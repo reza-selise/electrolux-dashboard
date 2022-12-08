@@ -41,7 +41,7 @@ function el_load_scripts(){
 		'el-dashboard-react-script', 
 		plugin_dir_url( __FILE__ ). 'public/js/index.js'  , 
 		[],
-		1,
+		rand(1,100),
 		true
 	);
 }
