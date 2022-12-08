@@ -1,13 +1,19 @@
+import { Layout } from 'antd';
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App/App';
+import { Provider } from 'react-redux';
+import Events from './Pages/Events/Events';
+import { store } from './Redux/store';
 
-const eventDashboard = ReactDOM.createRoot(document.getElementById('eventDashboard'));
-if(eventDashboard.length > 0){
+if (document.getElementById('eventDashboard') != null) {
+    const eventDashboard = ReactDOM.createRoot(document.getElementById('eventDashboard'));
     eventDashboard.render(
         <StrictMode>
-            <App />
+            <Provider store={store}>
+                <Layout>
+                    <Events />
+                </Layout>
+            </Provider>
         </StrictMode>
     );
 }
-
