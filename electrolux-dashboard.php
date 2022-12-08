@@ -26,18 +26,22 @@ require plugin_dir_path( __FILE__ ) . 'inc/add-menu-page.php';
 
 add_action( 'plugins_loaded', 'el_load_necessary_files' );
 
-// load scripts
-// add_action( 'admin_enqueue_scripts', 'el_load_necessary_files' );
 
 
-// function el_load_necessary_files(){
 
-// 	wp_enqueue_script( 
-// 		'el-dashboard-react-script', 
-// 		plugin_dir_path( __FILE__ )  , 
-// 		$deps:array, 
-// 		$ver:string|boolean|null,
-// 		true
-// 	)
 
-// }
+function el_load_necessary_files(){
+	// die();
+}
+add_action( 'admin_enqueue_scripts', 'el_load_scripts' );
+
+function el_load_scripts(){
+	// die();
+	wp_enqueue_script( 
+		'el-dashboard-react-script', 
+		plugin_dir_url( __FILE__ ). 'public/js/index.js'  , 
+		[],
+		1,
+		true
+	);
+}

@@ -54,7 +54,7 @@ add_action('admin_menu', 'el_add_settings_menu_items', 1);
 
 function el_dashboard_event_page_render(){
     ?>
-    <h1>Event main page</h1>
+    <div id="eventDashboard"></div>
     <?php
 }
 

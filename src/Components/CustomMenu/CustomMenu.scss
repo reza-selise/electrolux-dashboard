@@ -1,0 +1,39 @@
+.ant-menu-light {
+  color: #fff;
+  background: transparent;
+  margin-top: 60px;
+
+  .ant-menu-submenu-title {
+    padding: 0px !important;
+    .ant-menu-title-content {
+      color: #fff;
+      margin-left: 15px !important;
+    }
+    .ant-menu-submenu-arrow {
+      color: #fff;
+    }
+  }
+
+  .ant-menu {
+    .ant-menu-item-selected {
+      color: #fff;
+    }
+    .ant-menu-item {
+      padding: 0px !important;
+      background-color: transparent !important;
+      border-radius: 0px;
+      border-bottom: 1px solid transparent;
+
+      .ant-menu-title-content {
+        margin-left: 37px;
+      }
+
+      &:hover {
+        border-bottom: 1px solid red;
+        .ant-menu-title-content {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
