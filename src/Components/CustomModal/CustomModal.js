@@ -15,7 +15,13 @@ function CustomModal() {
     switch (location) {
         case 'global-comment':
             return (
-                <Modal title="Comments" open={isModalOpen} onCancel={handleCancel} footer={null}>
+                <Modal
+                    title="Generic Comments"
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={991}
+                >
                     <GlobalComment />
                 </Modal>
             );
