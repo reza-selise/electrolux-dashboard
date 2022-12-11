@@ -1,11 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+const siteURL = window.eluxDashboard.homeUrl;
+
 export const eluxAPI = createApi({
     reducerPath: 'eluxAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: siteURL }),
     endpoints: (builder) => ({
         getEventByDate: builder.query({
-            query: (name) => `pokemon/${name}`,
+            query: () => 'el-dashboard-api/generic-comments ',
         }),
     }),
 });
