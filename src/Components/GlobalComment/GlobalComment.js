@@ -1,5 +1,5 @@
 import { Select } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetGenericCommentQuery } from '../../API/apiSlice';
 import rocketIcon from '../../images/rocket.svg';
 import { eluxTranslation } from '../../Translation/Translation';
@@ -7,11 +7,15 @@ import './GlobalComment.scss';
 
 function GlobalComment() {
     const { data, error, isLoading } = useGetGenericCommentQuery();
+    const [date, setDate] = useState('2022');
+    // const [filteredData, setFilteredData] = useState();
     const assetsPath = window.eluxDashboard.assetsUrl;
     const { startTyping, errorOccured, pleaseWait } = eluxTranslation;
     const handleYearChange = (value) => {
-        console.log(value);
+        setDate(value);
     };
+    console.log(date);
+
     return (
         <div className="global-comment-container">
             <div className="comment-filters">
@@ -40,9 +44,15 @@ function GlobalComment() {
                     ? errorOccured
                     : isLoading
                     ? pleaseWait
-                    : data.data.map((comment) => (
-                          <li key={comment.comment_ID}>{comment.comment_content}</li>
-                      ))}
+                    : data.data
+                          .filter(
+                              (comment) =>
+                                  String(new Date(comment.comment_date).getFullYear()) ===
+                                  String(date)
+                          )
+                          .map((comment) => (
+                              <li key={comment.comment_ID}>{comment.comment_content}</li>
+                          ))}
             </ul>
             <form className="comment-submit-wrapper">
                 <input type="text" placeholder={startTyping} />
