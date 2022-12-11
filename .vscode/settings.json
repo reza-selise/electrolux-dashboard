@@ -22,5 +22,8 @@
   "emmet.triggerExpansionOnTab": true,
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
+  },
+  "[php]": {
+    "editor.defaultFormatter": "Sophisticode.php-formatter"
   }
 }
