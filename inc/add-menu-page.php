@@ -50,6 +50,7 @@ function el_add_settings_menu_items(){
     );
     
 }
+
 add_action('admin_menu', 'el_add_settings_menu_items', 1);
 
 function el_dashboard_event_page_render(){
@@ -64,15 +65,11 @@ function el_dashboard_consultation_render(){
     <?php
 }
 
-
 function el_dashboard_home_consultation_render(){
     ?>
     <h1>Home Consultation</h1>
     <?php
 }
-
-
-
 
 function el_dashboard_management_render(){
     ?>

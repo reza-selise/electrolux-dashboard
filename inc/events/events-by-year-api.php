@@ -1,3 +1,3 @@
 <?php
 
-var_dump('loaded');
+// var_dump('loaded');
