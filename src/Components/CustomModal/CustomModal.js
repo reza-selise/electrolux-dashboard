@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '../../Redux/Slice/modalSlice';
 import GlobalComment from '../GlobalComment/GlobalComment';
+import './CustomModal.scss';
 
 function CustomModal() {
     const isModalOpen = useSelector((state) => state.modal.value);
@@ -21,6 +22,7 @@ function CustomModal() {
                     onCancel={handleCancel}
                     footer={null}
                     width={991}
+                    className="global-comment-modal"
                 >
                     <GlobalComment />
                 </Modal>

@@ -1,0 +1,22 @@
+.global-comment-modal {
+  .ant-modal-content {
+    padding: 32px;
+    padding-top: 47px;
+    .ant-modal-header {
+      border-bottom: 1px solid #dfe7ea;
+      padding-bottom: 47px;
+      .ant-modal-title {
+        font-family: 'Electrolux Sans';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 120%;
+        color: #011e41;
+      }
+    }
+    .ant-modal-close {
+      top: 45px;
+      inset-inline-end: 30px;
+    }
+  }
+}

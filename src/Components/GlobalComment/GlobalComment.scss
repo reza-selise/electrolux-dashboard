@@ -24,10 +24,23 @@
     gap: 8px;
     input {
       flex: 1;
+      background-color: #fff;
+      height: 40px;
+      text-indent: 12px;
+      &::placeholder {
+        font-family: 'Electrolux Sans';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 150%;
+        color: #7b8a9c;
+      }
     }
     button {
       background: #011e41;
       border-radius: 6px;
+      width: 40px;
+      height: 40px;
     }
   }
 }
