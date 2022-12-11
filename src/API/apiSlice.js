@@ -4,12 +4,12 @@ const siteURL = window.eluxDashboard.homeUrl;
 
 export const eluxAPI = createApi({
     reducerPath: 'eluxAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: siteURL }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${siteURL}/wp-json/` }),
     endpoints: (builder) => ({
-        getEventByDate: builder.query({
-            query: () => 'el-dashboard-api/generic-comments ',
+        getGenericComment: builder.query({
+            query: () => 'el-dashboard-api/generic-comments',
         }),
     }),
 });
 
-export const { useGetEventByDateQuery } = eluxAPI;
+export const { useGetGenericCommentQuery } = eluxAPI;

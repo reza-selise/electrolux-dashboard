@@ -1,32 +1,23 @@
 import React from 'react';
+import { useGetGenericCommentQuery } from '../../API/apiSlice';
 import rocketIcon from '../../images/rocket.svg';
 import { eluxTranslation } from '../../Translation/Translation';
 import './GlobalComment.scss';
 
 function GlobalComment() {
-    const comments = [
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-    ];
+    const { data, error, isLoading } = useGetGenericCommentQuery();
     const assetsPath = window.eluxDashboard.assetsUrl;
-    const { startTyping } = eluxTranslation;
+    const { startTyping, errorOccured, pleaseWait } = eluxTranslation;
     return (
         <div className="global-comment-container">
             <ul className="comments">
-                {comments.map((comment) => (
-                    <li>{comment}</li>
-                ))}
+                {error
+                    ? errorOccured
+                    : isLoading
+                    ? pleaseWait
+                    : data.data.map((comment) => (
+                          <li key={comment.comment_ID}>{comment.comment_content}</li>
+                      ))}
             </ul>
             <form className="comment-submit-wrapper">
                 <input type="text" placeholder={startTyping} />

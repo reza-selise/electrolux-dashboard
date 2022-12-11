@@ -16286,7 +16286,7 @@ Schema.validators = validators;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "eluxAPI": () => (/* binding */ eluxAPI),
-/* harmony export */   "useGetEventByDateQuery": () => (/* binding */ useGetEventByDateQuery)
+/* harmony export */   "useGetGenericCommentQuery": () => (/* binding */ useGetGenericCommentQuery)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit/query/react */ "./node_modules/@reduxjs/toolkit/dist/query/react/rtk-query-react.esm.js");
 /* harmony import */ var _reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit/query/react */ "./node_modules/@reduxjs/toolkit/dist/query/rtk-query.esm.js");
@@ -16295,19 +16295,19 @@ var siteURL = window.eluxDashboard.homeUrl;
 var eluxAPI = (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.createApi)({
   reducerPath: 'eluxAPI',
   baseQuery: (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_1__.fetchBaseQuery)({
-    baseUrl: siteURL
+    baseUrl: "".concat(siteURL, "/wp-json/")
   }),
   endpoints: function endpoints(builder) {
     return {
-      getEventByDate: builder.query({
+      getGenericComment: builder.query({
         query: function query() {
-          return 'el-dashboard-api/generic-comments ';
+          return 'el-dashboard-api/generic-comments';
         }
       })
     };
   }
 });
-var useGetEventByDateQuery = eluxAPI.useGetEventByDateQuery;
+var useGetGenericCommentQuery = eluxAPI.useGetGenericCommentQuery;
 
 
 /***/ }),
@@ -16491,23 +16491,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _images_rocket_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../images/rocket.svg */ "./src/images/rocket.svg");
-/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
-/* harmony import */ var _GlobalComment_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./GlobalComment.scss */ "./src/Components/GlobalComment/GlobalComment.scss");
+/* harmony import */ var _API_apiSlice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../API/apiSlice */ "./src/API/apiSlice.js");
+/* harmony import */ var _images_rocket_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../images/rocket.svg */ "./src/images/rocket.svg");
+/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
+/* harmony import */ var _GlobalComment_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GlobalComment.scss */ "./src/Components/GlobalComment/GlobalComment.scss");
+
 
 
 
 
 function GlobalComment() {
-  var comments = ['t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.'];
+  var _useGetGenericComment = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useGetGenericCommentQuery)(),
+    data = _useGetGenericComment.data,
+    error = _useGetGenericComment.error,
+    isLoading = _useGetGenericComment.isLoading;
   var assetsPath = window.eluxDashboard.assetsUrl;
-  var startTyping = _Translation_Translation__WEBPACK_IMPORTED_MODULE_2__.eluxTranslation.startTyping;
+  var startTyping = _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__.eluxTranslation.startTyping,
+    errorOccured = _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__.eluxTranslation.errorOccured,
+    pleaseWait = _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__.eluxTranslation.pleaseWait;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "global-comment-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
     className: "comments"
-  }, comments.map(function (comment) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", null, comment);
+  }, error ? errorOccured : isLoading ? pleaseWait : data.data.map(function (comment) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
+      key: comment.comment_ID
+    }, comment.comment_content);
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     className: "comment-submit-wrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
@@ -16516,7 +16525,7 @@ function GlobalComment() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "submit"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
-    src: assetsPath + _images_rocket_svg__WEBPACK_IMPORTED_MODULE_1__["default"],
+    src: assetsPath + _images_rocket_svg__WEBPACK_IMPORTED_MODULE_2__["default"],
     alt: "rocket icon"
   }))));
 }
@@ -16621,14 +16630,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _API_apiSlice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../API/apiSlice */ "./src/API/apiSlice.js");
-/* harmony import */ var _Components_Container_Container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Components/Container/Container */ "./src/Components/Container/Container.js");
-/* harmony import */ var _Components_CustomModal_CustomModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Components/CustomModal/CustomModal */ "./src/Components/CustomModal/CustomModal.js");
-/* harmony import */ var _Components_EventByYear_EventByYear__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Components/EventByYear/EventByYear */ "./src/Components/EventByYear/EventByYear.js");
-/* harmony import */ var _Components_GlobalFilterButton_GlobalFilterButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Components/GlobalFilterButton/GlobalFilterButton */ "./src/Components/GlobalFilterButton/GlobalFilterButton.js");
-/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
-/* harmony import */ var _Events_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Events.scss */ "./src/Pages/Events/Events.scss");
-
+/* harmony import */ var _Components_Container_Container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Components/Container/Container */ "./src/Components/Container/Container.js");
+/* harmony import */ var _Components_CustomModal_CustomModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Components/CustomModal/CustomModal */ "./src/Components/CustomModal/CustomModal.js");
+/* harmony import */ var _Components_EventByYear_EventByYear__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Components/EventByYear/EventByYear */ "./src/Components/EventByYear/EventByYear.js");
+/* harmony import */ var _Components_GlobalFilterButton_GlobalFilterButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Components/GlobalFilterButton/GlobalFilterButton */ "./src/Components/GlobalFilterButton/GlobalFilterButton.js");
+/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
+/* harmony import */ var _Events_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Events.scss */ "./src/Pages/Events/Events.scss");
 
 
 
@@ -16637,15 +16644,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Events() {
-  var _useGetEventByDateQue = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useGetEventByDateQuery)(),
-    data = _useGetEventByDateQue.data,
-    error = _useGetEventByDateQue.error,
-    isLoading = _useGetEventByDateQue.isLoading;
-  console.log(data);
-  var eventDashboard = _Translation_Translation__WEBPACK_IMPORTED_MODULE_6__.eluxTranslation.eventDashboard;
+  var eventDashboard = _Translation_Translation__WEBPACK_IMPORTED_MODULE_5__.eluxTranslation.eventDashboard;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
     className: "section-title"
-  }, eventDashboard), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_Container_Container__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_EventByYear_EventByYear__WEBPACK_IMPORTED_MODULE_4__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_GlobalFilterButton_GlobalFilterButton__WEBPACK_IMPORTED_MODULE_5__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_CustomModal_CustomModal__WEBPACK_IMPORTED_MODULE_3__["default"], null));
+  }, eventDashboard), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_Container_Container__WEBPACK_IMPORTED_MODULE_1__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_EventByYear_EventByYear__WEBPACK_IMPORTED_MODULE_3__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_GlobalFilterButton_GlobalFilterButton__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_CustomModal_CustomModal__WEBPACK_IMPORTED_MODULE_2__["default"], null));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Events);
 
@@ -16772,7 +16774,9 @@ var eluxTranslation = {
   eventDashboard: 'Event Dashboard',
   genericComments: 'Generic Comments',
   filters: 'Filters',
-  startTyping: 'Start typing...'
+  startTyping: 'Start typing...',
+  errorOccured: 'An error happened during api call',
+  pleaseWait: 'Please wait...'
 };
 
 /***/ }),
