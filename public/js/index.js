@@ -18403,7 +18403,8 @@ function GlobalComment() {
   var _useInsetGenericComme = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useInsetGenericCommentMutation)(),
     _useInsetGenericComme2 = _slicedToArray(_useInsetGenericComme, 1),
     insertGenericComment = _useInsetGenericComme2[0];
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('2022'),
+  var currentYear = new Date().getFullYear();
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(currentYear),
     _useState2 = _slicedToArray(_useState, 2),
     date = _useState2[0],
     setDate = _useState2[1];
@@ -18458,27 +18459,27 @@ function GlobalComment() {
       return _ref.apply(this, arguments);
     };
   }();
+  var years = [];
+  for (var year = 1950; year <= currentYear; year += 1) {
+    var yearObject = {
+      label: year,
+      value: year
+    };
+    years.push(yearObject);
+    console.log('Years');
+  }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "global-comment-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "comment-filters"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(antd__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    defaultValue: "2022",
+    defaultValue: date,
     style: {
       width: 200,
       height: 54
     },
     onChange: handleYearChange,
-    options: [{
-      value: '2022',
-      label: '2022'
-    }, {
-      value: '2021',
-      label: '2021'
-    }, {
-      value: '2020',
-      label: '2020'
-    }]
+    options: years
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
     className: "comments"
   }, error ? errorOccured : isLoading ? pleaseWait : data.data.filter(function (comment) {
@@ -18486,7 +18487,11 @@ function GlobalComment() {
   }).map(function (comment) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
       key: comment.comment_ID
-    }, comment.comment_content);
+    }, comment.comment_content, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      type: "button"
+    }, "Delete"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      type: "button"
+    }, "Edit"));
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     className: "comment-submit-wrapper",
     onSubmit: handleCommentInsert

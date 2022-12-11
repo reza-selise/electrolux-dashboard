@@ -8,7 +8,8 @@ import './GlobalComment.scss';
 function GlobalComment() {
     const { data, error, isLoading } = useGetGenericCommentQuery();
     const [insertGenericComment] = useInsetGenericCommentMutation();
-    const [date, setDate] = useState('2022');
+    const currentYear = new Date().getFullYear();
+    const [date, setDate] = useState(currentYear);
     // const [filteredData, setFilteredData] = useState();
     const assetsPath = window.eluxDashboard.assetsUrl;
     const { startTyping, errorOccured, pleaseWait } = eluxTranslation;
@@ -37,27 +38,25 @@ function GlobalComment() {
         }
     };
 
+    const years = [];
+    for (let year = 1950; year <= currentYear; year += 1) {
+        const yearObject = {
+            label: year,
+            value: year,
+        };
+
+        years.push(yearObject);
+        console.log('Years');
+    }
+
     return (
         <div className="global-comment-container">
             <div className="comment-filters">
                 <Select
-                    defaultValue="2022"
+                    defaultValue={date}
                     style={{ width: 200, height: 54 }}
                     onChange={handleYearChange}
-                    options={[
-                        {
-                            value: '2022',
-                            label: '2022',
-                        },
-                        {
-                            value: '2021',
-                            label: '2021',
-                        },
-                        {
-                            value: '2020',
-                            label: '2020',
-                        },
-                    ]}
+                    options={years}
                 />
             </div>
             <ul className="comments">
@@ -72,7 +71,11 @@ function GlobalComment() {
                                   String(date)
                           )
                           .map((comment) => (
-                              <li key={comment.comment_ID}>{comment.comment_content}</li>
+                              <li key={comment.comment_ID}>
+                                  {comment.comment_content}
+                                  <button type="button">Delete</button>
+                                  <button type="button">Edit</button>
+                              </li>
                           ))}
             </ul>
             <form className="comment-submit-wrapper" onSubmit={handleCommentInsert}>
