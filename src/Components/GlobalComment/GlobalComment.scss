@@ -1,8 +1,11 @@
 .global-comment-container {
   .comments {
     height: 550px;
-    scroll-behavior: smooth;
-    overflow-y: scroll;
+    overflow: hidden;
+    &:hover {
+      scroll-behavior: smooth;
+      overflow-y: scroll;
+    }
     li {
       padding: 10px 16px;
       background: #dfe7ea;
@@ -24,10 +27,24 @@
     gap: 8px;
     input {
       flex: 1;
+      background-color: #fff;
+      height: 40px;
+      text-indent: 12px;
+      border: 1px solid #adb9c3;
+      &::placeholder {
+        font-family: 'Electrolux Sans';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 150%;
+        color: #7b8a9c;
+      }
     }
     button {
       background: #011e41;
       border-radius: 6px;
+      width: 40px;
+      height: 40px;
     }
   }
 }
