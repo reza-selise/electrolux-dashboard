@@ -1,28 +1,18 @@
 import React from 'react';
-import { useGetEventByDateQuery } from '../../API/apiSlice';
 import Container from '../../Components/Container/Container';
 import CustomModal from '../../Components/CustomModal/CustomModal';
+import EventByYear from '../../Components/EventByYear/EventByYear';
 import GlobalFilterButton from '../../Components/GlobalFilterButton/GlobalFilterButton';
+import { eluxTranslation } from '../../Translation/Translation';
 import './Events.scss';
 
 function Events() {
-    const { data, error, isLoading } = useGetEventByDateQuery('bulbasaur');
+    const { eventDashboard } = eluxTranslation;
     return (
         <>
-            <h2>Event Dashboard</h2>
+            <h2 className="section-title">{eventDashboard}</h2>
             <Container>
-                <div className="events">
-                    {error ? (
-                        <>Oh no, there was an error</>
-                    ) : isLoading ? (
-                        <>Loading...</>
-                    ) : data ? (
-                        <>
-                            <h3>{data.species.name}</h3>
-                            <img src={data.sprites.front_shiny} alt={data.species.name} />
-                        </>
-                    ) : null}
-                </div>
+                <EventByYear />
             </Container>
             <GlobalFilterButton />
             <CustomModal />

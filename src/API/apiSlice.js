@@ -1,13 +1,25 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+const siteURL = window.eluxDashboard.homeUrl;
+
 export const eluxAPI = createApi({
     reducerPath: 'eluxAPI',
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${siteURL}/wp-json/` }),
+    tagTypes: ['GenericComment'],
     endpoints: (builder) => ({
-        getEventByDate: builder.query({
-            query: (name) => `pokemon/${name}`,
+        insetGenericComment: builder.mutation({
+            query: (payload) => ({
+                url: 'el-dashboard-api/generic-comments',
+                method: 'POST',
+                body: payload,
+            }),
+            invalidatesTags: ['GenericComment'],
+        }),
+        getGenericComment: builder.query({
+            query: () => 'el-dashboard-api/generic-comments',
+            providesTags: ['GenericComment'],
         }),
     }),
 });
 
-export const { useGetEventByDateQuery } = eluxAPI;
+export const { useGetGenericCommentQuery, useInsetGenericCommentMutation } = eluxAPI;

@@ -2,11 +2,13 @@ import { Modal } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '../../Redux/Slice/modalSlice';
+import { eluxTranslation } from '../../Translation/Translation';
 import GlobalComment from '../GlobalComment/GlobalComment';
 import './CustomModal.scss';
 
 function CustomModal() {
     const isModalOpen = useSelector((state) => state.modal.value);
+    const { genericComments } = eluxTranslation;
     const dispatch = useDispatch();
     const handleCancel = () => {
         dispatch(setModal());
@@ -17,7 +19,7 @@ function CustomModal() {
         case 'global-comment':
             return (
                 <Modal
-                    title="Generic Comments"
+                    title={genericComments}
                     open={isModalOpen}
                     onCancel={handleCancel}
                     footer={null}
