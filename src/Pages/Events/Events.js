@@ -3,13 +3,15 @@ import { useGetEventByDateQuery } from '../../API/apiSlice';
 import Container from '../../Components/Container/Container';
 import CustomModal from '../../Components/CustomModal/CustomModal';
 import GlobalFilterButton from '../../Components/GlobalFilterButton/GlobalFilterButton';
+import { eluxTranslation } from '../../Translation/Translation';
 import './Events.scss';
 
 function Events() {
     const { data, error, isLoading } = useGetEventByDateQuery('bulbasaur');
+    const { eventDashboard } = eluxTranslation;
     return (
         <>
-            <h2>Event Dashboard</h2>
+            <h2 className="section-title">{eventDashboard}</h2>
             <Container>
                 <div className="events">
                     {error ? (

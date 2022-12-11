@@ -1,5 +1,6 @@
 import React from 'react';
 import rocketIcon from '../../images/rocket.svg';
+import { eluxTranslation } from '../../Translation/Translation';
 import './GlobalComment.scss';
 
 function GlobalComment() {
@@ -19,6 +20,7 @@ function GlobalComment() {
         't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
     ];
     const assetsPath = window.eluxDashboard.assetsUrl;
+    const { startTyping } = eluxTranslation;
     return (
         <div className="global-comment-container">
             <ul className="comments">
@@ -27,7 +29,7 @@ function GlobalComment() {
                 ))}
             </ul>
             <form className="comment-submit-wrapper">
-                <input type="text" placeholder="Start typing..." />
+                <input type="text" placeholder={startTyping} />
                 <button type="submit">
                     <img src={assetsPath + rocketIcon} alt="rocket icon" />
                 </button>

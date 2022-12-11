@@ -16348,13 +16348,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/modal/index.js");
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/modal/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _Redux_Slice_modalSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Redux/Slice/modalSlice */ "./src/Redux/Slice/modalSlice.js");
-/* harmony import */ var _GlobalComment_GlobalComment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../GlobalComment/GlobalComment */ "./src/Components/GlobalComment/GlobalComment.js");
-/* harmony import */ var _CustomModal_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CustomModal.scss */ "./src/Components/CustomModal/CustomModal.scss");
+/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
+/* harmony import */ var _GlobalComment_GlobalComment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../GlobalComment/GlobalComment */ "./src/Components/GlobalComment/GlobalComment.js");
+/* harmony import */ var _CustomModal_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CustomModal.scss */ "./src/Components/CustomModal/CustomModal.scss");
+
 
 
 
@@ -16365,6 +16367,7 @@ function CustomModal() {
   var isModalOpen = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
     return state.modal.value;
   });
+  var genericComments = _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__.eluxTranslation.genericComments;
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
   var handleCancel = function handleCancel() {
     dispatch((0,_Redux_Slice_modalSlice__WEBPACK_IMPORTED_MODULE_2__.setModal)());
@@ -16372,16 +16375,16 @@ function CustomModal() {
   var location = 'global-comment';
   switch (location) {
     case 'global-comment':
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(antd__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        title: "Generic Comments",
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(antd__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        title: genericComments,
         open: isModalOpen,
         onCancel: handleCancel,
         footer: null,
         width: 991,
         className: "global-comment-modal"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_GlobalComment_GlobalComment__WEBPACK_IMPORTED_MODULE_3__["default"], null));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_GlobalComment_GlobalComment__WEBPACK_IMPORTED_MODULE_4__["default"], null));
     default:
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(antd__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(antd__WEBPACK_IMPORTED_MODULE_6__["default"], {
         title: "Nothing found",
         open: isModalOpen,
         onCancel: handleCancel,
@@ -16407,13 +16410,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _images_rocket_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../images/rocket.svg */ "./src/images/rocket.svg");
-/* harmony import */ var _GlobalComment_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GlobalComment.scss */ "./src/Components/GlobalComment/GlobalComment.scss");
+/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
+/* harmony import */ var _GlobalComment_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./GlobalComment.scss */ "./src/Components/GlobalComment/GlobalComment.scss");
+
 
 
 
 function GlobalComment() {
   var comments = ['t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.', 't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.'];
   var assetsPath = window.eluxDashboard.assetsUrl;
+  var startTyping = _Translation_Translation__WEBPACK_IMPORTED_MODULE_2__.eluxTranslation.startTyping;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "global-comment-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
@@ -16424,7 +16430,7 @@ function GlobalComment() {
     className: "comment-submit-wrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
     type: "text",
-    placeholder: "Start typing..."
+    placeholder: startTyping
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "submit"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
@@ -16451,8 +16457,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _images_comment_svg__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../images/comment.svg */ "./src/images/comment.svg");
 /* harmony import */ var _images_filter_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../images/filter.svg */ "./src/images/filter.svg");
-/* harmony import */ var _ModalButton_ModalButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ModalButton/ModalButton */ "./src/Components/ModalButton/ModalButton.js");
-/* harmony import */ var _GlobalFilterButton_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GlobalFilterButton.scss */ "./src/Components/GlobalFilterButton/GlobalFilterButton.scss");
+/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
+/* harmony import */ var _ModalButton_ModalButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ModalButton/ModalButton */ "./src/Components/ModalButton/ModalButton.js");
+/* harmony import */ var _GlobalFilterButton_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./GlobalFilterButton.scss */ "./src/Components/GlobalFilterButton/GlobalFilterButton.scss");
+
 
 
 
@@ -16460,9 +16468,10 @@ __webpack_require__.r(__webpack_exports__);
 
 function GlobalFilterButton() {
   var assetsPath = window.eluxDashboard.assetsUrl;
+  var filters = _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__.eluxTranslation.filters;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "global-filter-button"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ModalButton_ModalButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_ModalButton_ModalButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
     location: "global-comment"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
     src: assetsPath + _images_comment_svg__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -16472,7 +16481,7 @@ function GlobalFilterButton() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
     src: assetsPath + _images_filter_svg__WEBPACK_IMPORTED_MODULE_2__["default"],
     alt: "filter icon"
-  }), "Filters"));
+  }), filters));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GlobalFilterButton);
 
@@ -16534,7 +16543,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Container_Container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Components/Container/Container */ "./src/Components/Container/Container.js");
 /* harmony import */ var _Components_CustomModal_CustomModal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Components/CustomModal/CustomModal */ "./src/Components/CustomModal/CustomModal.js");
 /* harmony import */ var _Components_GlobalFilterButton_GlobalFilterButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../Components/GlobalFilterButton/GlobalFilterButton */ "./src/Components/GlobalFilterButton/GlobalFilterButton.js");
-/* harmony import */ var _Events_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Events.scss */ "./src/Pages/Events/Events.scss");
+/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
+/* harmony import */ var _Events_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Events.scss */ "./src/Pages/Events/Events.scss");
+
 
 
 
@@ -16546,7 +16557,10 @@ function Events() {
     data = _useGetEventByDateQue.data,
     error = _useGetEventByDateQue.error,
     isLoading = _useGetEventByDateQue.isLoading;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Event Dashboard"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_Container_Container__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+  var eventDashboard = _Translation_Translation__WEBPACK_IMPORTED_MODULE_5__.eluxTranslation.eventDashboard;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
+    className: "section-title"
+  }, eventDashboard), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Components_Container_Container__WEBPACK_IMPORTED_MODULE_2__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "events"
   }, error ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, "Oh no, there was an error") : isLoading ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, "Loading...") : data ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, data.species.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
     src: data.sprites.front_shiny,
@@ -16660,6 +16674,26 @@ var store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_3__.configureStore)({
   }
 });
 (0,_reduxjs_toolkit_query__WEBPACK_IMPORTED_MODULE_4__.setupListeners)(store.dispatch);
+
+/***/ }),
+
+/***/ "./src/Translation/Translation.js":
+/*!****************************************!*\
+  !*** ./src/Translation/Translation.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "eluxTranslation": () => (/* binding */ eluxTranslation)
+/* harmony export */ });
+var eluxTranslation = {
+  eventDashboard: 'Event Dashboard',
+  genericComments: 'Generic Comments',
+  filters: 'Filters',
+  startTyping: 'Start typing...'
+};
 
 /***/ }),
 
@@ -16797,7 +16831,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".global-comment-container .comments {\n  height: 550px;\n  overflow: hidden;\n}\n.global-comment-container .comments:hover {\n  scroll-behavior: smooth;\n  overflow-y: scroll;\n}\n.global-comment-container .comments li {\n  padding: 10px 16px;\n  background: #dfe7ea;\n  border-radius: 4px;\n  margin-bottom: 16px;\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-size: 16px;\n  line-height: 150%;\n  color: #011e41;\n}\n.global-comment-container .comment-submit-wrapper {\n  width: 100%;\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.global-comment-container .comment-submit-wrapper input {\n  flex: 1;\n  background-color: #fff;\n  height: 40px;\n  text-indent: 12px;\n  border: 1px solid #adb9c3;\n}\n.global-comment-container .comment-submit-wrapper input::placeholder {\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-size: 14px;\n  line-height: 150%;\n  color: #7b8a9c;\n}\n.global-comment-container .comment-submit-wrapper button {\n  background: #011e41;\n  border-radius: 6px;\n  width: 40px;\n  height: 40px;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".global-comment-container .comments {\n  height: 520px;\n  overflow: hidden;\n}\n.global-comment-container .comments:hover {\n  scroll-behavior: smooth;\n  overflow-y: scroll;\n}\n.global-comment-container .comments li {\n  padding: 10px 16px;\n  background: #dfe7ea;\n  border-radius: 4px;\n  margin-bottom: 16px;\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-size: 16px;\n  line-height: 150%;\n  color: #011e41;\n}\n.global-comment-container .comment-submit-wrapper {\n  width: 100%;\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.global-comment-container .comment-submit-wrapper input {\n  flex: 1;\n  background-color: #fff;\n  height: 40px;\n  text-indent: 12px;\n  border: 1px solid #adb9c3;\n}\n.global-comment-container .comment-submit-wrapper input::placeholder {\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-size: 14px;\n  line-height: 150%;\n  color: #7b8a9c;\n}\n.global-comment-container .comment-submit-wrapper button {\n  background: #011e41;\n  border-radius: 6px;\n  width: 40px;\n  height: 40px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -16845,7 +16879,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "button {\n  border: none;\n  cursor: pointer;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "button {\n  border: none;\n  cursor: pointer;\n}\n\n.section-title {\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 600;\n  font-size: 26px;\n  line-height: 120%;\n  color: #011e41;\n  margin-bottom: 24px;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
