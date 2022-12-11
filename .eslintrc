@@ -19,7 +19,7 @@
     "import/prefer-default-export": "off",
     "no-restricted-imports": "off",
     "no-nested-ternary": "off",
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "react/jsx-filename-extension": [
       1,
       {
@@ -43,5 +43,8 @@
     "node": true,
     "es6": true,
     "jest": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 10
   }
 }

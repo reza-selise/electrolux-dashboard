@@ -1,20 +1,41 @@
 import { Select } from 'antd';
-import React, { useState } from 'react';
-import { useGetGenericCommentQuery } from '../../API/apiSlice';
+import React, { useRef, useState } from 'react';
+import { useGetGenericCommentQuery, useInsetGenericCommentMutation } from '../../API/apiSlice';
 import rocketIcon from '../../images/rocket.svg';
 import { eluxTranslation } from '../../Translation/Translation';
 import './GlobalComment.scss';
 
 function GlobalComment() {
     const { data, error, isLoading } = useGetGenericCommentQuery();
+    const [insertGenericComment] = useInsetGenericCommentMutation();
     const [date, setDate] = useState('2022');
     // const [filteredData, setFilteredData] = useState();
     const assetsPath = window.eluxDashboard.assetsUrl;
     const { startTyping, errorOccured, pleaseWait } = eluxTranslation;
+
+    const postCommentField = useRef();
+
     const handleYearChange = (value) => {
         setDate(value);
     };
-    console.log(date);
+
+    const handleCommentInsert = async (event) => {
+        event.preventDefault();
+        if (postCommentField.current.value !== '') {
+            const payload = {
+                comment_content: postCommentField.current.value,
+            };
+
+            try {
+                await insertGenericComment(payload).unwrap();
+                postCommentField.current.value = '';
+            } catch (e) {
+                console.log('An Error Occurred', e);
+            }
+        } else {
+            console.log('Please Enter a value');
+        }
+    };
 
     return (
         <div className="global-comment-container">
@@ -54,8 +75,8 @@ function GlobalComment() {
                               <li key={comment.comment_ID}>{comment.comment_content}</li>
                           ))}
             </ul>
-            <form className="comment-submit-wrapper">
-                <input type="text" placeholder={startTyping} />
+            <form className="comment-submit-wrapper" onSubmit={handleCommentInsert}>
+                <input type="text" placeholder={startTyping} ref={postCommentField} />
                 <button type="submit">
                     <img src={assetsPath + rocketIcon} alt="rocket icon" />
                 </button>

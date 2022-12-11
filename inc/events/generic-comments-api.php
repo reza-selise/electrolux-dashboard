@@ -77,7 +77,7 @@ function el_add_generic_comments($ReqObj){
             'comment_meta'      => [
                 'comment_section' => 'generic'
             ],
-            'comment_content'   => $comment_text,
+            'comment_content'   => $comment_content,
         ]);
 
 
