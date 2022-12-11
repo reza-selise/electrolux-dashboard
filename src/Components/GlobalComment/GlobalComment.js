@@ -4,19 +4,19 @@ import './GlobalComment.scss';
 
 function GlobalComment() {
     const comments = [
-        'Comment 1',
-        'Comment 2',
-        'Comment 3',
-        'Comment 4',
-        'Comment 5',
-        'Comment 6',
-        'Comment 7',
-        'Comment 8',
-        'Comment 9',
-        'Comment 10',
-        'Comment 11',
-        'Comment 12',
-        'Comment 13',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. t is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. ',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+        't is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
     ];
     const assetsPath = window.eluxDashboard.assetsUrl;
     return (

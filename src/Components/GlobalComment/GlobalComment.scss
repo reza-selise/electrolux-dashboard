@@ -1,8 +1,11 @@
 .global-comment-container {
   .comments {
     height: 550px;
-    scroll-behavior: smooth;
-    overflow-y: scroll;
+    overflow: hidden;
+    &:hover {
+      scroll-behavior: smooth;
+      overflow-y: scroll;
+    }
     li {
       padding: 10px 16px;
       background: #dfe7ea;
@@ -27,6 +30,7 @@
       background-color: #fff;
       height: 40px;
       text-indent: 12px;
+      border: 1px solid #adb9c3;
       &::placeholder {
         font-family: 'Electrolux Sans';
         font-style: normal;
