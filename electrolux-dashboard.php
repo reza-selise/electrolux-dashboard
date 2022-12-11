@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @wordpress-plugin
  * Plugin Name:       Electrolux Dashboard
  * Plugin URI:        https://edb.com
  * Description:       Dashboard Backend
@@ -15,7 +14,7 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 define( 'ELECTROLUX_DASHBOARD_VERSION', '1.0.0' );
@@ -25,13 +24,11 @@ require plugin_dir_path( __FILE__ ) . 'inc/add-menu-page.php';
 // plugin looaded hook
 
 add_action( 'plugins_loaded', 'el_load_necessary_files' );
-
-
-
-
-
 function el_load_necessary_files(){
-	// die();
+	require plugin_dir_path( __FILE__ ) . 'inc/events/events-by-year-api.php';
+	require plugin_dir_path( __FILE__ ) . 'inc/events/events-by-location-api.php';
+	require plugin_dir_path( __FILE__ ) . 'inc/events/generic-comments-api.php';
+
 }
 add_action( 'admin_enqueue_scripts', 'el_load_scripts' );
 
