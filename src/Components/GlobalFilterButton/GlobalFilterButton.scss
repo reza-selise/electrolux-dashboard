@@ -1,0 +1,26 @@
+.global-filter-button {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1;
+  display: flex;
+  gap: 8px;
+  button {
+    background: #011e41;
+    border: 1px solid #ffffff;
+    border-radius: 100px;
+    padding: 12px 16px;
+    height: 48px;
+    font-family: 'Electrolux Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+    cursor: pointer;
+  }
+}

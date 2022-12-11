@@ -44,4 +44,9 @@ function el_load_scripts(){
 		rand(1,100),
 		true
 	);
+	$localize_array = [
+		'homeUrl'   => site_url(),
+		'assetsUrl' => plugin_dir_url( __FILE__ ) . 'public'
+	];
+	wp_localize_script( 'el-dashboard-react-script', 'eluxDashboard', $localize_array );
 }

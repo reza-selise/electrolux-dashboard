@@ -1,14 +1,15 @@
 import React from 'react';
 import { useGetEventByDateQuery } from '../../API/apiSlice';
 import Container from '../../Components/Container/Container';
-import CustomHeader from '../../Components/CustomHeader/CustomHeader';
+import CustomModal from '../../Components/CustomModal/CustomModal';
+import GlobalFilterButton from '../../Components/GlobalFilterButton/GlobalFilterButton';
 import './Events.scss';
 
 function Events() {
     const { data, error, isLoading } = useGetEventByDateQuery('bulbasaur');
     return (
         <>
-            <CustomHeader />
+            <h2>Event Dashboard</h2>
             <Container>
                 <div className="events">
                     {error ? (
@@ -23,6 +24,8 @@ function Events() {
                     ) : null}
                 </div>
             </Container>
+            <GlobalFilterButton />
+            <CustomModal />
         </>
     );
 }

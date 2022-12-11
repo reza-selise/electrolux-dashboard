@@ -10,7 +10,7 @@ if (document.getElementById('eventDashboard') != null) {
     eventDashboard.render(
         <StrictMode>
             <Provider store={store}>
-                <Layout>
+                <Layout style={{ paddingRight: '20px' }}>
                     <Events />
                 </Layout>
             </Provider>
