@@ -24,13 +24,11 @@ require plugin_dir_path( __FILE__ ) . 'inc/add-menu-page.php';
 // plugin looaded hook
 
 add_action( 'plugins_loaded', 'el_load_necessary_files' );
-
-
-
-
-
 function el_load_necessary_files(){
-	// die();
+	require plugin_dir_path( __FILE__ ) . 'inc/events/events-by-year-api.php';
+	require plugin_dir_path( __FILE__ ) . 'inc/events/events-by-location-api.php';
+	require plugin_dir_path( __FILE__ ) . 'inc/events/generic-comments-api.php';
+
 }
 add_action( 'admin_enqueue_scripts', 'el_load_scripts' );
 
