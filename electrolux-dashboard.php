@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @wordpress-plugin
  * Plugin Name:       Electrolux Dashboard
  * Plugin URI:        https://edb.com
  * Description:       Dashboard Backend
@@ -15,7 +14,7 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 define( 'ELECTROLUX_DASHBOARD_VERSION', '1.0.0' );
