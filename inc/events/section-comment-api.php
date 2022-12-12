@@ -163,16 +163,12 @@ function el_get_section_comments($ReqObj){
             'data'      => $comments
         ]);
 
-    
-
     }else{
         return wp_send_json([
             'status'    => false,
             'data'      => 'Please login to get the comments'
         ]);
     }
-
-
 }
 
 
@@ -184,7 +180,6 @@ function el_get_section_comments($ReqObj){
     -- PARAMETERS
     1. comment_content  = text
     2. comment_id = number/text
-    
 --------------------------------------------------------*/
 add_action( 'rest_api_init', function () {
     register_rest_route( 'el-dashboard-api', '/section-comments', [
