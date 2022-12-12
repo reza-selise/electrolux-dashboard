@@ -1,8 +1,10 @@
 import { Select } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useGetGenericCommentQuery, useInsetGenericCommentMutation } from '../../API/apiSlice';
+import deleteIcon from '../../images/delete.svg';
 import pencilIcon from '../../images/pencil.svg';
 import rocketIcon from '../../images/rocket.svg';
+import saveIcon from '../../images/save.svg';
 import { eluxTranslation } from '../../Translation/Translation';
 import './GlobalComment.scss';
 
@@ -17,6 +19,7 @@ function GlobalComment() {
     const [commentId, setCommentID] = useState();
     // const [filteredData, setFilteredData] = useState();
     const assetsPath = window.eluxDashboard.assetsUrl;
+    const { currentUser } = window.eluxDashboard;
     const { startTyping, errorOccured, pleaseWait } = eluxTranslation;
 
     const postCommentField = useRef();
@@ -105,23 +108,19 @@ function GlobalComment() {
                           .map((comment) => (
                               <li key={comment.comment_ID}>
                                   <span>{comment.comment_content}</span>
-
-                                  <div className="comment-action">
-                                      <button
-                                          type="button"
-                                          data-id={comment.comment_ID}
-                                          onClick={openCommentEditBox}
-                                      >
-                                          <img src={assetsPath + pencilIcon} alt="edit icon" />
-                                      </button>
-                                      {/* <button
-                                          type="button"
-                                          data-id={comment.comment_ID}
-                                          onClick={handleCommentDelete}
-                                      >
-                                          Delete
-                                      </button> */}
-                                  </div>
+                                  {comment.user_id === currentUser ? (
+                                      <div className="comment-action">
+                                          <button
+                                              type="button"
+                                              data-id={comment.comment_ID}
+                                              onClick={openCommentEditBox}
+                                          >
+                                              <img src={assetsPath + pencilIcon} alt="edit icon" />
+                                          </button>
+                                      </div>
+                                  ) : (
+                                      ''
+                                  )}
                               </li>
                           ))}
             </ul>
@@ -133,13 +132,17 @@ function GlobalComment() {
                     </button>
                 </form>
             ) : (
-                <>
+                <div className="update-generic-comment-wrapper">
                     <textarea value={commentContent} />
                     <div className="comment-action">
-                        <button type="button">Save</button>
-                        <button type="button">Delete</button>
+                        <button type="button">
+                            <img src={assetsPath + saveIcon} alt="Save Icon" />
+                        </button>
+                        <button type="button">
+                            <img src={assetsPath + deleteIcon} alt="Delete Icon" />
+                        </button>
                     </div>
-                </>
+                </div>
             )}
         </div>
     );
