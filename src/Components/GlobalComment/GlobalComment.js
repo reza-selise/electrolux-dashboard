@@ -1,6 +1,7 @@
 import { Select } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGetGenericCommentQuery, useInsetGenericCommentMutation } from '../../API/apiSlice';
+import pencilIcon from '../../images/pencil.svg';
 import rocketIcon from '../../images/rocket.svg';
 import { eluxTranslation } from '../../Translation/Translation';
 import './GlobalComment.scss';
@@ -8,13 +9,18 @@ import './GlobalComment.scss';
 function GlobalComment() {
     const { data, error, isLoading } = useGetGenericCommentQuery();
     const [insertGenericComment] = useInsetGenericCommentMutation();
+    // const [deleteGenericComment] = useDeleteGenericCommentMutation();
     const currentYear = new Date().getFullYear();
     const [date, setDate] = useState(currentYear);
+    const [isEdit, setIsEdit] = useState(false);
+    const [commentContent, setCommentContent] = useState('');
+    const [commentId, setCommentID] = useState();
     // const [filteredData, setFilteredData] = useState();
     const assetsPath = window.eluxDashboard.assetsUrl;
     const { startTyping, errorOccured, pleaseWait } = eluxTranslation;
 
     const postCommentField = useRef();
+    // const commentDeleteBtn = useRef();
 
     const handleYearChange = (value) => {
         setDate(value);
@@ -49,6 +55,32 @@ function GlobalComment() {
         console.log('Years');
     }
 
+    // const handleCommentDelete = async (event) => {
+    //     console.log(event.target.getAttribute('data-id'));
+    //     const payload = {
+    //         comment_id: event.target.getAttribute('data-id'),
+    //     };
+
+    //     try {
+    //         await deleteGenericComment(payload).unwrap();
+    //     } catch (e) {
+    //         console.log('An Error Occurred', e);
+    //     }
+    // };
+
+    const openCommentEditBox = (event) => {
+        setIsEdit(!isEdit);
+        setCommentID(event.target.closest('button').getAttribute('data-id'));
+    };
+    useEffect(() => {
+        const comment =
+            data && data.data.find((comment) => String(comment.comment_ID) === String(commentId));
+        try {
+            setCommentContent(comment.comment_content);
+        } catch (error) {
+            console.log('State Not Updated', error);
+        }
+    }, [commentId]);
     return (
         <div className="global-comment-container">
             <div className="comment-filters">
@@ -59,7 +91,7 @@ function GlobalComment() {
                     options={years}
                 />
             </div>
-            <ul className="comments">
+            <ul className="comments" style={isEdit ? { opacity: 0.3 } : { opacity: 1 }}>
                 {error
                     ? errorOccured
                     : isLoading
@@ -72,18 +104,43 @@ function GlobalComment() {
                           )
                           .map((comment) => (
                               <li key={comment.comment_ID}>
-                                  {comment.comment_content}
-                                  <button type="button">Delete</button>
-                                  <button type="button">Edit</button>
+                                  <span>{comment.comment_content}</span>
+
+                                  <div className="comment-action">
+                                      <button
+                                          type="button"
+                                          data-id={comment.comment_ID}
+                                          onClick={openCommentEditBox}
+                                      >
+                                          <img src={assetsPath + pencilIcon} alt="edit icon" />
+                                      </button>
+                                      {/* <button
+                                          type="button"
+                                          data-id={comment.comment_ID}
+                                          onClick={handleCommentDelete}
+                                      >
+                                          Delete
+                                      </button> */}
+                                  </div>
                               </li>
                           ))}
             </ul>
-            <form className="comment-submit-wrapper" onSubmit={handleCommentInsert}>
-                <input type="text" placeholder={startTyping} ref={postCommentField} />
-                <button type="submit">
-                    <img src={assetsPath + rocketIcon} alt="rocket icon" />
-                </button>
-            </form>
+            {isEdit === false ? (
+                <form className="comment-submit-wrapper" onSubmit={handleCommentInsert}>
+                    <input type="text" placeholder={startTyping} ref={postCommentField} />
+                    <button type="submit">
+                        <img src={assetsPath + rocketIcon} alt="rocket icon" />
+                    </button>
+                </form>
+            ) : (
+                <>
+                    <textarea value={commentContent} />
+                    <div className="comment-action">
+                        <button type="button">Save</button>
+                        <button type="button">Delete</button>
+                    </div>
+                </>
+            )}
         </div>
     );
 }
