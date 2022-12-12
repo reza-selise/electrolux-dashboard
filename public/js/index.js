@@ -18421,7 +18421,10 @@ function GlobalComment() {
   var _useInsetGenericComme = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useInsetGenericCommentMutation)(),
     _useInsetGenericComme2 = _slicedToArray(_useInsetGenericComme, 1),
     insertGenericComment = _useInsetGenericComme2[0];
-  // const [deleteGenericComment] = useDeleteGenericCommentMutation();
+  var _useDeleteGenericComm = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useDeleteGenericCommentMutation)(),
+    _useDeleteGenericComm2 = _slicedToArray(_useDeleteGenericComm, 2),
+    deleteGenericComment = _useDeleteGenericComm2[0],
+    response = _useDeleteGenericComm2[1];
   var currentYear = new Date().getFullYear();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(currentYear),
     _useState2 = _slicedToArray(_useState, 2),
@@ -18502,20 +18505,37 @@ function GlobalComment() {
     years.push(yearObject);
     console.log('Years');
   }
-
-  // const handleCommentDelete = async (event) => {
-  //     console.log(event.target.getAttribute('data-id'));
-  //     const payload = {
-  //         comment_id: event.target.getAttribute('data-id'),
-  //     };
-
-  //     try {
-  //         await deleteGenericComment(payload).unwrap();
-  //     } catch (e) {
-  //         console.log('An Error Occurred', e);
-  //     }
-  // };
-
+  var deleteCommentHandler = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return deleteGenericComment({
+                comment_id: commentId
+              });
+            case 3:
+              console.log(response);
+              setIsEdit(!isEdit);
+              _context2.next = 10;
+              break;
+            case 7:
+              _context2.prev = 7;
+              _context2.t0 = _context2["catch"](0);
+              console.log('An Error Occurred', _context2.t0);
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 7]]);
+    }));
+    return function deleteCommentHandler() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
   var openCommentEditBox = function openCommentEditBox(event) {
     setIsEdit(!isEdit);
     setCommentID(event.target.closest('button').getAttribute('data-id'));
@@ -18588,7 +18608,8 @@ function GlobalComment() {
     src: assetsPath + _images_save_svg__WEBPACK_IMPORTED_MODULE_5__["default"],
     alt: "Save Icon"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    type: "button"
+    type: "button",
+    onClick: deleteCommentHandler
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
     src: assetsPath + _images_delete_svg__WEBPACK_IMPORTED_MODULE_2__["default"],
     alt: "Delete Icon"

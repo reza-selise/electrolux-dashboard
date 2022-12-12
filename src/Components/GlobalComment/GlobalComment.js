@@ -1,6 +1,10 @@
 import { Select } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { useGetGenericCommentQuery, useInsetGenericCommentMutation } from '../../API/apiSlice';
+import {
+    useDeleteGenericCommentMutation,
+    useGetGenericCommentQuery,
+    useInsetGenericCommentMutation
+} from '../../API/apiSlice';
 import deleteIcon from '../../images/delete.svg';
 import pencilIcon from '../../images/pencil.svg';
 import rocketIcon from '../../images/rocket.svg';
@@ -11,7 +15,7 @@ import './GlobalComment.scss';
 function GlobalComment() {
     const { data, error, isLoading } = useGetGenericCommentQuery();
     const [insertGenericComment] = useInsetGenericCommentMutation();
-    // const [deleteGenericComment] = useDeleteGenericCommentMutation();
+    const [deleteGenericComment, response] = useDeleteGenericCommentMutation();
     const currentYear = new Date().getFullYear();
     const [date, setDate] = useState(currentYear);
     const [isEdit, setIsEdit] = useState(false);
@@ -58,19 +62,17 @@ function GlobalComment() {
         console.log('Years');
     }
 
-    // const handleCommentDelete = async (event) => {
-    //     console.log(event.target.getAttribute('data-id'));
-    //     const payload = {
-    //         comment_id: event.target.getAttribute('data-id'),
-    //     };
-
-    //     try {
-    //         await deleteGenericComment(payload).unwrap();
-    //     } catch (e) {
-    //         console.log('An Error Occurred', e);
-    //     }
-    // };
-
+    const deleteCommentHandler = async () => {
+        try {
+            await deleteGenericComment({
+                comment_id: commentId,
+            });
+            console.log(response);
+            setIsEdit(!isEdit);
+        } catch (e) {
+            console.log('An Error Occurred', e);
+        }
+    };
     const openCommentEditBox = (event) => {
         setIsEdit(!isEdit);
         setCommentID(event.target.closest('button').getAttribute('data-id'));
@@ -138,7 +140,7 @@ function GlobalComment() {
                         <button type="button">
                             <img src={assetsPath + saveIcon} alt="Save Icon" />
                         </button>
-                        <button type="button">
+                        <button type="button" onClick={deleteCommentHandler}>
                             <img src={assetsPath + deleteIcon} alt="Delete Icon" />
                         </button>
                     </div>
