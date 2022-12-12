@@ -152,12 +152,12 @@ function elux_get_all_event_orders_by_date( $start_date, $end_date, $disallowed_
     $order_ids  = array_map( "elux_order_id_array_map", $response );
     return $order_ids;
     // AND ( $wpdb->postmeta.meta_key = 'event_start_time' AND ( $wpdb->postmeta.meta_value BETWEEN '%s' AND '%s' ))             
-    echo '<pre>';
-    var_dump( $order_ids ); die();
-    var_dump( $response ); die();
-    var_dump( $wpdb->prepare( $query, $start_date, $end_date ) ); die();
+    // echo '<pre>';
+    // var_dump( $order_ids ); die();
+    // var_dump( $response ); die();
+    // var_dump( $wpdb->prepare( $query, $start_date, $end_date ) ); die();
 }
-elux_get_all_event_orders_by_date( '2022-08-01 00:00:00', '2022-08-31 11:59:59', array( 'giftcard', 'voucher' ) );
+// elux_get_all_event_orders_by_date( '2022-08-01 00:00:00', '2022-08-31 11:59:59', array( 'giftcard', 'voucher' ) );
 
 function elux_order_id_array_map( $order ){
     return $order->post_id;
