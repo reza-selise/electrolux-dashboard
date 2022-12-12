@@ -18157,7 +18157,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "eluxAPI": () => (/* binding */ eluxAPI),
 /* harmony export */   "useDeleteGenericCommentMutation": () => (/* binding */ useDeleteGenericCommentMutation),
 /* harmony export */   "useGetGenericCommentQuery": () => (/* binding */ useGetGenericCommentQuery),
-/* harmony export */   "useInsetGenericCommentMutation": () => (/* binding */ useInsetGenericCommentMutation)
+/* harmony export */   "useInsetGenericCommentMutation": () => (/* binding */ useInsetGenericCommentMutation),
+/* harmony export */   "useUpdateGenericCommentMutation": () => (/* binding */ useUpdateGenericCommentMutation)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit/query/react */ "./node_modules/@reduxjs/toolkit/dist/query/react/rtk-query-react.esm.js");
 /* harmony import */ var _reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit/query/react */ "./node_modules/@reduxjs/toolkit/dist/query/rtk-query.esm.js");
@@ -18196,13 +18197,24 @@ var eluxAPI = (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.creat
           };
         },
         invalidatesTags: ['GenericComment']
+      }),
+      updateGenericComment: builder.mutation({
+        query: function query(payload) {
+          return {
+            url: 'el-dashboard-api/generic-comments',
+            method: 'PUT',
+            body: payload
+          };
+        },
+        invalidatesTags: ['GenericComment']
       })
     };
   }
 });
 var useGetGenericCommentQuery = eluxAPI.useGetGenericCommentQuery,
   useInsetGenericCommentMutation = eluxAPI.useInsetGenericCommentMutation,
-  useDeleteGenericCommentMutation = eluxAPI.useDeleteGenericCommentMutation;
+  useDeleteGenericCommentMutation = eluxAPI.useDeleteGenericCommentMutation,
+  useUpdateGenericCommentMutation = eluxAPI.useUpdateGenericCommentMutation;
 
 
 /***/ }),
@@ -18425,6 +18437,9 @@ function GlobalComment() {
     _useDeleteGenericComm2 = _slicedToArray(_useDeleteGenericComm, 2),
     deleteGenericComment = _useDeleteGenericComm2[0],
     response = _useDeleteGenericComm2[1];
+  var _useUpdateGenericComm = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useUpdateGenericCommentMutation)(),
+    _useUpdateGenericComm2 = _slicedToArray(_useUpdateGenericComm, 1),
+    updateGenericComment = _useUpdateGenericComm2[0];
   var currentYear = new Date().getFullYear();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(currentYear),
     _useState2 = _slicedToArray(_useState, 2),
@@ -18442,6 +18457,10 @@ function GlobalComment() {
     _useState8 = _slicedToArray(_useState7, 2),
     commentId = _useState8[0],
     setCommentID = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState10 = _slicedToArray(_useState9, 2),
+    years = _useState10[0],
+    setYears = _useState10[1];
   // const [filteredData, setFilteredData] = useState();
   var assetsPath = window.eluxDashboard.assetsUrl;
   var currentUser = window.eluxDashboard.currentUser;
@@ -18449,8 +18468,6 @@ function GlobalComment() {
     errorOccured = _Translation_Translation__WEBPACK_IMPORTED_MODULE_6__.eluxTranslation.errorOccured,
     pleaseWait = _Translation_Translation__WEBPACK_IMPORTED_MODULE_6__.eluxTranslation.pleaseWait;
   var postCommentField = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
-  // const commentDeleteBtn = useRef();
-
   var handleYearChange = function handleYearChange(value) {
     setDate(value);
   };
@@ -18496,15 +18513,6 @@ function GlobalComment() {
       return _ref.apply(this, arguments);
     };
   }();
-  var years = [];
-  for (var year = 1950; year <= currentYear; year += 1) {
-    var yearObject = {
-      label: year,
-      value: year
-    };
-    years.push(yearObject);
-    console.log('Years');
-  }
   var deleteCommentHandler = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -18517,28 +18525,61 @@ function GlobalComment() {
                 comment_id: commentId
               });
             case 3:
-              console.log(response);
               setIsEdit(!isEdit);
-              _context2.next = 10;
+              _context2.next = 9;
               break;
-            case 7:
-              _context2.prev = 7;
+            case 6:
+              _context2.prev = 6;
               _context2.t0 = _context2["catch"](0);
               console.log('An Error Occurred', _context2.t0);
-            case 10:
+            case 9:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 7]]);
+      }, _callee2, null, [[0, 6]]);
     }));
     return function deleteCommentHandler() {
       return _ref2.apply(this, arguments);
     };
   }();
+  var updateCommentHandler = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return updateGenericComment({
+                comment_id: commentId,
+                comment_content: commentContent
+              });
+            case 3:
+              setIsEdit(!isEdit);
+              _context3.next = 9;
+              break;
+            case 6:
+              _context3.prev = 6;
+              _context3.t0 = _context3["catch"](0);
+              console.log('An Error Occurred', _context3.t0);
+            case 9:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 6]]);
+    }));
+    return function updateCommentHandler() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
   var openCommentEditBox = function openCommentEditBox(event) {
     setIsEdit(!isEdit);
     setCommentID(event.target.closest('button').getAttribute('data-id'));
+  };
+  var updateCommentOnChange = function updateCommentOnChange(event) {
+    setCommentContent(event.target.value);
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var comment = data && data.data.find(function (comment) {
@@ -18550,6 +18591,18 @@ function GlobalComment() {
       console.log('State Not Updated', error);
     }
   }, [commentId]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var years = [];
+    for (var year = 1950; year <= currentYear; year += 1) {
+      var yearObject = {
+        label: year,
+        value: year
+      };
+      years.push(yearObject);
+      setYears(years);
+      console.log('Years');
+    }
+  }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "global-comment-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -18599,11 +18652,13 @@ function GlobalComment() {
   }))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "update-generic-comment-wrapper"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", {
-    value: commentContent
+    value: commentContent,
+    onChange: updateCommentOnChange
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "comment-action"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-    type: "button"
+    type: "button",
+    onClick: updateCommentHandler
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
     src: assetsPath + _images_save_svg__WEBPACK_IMPORTED_MODULE_5__["default"],
     alt: "Save Icon"

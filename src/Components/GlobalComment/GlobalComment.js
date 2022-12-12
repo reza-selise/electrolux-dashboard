@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
     useDeleteGenericCommentMutation,
     useGetGenericCommentQuery,
-    useInsetGenericCommentMutation
+    useInsetGenericCommentMutation,
+    useUpdateGenericCommentMutation
 } from '../../API/apiSlice';
 import deleteIcon from '../../images/delete.svg';
 import pencilIcon from '../../images/pencil.svg';
@@ -16,19 +17,19 @@ function GlobalComment() {
     const { data, error, isLoading } = useGetGenericCommentQuery();
     const [insertGenericComment] = useInsetGenericCommentMutation();
     const [deleteGenericComment, response] = useDeleteGenericCommentMutation();
+    const [updateGenericComment] = useUpdateGenericCommentMutation();
     const currentYear = new Date().getFullYear();
     const [date, setDate] = useState(currentYear);
     const [isEdit, setIsEdit] = useState(false);
     const [commentContent, setCommentContent] = useState('');
     const [commentId, setCommentID] = useState();
+    const [years, setYears] = useState([]);
     // const [filteredData, setFilteredData] = useState();
     const assetsPath = window.eluxDashboard.assetsUrl;
     const { currentUser } = window.eluxDashboard;
     const { startTyping, errorOccured, pleaseWait } = eluxTranslation;
 
     const postCommentField = useRef();
-    // const commentDeleteBtn = useRef();
-
     const handleYearChange = (value) => {
         setDate(value);
     };
@@ -51,23 +52,22 @@ function GlobalComment() {
         }
     };
 
-    const years = [];
-    for (let year = 1950; year <= currentYear; year += 1) {
-        const yearObject = {
-            label: year,
-            value: year,
-        };
-
-        years.push(yearObject);
-        console.log('Years');
-    }
-
     const deleteCommentHandler = async () => {
         try {
             await deleteGenericComment({
                 comment_id: commentId,
             });
-            console.log(response);
+            setIsEdit(!isEdit);
+        } catch (e) {
+            console.log('An Error Occurred', e);
+        }
+    };
+    const updateCommentHandler = async () => {
+        try {
+            await updateGenericComment({
+                comment_id: commentId,
+                comment_content: commentContent,
+            });
             setIsEdit(!isEdit);
         } catch (e) {
             console.log('An Error Occurred', e);
@@ -77,6 +77,11 @@ function GlobalComment() {
         setIsEdit(!isEdit);
         setCommentID(event.target.closest('button').getAttribute('data-id'));
     };
+
+    const updateCommentOnChange = (event) => {
+        setCommentContent(event.target.value);
+    };
+
     useEffect(() => {
         const comment =
             data && data.data.find((comment) => String(comment.comment_ID) === String(commentId));
@@ -86,6 +91,21 @@ function GlobalComment() {
             console.log('State Not Updated', error);
         }
     }, [commentId]);
+
+    useEffect(() => {
+        const years = [];
+        for (let year = 1950; year <= currentYear; year += 1) {
+            const yearObject = {
+                label: year,
+                value: year,
+            };
+
+            years.push(yearObject);
+            setYears(years);
+            console.log('Years');
+        }
+    }, []);
+
     return (
         <div className="global-comment-container">
             <div className="comment-filters">
@@ -135,9 +155,9 @@ function GlobalComment() {
                 </form>
             ) : (
                 <div className="update-generic-comment-wrapper">
-                    <textarea value={commentContent} />
+                    <textarea value={commentContent} onChange={updateCommentOnChange} />
                     <div className="comment-action">
-                        <button type="button">
+                        <button type="button" onClick={updateCommentHandler}>
                             <img src={assetsPath + saveIcon} alt="Save Icon" />
                         </button>
                         <button type="button" onClick={deleteCommentHandler}>

@@ -27,6 +27,14 @@ export const eluxAPI = createApi({
             }),
             invalidatesTags: ['GenericComment'],
         }),
+        updateGenericComment: builder.mutation({
+            query: (payload) => ({
+                url: 'el-dashboard-api/generic-comments',
+                method: 'PUT',
+                body: payload,
+            }),
+            invalidatesTags: ['GenericComment'],
+        }),
     }),
 });
 
@@ -34,4 +42,5 @@ export const {
     useGetGenericCommentQuery,
     useInsetGenericCommentMutation,
     useDeleteGenericCommentMutation,
+    useUpdateGenericCommentMutation,
 } = eluxAPI;
