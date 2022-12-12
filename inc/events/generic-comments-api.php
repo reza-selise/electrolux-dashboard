@@ -10,38 +10,56 @@ add_action( 'rest_api_init', function () {
     register_rest_route( 'el-dashboard-api', '/generic-comments', [
         'methods' => 'GET',
         'callback' => 'el_get_generic_comments',
+        'login_user_id' => get_current_user_id(),
     ]);
 });
 
 function el_get_generic_comments($ReqObj){
+    // print_r($ReqObj->get_attributes() );
+    // for testing
+    if(el_has_rest_Authority($ReqObj) == true || true ){
+        
 
-    $comments_per_page = 10;
+        // has admin access 
 
-    $args = [
-        'meta_key'      => 'comment_section',
-        'meta_value'    => 'generic',
-        'number'        => $comments_per_page,
-        'offset'        => 0,
-    ];
 
-    // change page number 
-    $comment_page   =  intval(  $ReqObj->get_param('page') );
-    
-    if( $comment_page ){
-        $offset_value   =  ($comment_page - 1) * $comments_per_page;
-        if($offset_value){
-            $args['offset'] = $offset_value;
+        $comments_per_page = 10;
+
+        $args = [
+            'meta_key'      => 'comment_section',
+            'meta_value'    => 'generic',
+            'number'        => $comments_per_page,
+            'offset'        => 0,
+        ];
+
+        // change page number 
+        $comment_page   =  intval(  $ReqObj->get_param('page') );
+        
+        if( $comment_page ){
+            $offset_value   =  ($comment_page - 1) * $comments_per_page;
+            if($offset_value){
+                $args['offset'] = $offset_value;
+            }
         }
+
+
+        $comments_query = new WP_Comment_Query;
+        $comments = $comments_query->query($args);
+
+        return wp_send_json([
+            'status' => true,
+            'data'  =>$comments
+        ]);
+
+    
+
+    }else{
+        return wp_send_json([
+            'status'    => false,
+            'data'      => 'Please login to get the comments'
+        ]);
     }
 
-
-    $comments_query = new WP_Comment_Query;
-    $comments = $comments_query->query($args);
-
-    return wp_send_json([
-        'status' => true,
-        'data'  =>$comments
-    ]);
 
 }
 
@@ -49,64 +67,83 @@ function el_get_generic_comments($ReqObj){
 // ------------- ADD Generic Comments ---------------
 
 add_action( 'rest_api_init', function () {
+   
+
     register_rest_route( 'el-dashboard-api', '/generic-comments', [
         'methods' => 'POST',
         'callback' => 'el_add_generic_comments',
+        'login_user_id' => get_current_user_id(),
     ]);
+
 } );
 
 function el_add_generic_comments($ReqObj){
 
-    // $comment_content  =  $()
+    if(el_has_rest_Authority($ReqObj) == true ){
 
-    $received_data = $ReqObj->get_json_params();
-
-
-    if( isset($received_data['comment_content']) ){
-        $comment_content = sanitize_textarea_field(  $received_data['comment_content'] );
-        $current_user = wp_get_current_user();
-        $email = $current_user->user_email;
-
-
-        // Insert the comment (Return : int|false)
-        $is_inserted = wp_insert_comment([
-            'comment_approved'  => 1,
-            'user_id'           => get_current_user_id(  ),
-            'comment_author_email' => $email,
-            'comment_author'    => $current_user->user_login,
-            'comment_meta'      => [
-                'comment_section' => 'generic'
-            ],
-            'comment_content'   => $comment_content,
-        ]);
+        // get user info
+        $attrs              =  $ReqObj->get_attributes();
+        $current_user_id    = intval($attrs['login_user_id']);
+        $current_user       = get_user_by( 'id', $current_user_id );
 
 
 
+        $received_data = $ReqObj->get_json_params();
 
-        if( $is_inserted === false ){
-            
+
+        if( isset($received_data['comment_content']) ){
+            $comment_content    = sanitize_textarea_field(  $received_data['comment_content'] );
+            $email              = $current_user->user_email;
+
+
+            // Insert the comment (Return : int|false)
+            $is_inserted = wp_insert_comment([
+                'comment_approved'  => 1,
+                'user_id'           => $current_user_id,
+                'comment_author_email' => $email,
+                'comment_author'    => $current_user->user_login,
+                'comment_meta'      => [
+                    'comment_section' => 'generic'
+                ],
+                'comment_content'   => $comment_content,
+            ]);
+
+
+
+
+            if( $is_inserted === false ){
+                
+                return wp_send_json([
+                    "status"    => false,
+                    'message'   => "Comment not saved",
+                    'currentuser' => get_current_user_id(  ),
+                ]);
+            }
+
+            if( $is_inserted > 0 ){
+                return wp_send_json([
+                    "status"    => true,
+                    'message'   => "Your Comment Added",
+                    'dev_message'   => "Comment id ".$is_inserted,
+                    'currentuser' => get_current_user_id(  ),
+
+                ]);
+            }
+
+        }else{
             return wp_send_json([
                 "status"    => false,
-                'message'   => "Comment not saved",
-            ]);
-        }
-
-        if( $is_inserted > 0 ){
-            return wp_send_json([
-                "status"    => true,
-                'message'   => "Your Comment Added",
-                'dev_message'   => "Comment id ".$is_inserted,
+                'message'   => "Please provide a valid comment",
+                'currentuser' => get_current_user_id(  ),
             ]);
         }
 
     }else{
         return wp_send_json([
-            "status"    => false,
-            'message'   => "Please provide a valid comment",
+            'status'    => false,
+            'data'      => 'Please login to get the comments or you have to be admin'
         ]);
     }
-
-
 }
 
 // ------------- UPDATE Generic Comments ---------------
@@ -123,6 +160,8 @@ add_action( 'rest_api_init', function () {
     register_rest_route( 'el-dashboard-api', '/generic-comments', [
         'methods' => 'PUT',
         'callback' => 'el_update_generic_comments',
+        'login_user_id' => get_current_user_id(),
+
     ]);
 } );
 
@@ -130,71 +169,82 @@ add_action( 'rest_api_init', function () {
 function el_update_generic_comments($ReqObj){
   
 
-    
-    $received_data = $ReqObj->get_json_params();
+    if(el_has_rest_Authority($ReqObj) == true ){
+        
+        $received_data = $ReqObj->get_json_params();
 
-    if( isset($received_data['comment_content']) &&  isset($received_data['comment_id']) ){
+        $attrs              =  $ReqObj->get_attributes();
+        $current_user_id    = intval($attrs['login_user_id']);
+        $current_user       = get_user_by( 'id', $current_user_id );
 
-        $comment_id         = intval($received_data['comment_id']);
-        $comment_content    = sanitize_textarea_field($received_data['comment_content']);
+        if( isset($received_data['comment_content']) &&  isset($received_data['comment_id']) ){
 
-        // get comment 
-        $comment            = get_comment( $comment_id );
+            $comment_id         = intval($received_data['comment_id']);
+            $comment_content    = sanitize_textarea_field($received_data['comment_content']);
 
-        // 
-        if( $comment ){
-            $comment_user_id = $comment->user_id;
+            // get comment 
+            $comment            = get_comment( $comment_id );
 
-            $user_matched = $comment_user_id === get_current_user_id(  ) ? true : false;
+            // 
+            if( $comment ){
+                $comment_user_id = intval($comment->user_id);
 
-            $user_matched = true; // testing
+                $user_matched = $comment_user_id === $current_user_id ? true : false;
 
-            // check is user create the comment 
-            if($user_matched){
+                // $user_matched = true; // testing
 
-                $update_status = wp_update_comment( [
-                    'comment_ID'        => $comment_id,
-                    'comment_content'   => $comment_content
-                ]);
+                // check is user create the comment 
+                if($user_matched){
 
-                if(  $update_status == 1 ){
-                    return wp_send_json([
-                        'status'    => true,
-                        'message'   => "Your comment updated!"
+                    $update_status = wp_update_comment( [
+                        'comment_ID'        => $comment_id,
+                        'comment_content'   => $comment_content
                     ]);
-                }
+
+                    if(  $update_status == 1 ){
+                        return wp_send_json([
+                            'status'    => true,
+                            'message'   => "Your comment updated!"
+                        ]);
+                    }
 
 
-                if( is_wp_error( $update_status ) || $update_status == 0 ){
-                    return wp_send_json([
+                    if( is_wp_error( $update_status ) || $update_status == 0 ){
+                        return wp_send_json([
+                            'status'    => false,
+                            'message'   => "Something is wrong while updating!"
+                        ]);
+                    }
+
+                }else{
+                    return wp_send_json( [
                         'status'    => false,
-                        'message'   => "Something is wrong while updating!"
+                        'message'   => "Your are not authorize to update this comment."
                     ]);
                 }
+
 
             }else{
                 return wp_send_json( [
                     'status'    => false,
-                    'message'   => "Your are not authorize to update this comment."
+                    'message'   => "Comment not found"
                 ]);
             }
 
-
+            
         }else{
             return wp_send_json( [
                 'status'    => false,
-                'message'   => "Comment not found"
+                'message'   => "Please provide comment text / Comment id"
             ]);
         }
 
-        
     }else{
-        return wp_send_json( [
+        return wp_send_json([
             'status'    => false,
-            'message'   => "Please provide comment text / Comment id"
+            'data'      => 'Please login to get the comments or you have to be admin'
         ]);
     }
-
 
 }
 
@@ -212,56 +262,69 @@ add_action( 'rest_api_init', function () {
     register_rest_route( 'el-dashboard-api', '/generic-comments', [
         'methods' => 'DELETE',
         'callback' => 'el_delete_generic_comments',
+        'login_user_id' => get_current_user_id(),
+
     ]);
 } );
 
 function el_delete_generic_comments($ReqObj){
 
-    
-    $received_data = $ReqObj->get_json_params();
+    if(el_has_rest_Authority($ReqObj) == true ){
+        
+        // get comment 
+        $received_data      = $ReqObj->get_json_params();
+        $comment_id         = intval($received_data['comment_id']);
+        $comment            = get_comment( $comment_id );
 
-    $comment_id         = intval($received_data['comment_id']);
+        // get current user
+        $attrs              =  $ReqObj->get_attributes();
+        $current_user_id    = intval($attrs['login_user_id']);
+        $current_user       = get_user_by( 'id', $current_user_id );
 
-    // get comment 
-    $comment            = get_comment( $comment_id );
 
-    // 
-    if( $comment_id && $comment ){
-        $comment_user_id = $comment->user_id;
 
-        $user_matched = $comment_user_id === get_current_user_id(  ) ? true : false;
+        // 
+        if( $comment_id && $comment ){
+            $comment_user_id = $comment->user_id;
 
-        $user_matched = true; // testing
+            $user_matched = $comment_user_id === $current_user_id ? true : false;
 
-        // check is user create the comment 
-        if($user_matched){
+            // $user_matched = true; // testing
 
-            $delete_status = wp_delete_comment($comment_id);
+            // check is user create the comment 
+            if($user_matched){
 
-            if($delete_status){
-                return wp_send_json( [
-                    'status'    => true,
-                    'message'   => "Your comment deleted!"
-                ]);    
+                $delete_status = wp_delete_comment($comment_id);
+
+                if($delete_status){
+                    return wp_send_json( [
+                        'status'    => true,
+                        'message'   => "Your comment deleted!"
+                    ]);    
+                }else{
+                    return wp_send_json( [
+                        'status'    => false,
+                        'message'   => "Something is wrong while delete the Comment"
+                    ]);    
+                }
+
             }else{
                 return wp_send_json( [
                     'status'    => false,
-                    'message'   => "Something is wrong while delete the Comment"
-                ]);    
+                    'message'   => "Your are not authorize to delete this comment."
+                ]);
             }
-
         }else{
             return wp_send_json( [
                 'status'    => false,
-                'message'   => "Your are not authorize to delete this comment."
+                'message'   => "Please provide Valid Comment ID!"
             ]);
         }
+
     }else{
-        return wp_send_json( [
+        return wp_send_json([
             'status'    => false,
-            'message'   => "Please provide Valid Comment id"
+            'data'      => 'Please login to get the comments or you have to be admin'
         ]);
     }
-
-
 }

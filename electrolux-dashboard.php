@@ -318,3 +318,53 @@ final class Electrolux_Dashboard {
 }
 
 Electrolux_Dashboard::get_instance();
+
+
+
+/**
+ * Include 
+ * 'login_user_id' => get_current_user_id(),
+ * in the rest API args
+ * 
+ * 
+ * Example use case
+ * register_rest_route( 'el-dashboard-api', '/generic-comments', [
+        'methods' => 'GET',
+        'callback' => 'el_get_generic_comments',
+        'login_user_id' => get_current_user_id(),
+    ]);
+
+
+    if(el_has_rest_Authority($ReqObj) == true ){
+
+        // do stuff
+        $attrs              =  $ReqObj->get_attributes();
+        $current_user_id    = intval($attrs['login_user_id']);
+        $current_user       = get_user_by( 'id', $current_user_id );
+
+
+    }else{
+        return wp_send_json([
+            'status'    => false,
+            'data'      => 'Please login to get the comments or you have to be admin'
+        ]);
+    }
+
+ */
+function el_has_rest_Authority($EL_REST_REQUEST){
+    $attrs =  $EL_REST_REQUEST->get_attributes();
+    $has_authority = false;
+
+    if( isset($attrs['login_user_id']) && intval($attrs['login_user_id']) > 0  ){
+
+        $user_id = intval($attrs['login_user_id']);
+        $current_user = get_user_by( 'id', $user_id );
+        $roles = ( array ) $current_user->roles;
+
+        if(in_array('administrator', $roles )){
+            $has_authority = true;
+        }
+
+    }
+    return $has_authority;
+}
