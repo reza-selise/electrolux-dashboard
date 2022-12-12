@@ -1,0 +1,85 @@
+
+// request from frontend
+
+{
+    "filter_type": "months",
+    "request_data": "events/participants",
+    "request_body": {
+        "year": "2021",
+        "months": "01,03,09"
+    }
+}
+// year filter
+{
+    "filter_type": "years",
+    "request_data": "events/participants",
+    "request_body": {
+        "years": [
+            {
+                "year":  "2022",
+                "months":  "02,05,06"
+            },
+            {
+                "year":  "2023",
+                "months":  "02,11,06"
+            },
+            {
+                "year":  "2021",
+                "months":  "02,07,04"
+            },
+           
+        ]
+    }
+}
+// custom date filter
+{
+    "filter_type": "custom_date_range",
+    "request_data": "events/participants",
+    "request_body": {
+        "years": [
+            {
+                "start":  "2022-01-01",
+                "end":  "2022-01-31",
+            },
+            {
+                "start":  "2022-02-01",
+                "end":  "2022-03-31",
+            },
+        ]
+    }
+}
+//custom time frame
+{
+    "filter_type": "custom_time_frame",
+    "request_data": "events/participants",
+    "request_body": {
+        "start":  "2022-01-01",
+        "end":  "2022-01-31",
+    }
+}
+//------------------------------------------------------------------ Deliver data -------------------
+{
+    "status": 200,
+    "message": "success",
+    "data": {
+        "type": "events/participants",
+        "years": [
+            {
+                "year":  "2022",
+                "total":  "10990",
+              
+            },
+            {
+                "year":  "2021",
+                "total":  "665",
+              
+            },
+            {
+                "year":  "2020",
+                "total":  "433",
+              
+            },
+           
+        ]
+    }
+}
