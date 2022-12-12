@@ -5,7 +5,7 @@ add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
     register_rest_route($namespace, '/consultations-by-acquisition-type', array(
         'methods' => 'GET',
-        'callback' => 'my_awesome_func',
+        'callback' => 'get_event_by_locations',
         'permission_callback' => '__return_true',
     ));
 });
@@ -34,7 +34,25 @@ function handle_custom_query_var($query, $query_vars){
 add_filter('woocommerce_order_data_store_cpt_get_orders_query', 'handle_custom_query_var', 10, 2);
 
 
-function my_awesome_func($request){
+function get_event_by_locations($request){
+    $filter_type =  $request->get_params()['filter_type'];
+    if($filter_type == 'months'){
+        
+    }
+    elseif($filter_type == 'years'){
+        
+    }
+    elseif($filter_type == 'custom_date_range'){
+        
+    }
+    elseif($filter_type == 'custom_time_frame'){
+        
+    }
+    else{
+        return 'not matched filter type';
+    }
+    return $filter_type;
+    
     $requests =  $request->get_params();
     $request_years = $request->get_params()['years'];
     $arr_req_years = explode (",", $request_years); 
