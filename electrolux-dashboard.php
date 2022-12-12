@@ -328,20 +328,21 @@ Electrolux_Dashboard::get_instance();
  * 
  * 
  * Example use case
- * register_rest_route( 'el-dashboard-api', '/generic-comments', [
+
+    // while register
+    register_rest_route( 'el-dashboard-api', '/generic-comments', [
         'methods' => 'GET',
         'callback' => 'el_get_generic_comments',
         'login_user_id' => get_current_user_id(),
     ]);
 
-
+    // in callback
     if(el_has_rest_Authority($ReqObj) == true ){
 
         // do stuff
         $attrs              =  $ReqObj->get_attributes();
         $current_user_id    = intval($attrs['login_user_id']);
         $current_user       = get_user_by( 'id', $current_user_id );
-
 
     }else{
         return wp_send_json([
