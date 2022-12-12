@@ -356,6 +356,7 @@ Electrolux_Dashboard::get_instance();
 function el_has_rest_Authority($EL_REST_REQUEST){
     $attrs =  $EL_REST_REQUEST->get_attributes();
     $has_authority = false;
+    // $has_authority = true;
 
     if( isset($attrs['login_user_id']) && intval($attrs['login_user_id']) > 0  ){
 

@@ -15,12 +15,12 @@ add_action( 'rest_api_init', function () {
 });
 
 function el_get_generic_comments($ReqObj){
-    // print_r($ReqObj->get_attributes() );
+    
     // for testing
     if(el_has_rest_Authority($ReqObj) == true || true ){
+        // has admin access 
         
 
-        // has admin access 
 
 
         $comments_per_page = 10;
@@ -31,6 +31,9 @@ function el_get_generic_comments($ReqObj){
             'number'        => $comments_per_page,
             'offset'        => 0,
         ];
+
+        
+
 
         // change page number 
         $comment_page   =  intval(  $ReqObj->get_param('page') );
@@ -43,11 +46,21 @@ function el_get_generic_comments($ReqObj){
         }
 
 
+        // Filter by year
+        $comment_year   =  intval(  $ReqObj->get_param('comment_year') )  ?  intval(  $ReqObj->get_param('comment_year') ) : date("Y");
+        if( $comment_year ){
+            $args['date_query'] = [
+                'year' => $comment_year
+            ];
+        }
+        
+
         $comments_query = new WP_Comment_Query;
         $comments = $comments_query->query($args);
 
         return wp_send_json([
             'status' => true,
+            'sent_args' => $args,
             'data'  =>$comments
         ]);
 
@@ -177,7 +190,11 @@ function el_update_generic_comments($ReqObj){
         $current_user_id    = intval($attrs['login_user_id']);
         $current_user       = get_user_by( 'id', $current_user_id );
 
-        if( isset($received_data['comment_content']) &&  isset($received_data['comment_id']) ){
+        if( 
+            isset($received_data['comment_content']) &&  
+            isset($received_data['comment_id']) &&
+            trim($received_data['comment_content'])   
+        ){
 
             $comment_id         = intval($received_data['comment_id']);
             $comment_content    = sanitize_textarea_field($received_data['comment_content']);
@@ -263,7 +280,6 @@ add_action( 'rest_api_init', function () {
         'methods' => 'DELETE',
         'callback' => 'el_delete_generic_comments',
         'login_user_id' => get_current_user_id(),
-
     ]);
 } );
 
@@ -285,7 +301,7 @@ function el_delete_generic_comments($ReqObj){
 
         // 
         if( $comment_id && $comment ){
-            $comment_user_id = $comment->user_id;
+            $comment_user_id = intval($comment->user_id);
 
             $user_matched = $comment_user_id === $current_user_id ? true : false;
 
