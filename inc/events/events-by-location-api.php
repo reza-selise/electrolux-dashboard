@@ -12,91 +12,117 @@ add_action( 'rest_api_init', function () {
 
 function handle_custom_query_var($query, $query_vars){
     if (!empty($query_vars['event_location'])) {
-      
+     
         $query['meta_query'][] = array(
             'key' => 'event_location',
-            'value' => $query_vars['event_location'],
+            'value' => explode(',', $query_vars['event_location']),
             'compare' => 'IN',
 
         );
     }
-    if (!empty($query_vars['event_start_date'])) {
-        $query['meta_query'][] = array(
-            'key' => 'start_date',
-            'value' => $query_vars['event_start_date'],
-            'compare'   => 'BETWEEN',
-            'type'      => 'DATETIME'
+    if(!empty($query_vars['filter_type']) && $query_vars['filter_type'] == 'month'){
+        $request_body =  $query_vars['request_body'];
 
-        );
+
     }
+//    die($query_vars['event_location']);
+  
+    // if (!empty($query_vars['event_start_date'])) {
+    //     $query['meta_query'][] = array(
+    //         'key' => 'start_date',
+    //         'value' => $query_vars['event_start_date'],
+    //         'compare'   => 'BETWEEN',
+    //         'type'      => 'DATETIME'
+
+    //     );
+    // }
     return $query;
 }
 add_filter('woocommerce_order_data_store_cpt_get_orders_query', 'handle_custom_query_var', 10, 2);
 
 
 function get_event_by_locations($request){
+    $request_data =  $request->get_params()['request_data'];
     $filter_type =  $request->get_params()['filter_type'];
-    $req_year = null;
-    $req_months = [];
-
-    // for -  years filter
-    $req_years = [];
+    $request_body =  $request->get_params()['request_body'];
     
+    $gallery_locations = $request->get_params()['locations'];
+    $gallery_locations_arr =  explode(',',$gallery_locations);
+    $response               = array(
+        "type"  => $request_data
+    );
 
-
-    if($filter_type == 'months'){
-        $req_year =  $request->get_params()['request_body']['year'];
-        $req_months = explode (",", $request->get_params()['request_body']['months']);
-
-        return $req_months;
-    }
-    elseif($filter_type == 'years'){
-        $req_years = $request->get_params()['request_body']['years'];
-
-        return $req_years;
-    }
-    elseif($filter_type == 'custom_date_range'){
+    $my_returned_data = array();
+    $my_years = array();
+    foreach($gallery_locations_arr as $gallery_location){
+        $my_data = array(
+            "location"  => $gallery_location,
+            "total" => count(get_order_count($gallery_location,$filter_type,$start_date,$end_date)),
+    
         
-    }
-    elseif($filter_type == 'custom_time_frame'){
+        );
         
+        foreach( $request_body as $key=>$single_year){
+            $my_data[$single_year['year']] = rand(10,100);
+               
+        }
+
+      array_push($my_returned_data, $my_data);  
     }
-    else{
-        return 'not matched filter type';
-    }
-    return $filter_type;
-    
-    $requests =  $request->get_params();
-    $request_years = $request->get_params()['years'];
-    $arr_req_years = explode (",", $request_years); 
-    $arr_req_months = explode (",", $request->get_params()['months']); 
-    $arr_req_categories = null;
-    if(isset($request->get_params()['categories']) && !empty($request->get_params()['categories'])){
-        $arr_req_categories = explode (",", $request->get_params()['categories']);
-    }
-    $customer_types = explode (",", $request->get_params()['customer_types']);
-    $gallery_locations = explode (",", $request->get_params()['gallery_locations']);
-    $device_types = explode (",", $request->get_params()['device_types']);
-    $device_categories = explode (",", $request->get_params()['device_categories']);
-    $status = explode (",", $request->get_params()['status']);
-    $cancellation_type = explode (",", $request->get_params()['cancellation_type']);
-    
    
-    // meta query
+    // foreach( $request_body as $single_year){
+    //     $all_locations_data = array();
+    //     $year   = $single_year->year;
+    //     $months = explode(',', $single_year->months);
+    //     $yearly_order_ids           = array();
+    //     $yearly_event_participants  = 0;
+        
+    //     foreach ( $months as $month ) {
+    //         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
+    //         $end_date           = $year . '-' . $month . '-31 11:59:59' ;
+    //         $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+    //         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
+    //     }
+        
+    //     if( 'events' === $request_data ){
+    //         $locations_data = array(
+    //             "location"  => $gallery_locations[0],
+    //             "2022"  => "400000",
+    //             "2021"   => "450000",
+    //             "2023"   => "750000",
+    //             "total" => count( $yearly_order_ids )
+    //         );
+    //         array_push( $all_locations_data, $locations_data );
+    //     }
+
+    // }
+    $response['locations'] = $my_returned_data;
+    
+    return rest_ensure_response( array(
+        'status_code' => 200,
+        'message'     => 'success',
+        'data'        => $response,
+        ) 
+    );
+
+   
+    // return $request_body;
+    // return get_order_count($gallery_location,$filter_type,$start_date,$end_date );
+    // consultations_by_acquisition_type
+    // return array( 'custom' => 'Data' , "request"=> $request->get_params() );
+}
+
+
+function get_order_count($gallery_location,$filter_type,$start_date,$end_date){
     $args = array(
         'limit' => -1,
         'event_location' => $gallery_locations,
-        'event_years' => '2021,2022,2023',
-        'event_months' => '01,02,03',
-        'event_start_date' => '2022-01-01',
-        'event_end_date' => '2022-12-31',
+        'filter_type' => $filter_type,
+        // 'request_body' => $request_body,
+        'event_start_date' => $start_date,
+        'event_end_date' => $end_date,
         'return' => 'ids'
     );
     $order_data = wc_get_orders($args);
-    // meta query
-
-
-    return  count($order_data);
-    // consultations_by_acquisition_type
-    // return array( 'custom' => 'Data' , "request"=> $request->get_params() );
+    return $order_data;
 }
