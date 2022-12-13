@@ -19,7 +19,28 @@ export const eluxAPI = createApi({
             query: () => 'el-dashboard-api/generic-comments',
             providesTags: ['GenericComment'],
         }),
+        deleteGenericComment: builder.mutation({
+            query: (payload) => ({
+                url: 'el-dashboard-api/generic-comments',
+                method: 'DELETE',
+                body: payload,
+            }),
+            invalidatesTags: ['GenericComment'],
+        }),
+        updateGenericComment: builder.mutation({
+            query: (payload) => ({
+                url: 'el-dashboard-api/generic-comments',
+                method: 'PUT',
+                body: payload,
+            }),
+            invalidatesTags: ['GenericComment'],
+        }),
     }),
 });
 
-export const { useGetGenericCommentQuery, useInsetGenericCommentMutation } = eluxAPI;
+export const {
+    useGetGenericCommentQuery,
+    useInsetGenericCommentMutation,
+    useDeleteGenericCommentMutation,
+    useUpdateGenericCommentMutation,
+} = eluxAPI;

@@ -122,6 +122,12 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date){
         'event_start_date' => $start_date,
         'event_end_date' => $end_date,
         'return' => 'ids'
+        'event_years' => '2021,2022,2023',
+        'event_months' => '01,02,03',
+        'event_start_date' => '2022-01-01',
+        'event_end_date' => '2022-12-31',
+        'return' => 'ids',
+
     );
     $order_data = wc_get_orders($args);
     return $order_data;

@@ -152,6 +152,7 @@ final class Electrolux_Dashboard {
         $localize_array = [
             'homeUrl'   => site_url(),
             'assetsUrl' => ELUX_DB_PLUGIN_URL . 'public',
+            'currentUser' => get_current_user_id(),
         ];
         wp_localize_script( 'elux-db-react-script', 'eluxDashboard', $localize_array );
     }
