@@ -36,11 +36,24 @@ add_filter('woocommerce_order_data_store_cpt_get_orders_query', 'handle_custom_q
 
 function get_event_by_locations($request){
     $filter_type =  $request->get_params()['filter_type'];
+    $req_year = null;
+    $req_months = [];
+
+    // for -  years filter
+    $req_years = [];
+    
+
+
     if($filter_type == 'months'){
-        
+        $req_year =  $request->get_params()['request_body']['year'];
+        $req_months = explode (",", $request->get_params()['request_body']['months']);
+
+        return $req_months;
     }
     elseif($filter_type == 'years'){
-        
+        $req_years = $request->get_params()['request_body']['years'];
+
+        return $req_years;
     }
     elseif($filter_type == 'custom_date_range'){
         
