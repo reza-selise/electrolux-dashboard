@@ -3,12 +3,23 @@
 
 {
     "filter_type": "months",
-    "request_data": "events/participants",
-    "locations": "474,473",
-    "request_body": {
-        "year": "2021",
-        "months": "01,03,09"
-    }
+    "request_data": "events",
+    "locations": "45900,47400",
+   "request_body": [
+        {
+            "year": "2021",
+            "months": "01,03,09"
+        },
+         {
+            "year": "2022",
+            "months": "01,03,09"
+        }
+        ,
+         {
+            "year": "2019",
+            "months": "01,03,09"
+        }
+    ]
    
 }
 // year filter
@@ -58,28 +69,25 @@
 }
 //------------------------------------------------------------------ Deliver data -------------------
 {
-    "status": 200,
+    "status_code": 200,
     "message": "success",
-    "locations": "474,473",
     "data": {
-        "type": "events/participants",
-        "years": [
+        "type": "events",
+        "locations": [
             {
-                "year":  "2022",
-                "total":  "10990",
-              
+                "location": "45900",
+                "total": 5892,
+                "2021": 21,
+                "2022": 45,
+                "2019": 28
             },
             {
-                "year":  "2021",
-                "total":  "665",
-              
-            },
-            {
-                "year":  "2020",
-                "total":  "433",
-              
-            },
-           
+                "location": "47400",
+                "total": 5892,
+                "2021": 76,
+                "2022": 68,
+                "2019": 92
+            }
         ]
     }
 }

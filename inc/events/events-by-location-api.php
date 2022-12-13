@@ -20,22 +20,29 @@ function handle_custom_query_var($query, $query_vars){
 
         );
     }
-    if(!empty($query_vars['filter_type']) && $query_vars['filter_type'] == 'month'){
-        $request_body =  $query_vars['request_body'];
+    // if(!empty($query_vars['filter_type']) && $query_vars['filter_type'] == 'month'){
+    //     $request_body =  $query_vars['request_body'];
+    // }
+    
+    if (!empty($query_vars['event_start_date'])) {
+        $query['meta_query'][] = array(
+            'key' => 'event_start_time',
+            'value' => $query_vars['event_start_date'],
+            'compare'   => 'BETWEEN',
+            'type'      => 'DATETIME'
 
-
+        );
     }
-//    die($query_vars['event_location']);
-  
-    // if (!empty($query_vars['event_start_date'])) {
+    // if (!empty($query_vars['event_end_date'])) {
     //     $query['meta_query'][] = array(
-    //         'key' => 'start_date',
-    //         'value' => $query_vars['event_start_date'],
+    //         'key' => 'event_end_time',
+    //         'value' => $query_vars['event_end_date'],
     //         'compare'   => 'BETWEEN',
     //         'type'      => 'DATETIME'
 
     //     );
     // }
+
     return $query;
 }
 add_filter('woocommerce_order_data_store_cpt_get_orders_query', 'handle_custom_query_var', 10, 2);
@@ -67,38 +74,22 @@ function get_event_by_locations($request){
         
         foreach( $request_body as $key=>$single_year){
             $my_data[$single_year['year']] = rand(10,100);
+
+            // code here--------------
+            $year   = $single_year['year'];
+            $months = explode(',', $single_year->months); 
+            $start_date         = $year . '-' . $month . '-01 00:00:00';
+            $end_date           =  new DateTime($year . '-' . $month . '01 11:59:59');
+            $end_date = $end_date->format('Y-m-t h:i:s');
+            
+            $my_data[$single_year['year']] = count(get_order_count($gallery_location,$filter_type,$start_date,$end_date));
                
         }
 
       array_push($my_returned_data, $my_data);  
     }
    
-    // foreach( $request_body as $single_year){
-    //     $all_locations_data = array();
-    //     $year   = $single_year->year;
-    //     $months = explode(',', $single_year->months);
-    //     $yearly_order_ids           = array();
-    //     $yearly_event_participants  = 0;
-        
-    //     foreach ( $months as $month ) {
-    //         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
-    //         $end_date           = $year . '-' . $month . '-31 11:59:59' ;
-    //         $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date);
-    //         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
-    //     }
-        
-    //     if( 'events' === $request_data ){
-    //         $locations_data = array(
-    //             "location"  => $gallery_locations[0],
-    //             "2022"  => "400000",
-    //             "2021"   => "450000",
-    //             "2023"   => "750000",
-    //             "total" => count( $yearly_order_ids )
-    //         );
-    //         array_push( $all_locations_data, $locations_data );
-    //     }
-
-    // }
+   
     $response['locations'] = $my_returned_data;
     
     return rest_ensure_response( array(
@@ -108,30 +99,22 @@ function get_event_by_locations($request){
         ) 
     );
 
-   
-    // return $request_body;
-    // return get_order_count($gallery_location,$filter_type,$start_date,$end_date );
-    // consultations_by_acquisition_type
-    // return array( 'custom' => 'Data' , "request"=> $request->get_params() );
 }
 
 
 function get_order_count($gallery_location,$filter_type,$start_date,$end_date){
     $args = array(
         'limit' => -1,
+        'meta_relation' => 'AND',
         'event_location' => $gallery_locations,
         'filter_type' => $filter_type,
         // 'request_body' => $request_body,
-        'event_start_date' => $start_date,
+        'event_start_date' => array($start_date, $end_date),
         'event_end_date' => $end_date,
         'return' => 'ids',
-        'event_years' => '2021,2022,2023',
-        'event_months' => '01,02,03',
-        'event_start_date' => '2022-01-01',
-        'event_end_date' => '2022-12-31',
-        'return' => 'ids',
-
+        
     );
+    $order_data = new WC_Order_Query($args);
     $order_data = wc_get_orders($args);
     return $order_data;
 }
