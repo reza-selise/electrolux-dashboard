@@ -18155,8 +18155,10 @@ Schema.validators = validators;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "eluxAPI": () => (/* binding */ eluxAPI),
+/* harmony export */   "useDeleteGenericCommentMutation": () => (/* binding */ useDeleteGenericCommentMutation),
 /* harmony export */   "useGetGenericCommentQuery": () => (/* binding */ useGetGenericCommentQuery),
-/* harmony export */   "useInsetGenericCommentMutation": () => (/* binding */ useInsetGenericCommentMutation)
+/* harmony export */   "useInsetGenericCommentMutation": () => (/* binding */ useInsetGenericCommentMutation),
+/* harmony export */   "useUpdateGenericCommentMutation": () => (/* binding */ useUpdateGenericCommentMutation)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit/query/react */ "./node_modules/@reduxjs/toolkit/dist/query/react/rtk-query-react.esm.js");
 /* harmony import */ var _reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit/query/react */ "./node_modules/@reduxjs/toolkit/dist/query/rtk-query.esm.js");
@@ -18185,12 +18187,34 @@ var eluxAPI = (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.creat
           return 'el-dashboard-api/generic-comments';
         },
         providesTags: ['GenericComment']
+      }),
+      deleteGenericComment: builder.mutation({
+        query: function query(payload) {
+          return {
+            url: 'el-dashboard-api/generic-comments',
+            method: 'DELETE',
+            body: payload
+          };
+        },
+        invalidatesTags: ['GenericComment']
+      }),
+      updateGenericComment: builder.mutation({
+        query: function query(payload) {
+          return {
+            url: 'el-dashboard-api/generic-comments',
+            method: 'PUT',
+            body: payload
+          };
+        },
+        invalidatesTags: ['GenericComment']
       })
     };
   }
 });
 var useGetGenericCommentQuery = eluxAPI.useGetGenericCommentQuery,
-  useInsetGenericCommentMutation = eluxAPI.useInsetGenericCommentMutation;
+  useInsetGenericCommentMutation = eluxAPI.useInsetGenericCommentMutation,
+  useDeleteGenericCommentMutation = eluxAPI.useDeleteGenericCommentMutation,
+  useUpdateGenericCommentMutation = eluxAPI.useUpdateGenericCommentMutation;
 
 
 /***/ }),
@@ -18372,13 +18396,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/select/index.js");
+/* harmony import */ var antd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! antd */ "./node_modules/antd/es/select/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _API_apiSlice__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../API/apiSlice */ "./src/API/apiSlice.js");
-/* harmony import */ var _images_rocket_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../images/rocket.svg */ "./src/images/rocket.svg");
-/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
-/* harmony import */ var _GlobalComment_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./GlobalComment.scss */ "./src/Components/GlobalComment/GlobalComment.scss");
+/* harmony import */ var _images_delete_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../images/delete.svg */ "./src/images/delete.svg");
+/* harmony import */ var _images_pencil_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../images/pencil.svg */ "./src/images/pencil.svg");
+/* harmony import */ var _images_rocket_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../images/rocket.svg */ "./src/images/rocket.svg");
+/* harmony import */ var _images_save_svg__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../images/save.svg */ "./src/images/save.svg");
+/* harmony import */ var _Translation_Translation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Translation/Translation */ "./src/Translation/Translation.js");
+/* harmony import */ var _GlobalComment_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./GlobalComment.scss */ "./src/Components/GlobalComment/GlobalComment.scss");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -18395,6 +18422,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
 function GlobalComment() {
   var _useGetGenericComment = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useGetGenericCommentQuery)(),
     data = _useGetGenericComment.data,
@@ -18403,16 +18433,40 @@ function GlobalComment() {
   var _useInsetGenericComme = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useInsetGenericCommentMutation)(),
     _useInsetGenericComme2 = _slicedToArray(_useInsetGenericComme, 1),
     insertGenericComment = _useInsetGenericComme2[0];
+  var _useDeleteGenericComm = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useDeleteGenericCommentMutation)(),
+    _useDeleteGenericComm2 = _slicedToArray(_useDeleteGenericComm, 2),
+    deleteGenericComment = _useDeleteGenericComm2[0],
+    response = _useDeleteGenericComm2[1];
+  var _useUpdateGenericComm = (0,_API_apiSlice__WEBPACK_IMPORTED_MODULE_1__.useUpdateGenericCommentMutation)(),
+    _useUpdateGenericComm2 = _slicedToArray(_useUpdateGenericComm, 1),
+    updateGenericComment = _useUpdateGenericComm2[0];
   var currentYear = new Date().getFullYear();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(currentYear),
     _useState2 = _slicedToArray(_useState, 2),
     date = _useState2[0],
     setDate = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    isEdit = _useState4[0],
+    setIsEdit = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState6 = _slicedToArray(_useState5, 2),
+    commentContent = _useState6[0],
+    setCommentContent = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+    _useState8 = _slicedToArray(_useState7, 2),
+    commentId = _useState8[0],
+    setCommentID = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState10 = _slicedToArray(_useState9, 2),
+    years = _useState10[0],
+    setYears = _useState10[1];
   // const [filteredData, setFilteredData] = useState();
   var assetsPath = window.eluxDashboard.assetsUrl;
-  var startTyping = _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__.eluxTranslation.startTyping,
-    errorOccured = _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__.eluxTranslation.errorOccured,
-    pleaseWait = _Translation_Translation__WEBPACK_IMPORTED_MODULE_3__.eluxTranslation.pleaseWait;
+  var currentUser = window.eluxDashboard.currentUser;
+  var startTyping = _Translation_Translation__WEBPACK_IMPORTED_MODULE_6__.eluxTranslation.startTyping,
+    errorOccured = _Translation_Translation__WEBPACK_IMPORTED_MODULE_6__.eluxTranslation.errorOccured,
+    pleaseWait = _Translation_Translation__WEBPACK_IMPORTED_MODULE_6__.eluxTranslation.pleaseWait;
   var postCommentField = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
   var handleYearChange = function handleYearChange(value) {
     setDate(value);
@@ -18459,20 +18513,101 @@ function GlobalComment() {
       return _ref.apply(this, arguments);
     };
   }();
-  var years = [];
-  for (var year = 1950; year <= currentYear; year += 1) {
-    var yearObject = {
-      label: year,
-      value: year
+  var deleteCommentHandler = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return deleteGenericComment({
+                comment_id: commentId
+              });
+            case 3:
+              setIsEdit(!isEdit);
+              _context2.next = 9;
+              break;
+            case 6:
+              _context2.prev = 6;
+              _context2.t0 = _context2["catch"](0);
+              console.log('An Error Occurred', _context2.t0);
+            case 9:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 6]]);
+    }));
+    return function deleteCommentHandler() {
+      return _ref2.apply(this, arguments);
     };
-    years.push(yearObject);
-    console.log('Years');
-  }
+  }();
+  var updateCommentHandler = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return updateGenericComment({
+                comment_id: commentId,
+                comment_content: commentContent
+              });
+            case 3:
+              setIsEdit(!isEdit);
+              _context3.next = 9;
+              break;
+            case 6:
+              _context3.prev = 6;
+              _context3.t0 = _context3["catch"](0);
+              console.log('An Error Occurred', _context3.t0);
+            case 9:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 6]]);
+    }));
+    return function updateCommentHandler() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  var openCommentEditBox = function openCommentEditBox(event) {
+    setIsEdit(!isEdit);
+    setCommentID(event.target.closest('button').getAttribute('data-id'));
+  };
+  var updateCommentOnChange = function updateCommentOnChange(event) {
+    setCommentContent(event.target.value);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var comment = data && data.data.find(function (comment) {
+      return String(comment.comment_ID) === String(commentId);
+    });
+    try {
+      setCommentContent(comment.comment_content);
+    } catch (error) {
+      console.log('State Not Updated', error);
+    }
+  }, [commentId]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var years = [];
+    for (var year = 1950; year <= currentYear; year += 1) {
+      var yearObject = {
+        label: year,
+        value: year
+      };
+      years.push(yearObject);
+      setYears(years);
+      console.log('Years');
+    }
+  }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "global-comment-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "comment-filters"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(antd__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(antd__WEBPACK_IMPORTED_MODULE_8__["default"], {
     defaultValue: date,
     style: {
       width: 200,
@@ -18481,18 +18616,28 @@ function GlobalComment() {
     onChange: handleYearChange,
     options: years
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
-    className: "comments"
+    className: "comments",
+    style: isEdit ? {
+      opacity: 0.3
+    } : {
+      opacity: 1
+    }
   }, error ? errorOccured : isLoading ? pleaseWait : data.data.filter(function (comment) {
     return String(new Date(comment.comment_date).getFullYear()) === String(date);
   }).map(function (comment) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
       key: comment.comment_ID
-    }, comment.comment_content, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-      type: "button"
-    }, "Delete"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
-      type: "button"
-    }, "Edit"));
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, comment.comment_content), comment.user_id === currentUser ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      className: "comment-action"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      type: "button",
+      "data-id": comment.comment_ID,
+      onClick: openCommentEditBox
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+      src: assetsPath + _images_pencil_svg__WEBPACK_IMPORTED_MODULE_3__["default"],
+      alt: "edit icon"
+    }))) : '');
+  })), isEdit === false ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
     className: "comment-submit-wrapper",
     onSubmit: handleCommentInsert
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
@@ -18502,9 +18647,28 @@ function GlobalComment() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "submit"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
-    src: assetsPath + _images_rocket_svg__WEBPACK_IMPORTED_MODULE_2__["default"],
+    src: assetsPath + _images_rocket_svg__WEBPACK_IMPORTED_MODULE_4__["default"],
     alt: "rocket icon"
-  }))));
+  }))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "update-generic-comment-wrapper"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("textarea", {
+    value: commentContent,
+    onChange: updateCommentOnChange
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "comment-action"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    type: "button",
+    onClick: updateCommentHandler
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+    src: assetsPath + _images_save_svg__WEBPACK_IMPORTED_MODULE_5__["default"],
+    alt: "Save Icon"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+    type: "button",
+    onClick: deleteCommentHandler
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+    src: assetsPath + _images_delete_svg__WEBPACK_IMPORTED_MODULE_2__["default"],
+    alt: "Delete Icon"
+  })))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GlobalComment);
 
@@ -18892,7 +19056,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".global-comment-container {\n  position: relative;\n}\n.global-comment-container .comments {\n  height: 520px;\n  overflow: hidden;\n}\n.global-comment-container .comments:hover {\n  scroll-behavior: smooth;\n  overflow-y: scroll;\n}\n.global-comment-container .comments li {\n  padding: 10px 16px;\n  background: #dfe7ea;\n  border-radius: 4px;\n  margin-bottom: 16px;\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-size: 16px;\n  line-height: 150%;\n  color: #011e41;\n}\n.global-comment-container .comment-submit-wrapper {\n  width: 100%;\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.global-comment-container .comment-submit-wrapper input {\n  flex: 1;\n  background-color: #fff;\n  height: 40px;\n  text-indent: 12px;\n  border: 1px solid #adb9c3;\n}\n.global-comment-container .comment-submit-wrapper input::placeholder {\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-size: 14px;\n  line-height: 150%;\n  color: #7b8a9c;\n}\n.global-comment-container .comment-submit-wrapper button {\n  background: #011e41;\n  border-radius: 6px;\n  width: 40px;\n  height: 40px;\n}\n.global-comment-container .comment-filters {\n  position: absolute;\n  right: 40px;\n  top: -100px;\n}\n.global-comment-container .comment-filters .ant-select-selector {\n  height: 54px;\n  border-radius: 0;\n  align-items: center;\n}", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".global-comment-container {\n  position: relative;\n}\n.global-comment-container .comments {\n  height: 520px;\n  overflow: hidden;\n}\n.global-comment-container .comments:hover {\n  scroll-behavior: smooth;\n  overflow-y: scroll;\n}\n.global-comment-container .comments li {\n  padding: 10px 16px;\n  background: #dfe7ea;\n  border-radius: 4px;\n  margin-bottom: 16px;\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-size: 16px;\n  line-height: 150%;\n  color: #011e41;\n  display: flex;\n  justify-content: space-between;\n  gap: 13px;\n}\n.global-comment-container .comments li span {\n  flex: 1;\n}\n.global-comment-container .comments li .comment-action button {\n  background-color: transparent;\n  font-size: 12px;\n}\n.global-comment-container .comment-submit-wrapper {\n  width: 100%;\n  width: 100%;\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.global-comment-container .comment-submit-wrapper input {\n  flex: 1;\n  background-color: #fff;\n  height: 40px;\n  text-indent: 12px;\n  border: 1px solid #adb9c3;\n}\n.global-comment-container .comment-submit-wrapper input::placeholder {\n  font-family: \"Electrolux Sans\";\n  font-style: normal;\n  font-weight: 400;\n  font-size: 14px;\n  line-height: 150%;\n  color: #7b8a9c;\n}\n.global-comment-container .comment-submit-wrapper button {\n  background: #011e41;\n  border-radius: 6px;\n  width: 40px;\n  height: 40px;\n}\n.global-comment-container .comment-filters {\n  position: absolute;\n  right: 40px;\n  top: -100px;\n}\n.global-comment-container .comment-filters .ant-select-selector {\n  height: 54px;\n  border-radius: 0;\n  align-items: center;\n}\n.global-comment-container .update-generic-comment-wrapper {\n  display: flex;\n  align-items: flex-start;\n  gap: 8px;\n}\n.global-comment-container .update-generic-comment-wrapper textarea {\n  flex: 1;\n  padding: 8px 12px;\n  height: 120px;\n  border: 1px solid #adb9c3;\n  border-radius: 4px;\n}\n.global-comment-container .update-generic-comment-wrapper .comment-action button {\n  width: 40px;\n  height: 40px;\n  border: 1px solid;\n  border-radius: 6px;\n}\n.global-comment-container .update-generic-comment-wrapper .comment-action button:first-child {\n  background: #011e41;\n  border-color: #011e41;\n  margin-right: 8px;\n}\n.global-comment-container .update-generic-comment-wrapper .comment-action button:last-child {\n  background: #ffffff;\n  border-color: #dfe7ea;\n}", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -20230,6 +20394,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/images/delete.svg":
+/*!*******************************!*\
+  !*** ./src/images/delete.svg ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/delete.svg?5a37837a080c25f50b69a8315a1a4225");
+
+/***/ }),
+
 /***/ "./src/images/filter.svg":
 /*!*******************************!*\
   !*** ./src/images/filter.svg ***!
@@ -20245,6 +20424,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/images/pencil.svg":
+/*!*******************************!*\
+  !*** ./src/images/pencil.svg ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/pencil.svg?be0f201f87620864f9f980b979a73896");
+
+/***/ }),
+
 /***/ "./src/images/rocket.svg":
 /*!*******************************!*\
   !*** ./src/images/rocket.svg ***!
@@ -20257,6 +20451,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/rocket.svg?978cf9c30dc9e418fe33c7ca92ea4ca9");
+
+/***/ }),
+
+/***/ "./src/images/save.svg":
+/*!*****************************!*\
+  !*** ./src/images/save.svg ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/save.svg?31c08f0a8482bf0b461bf072b972a085");
 
 /***/ }),
 
