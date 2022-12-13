@@ -301,7 +301,7 @@ function el_delete_generic_comments($ReqObj){
 
         // 
         if( $comment_id && $comment ){
-            $comment_user_id = $comment->user_id;
+            $comment_user_id = intval($comment->user_id);
 
             $user_matched = $comment_user_id === $current_user_id ? true : false;
 

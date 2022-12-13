@@ -15,42 +15,36 @@
 {
     "filter_type": "years",
     "request_data": "events/participants",
-    "locations": "474,473",
-    "request_body": {
-        "years": [
-            {
-                "year":  "2022",
-                "months":  "02,05,06"
-            },
-            {
-                "year":  "2023",
-                "months":  "02,11,06"
-            },
-            {
-                "year":  "2021",
-                "months":  "02,07,04"
-            },
-           
-        ]
+
+    "request_body": [
+        {
+            "year":  "2022",
+            "months":  "02,05,06"
+        },
+        {
+            "year":  "2023",
+            "months":  "02,11,06"
+        },
+        {
+            "year":  "2021",
+            "months":  "02,07,04"
+        },
     }
 }
 // custom date filter
 {
     "filter_type": "custom_date_range",
     "request_data": "events/participants",
-    "locations": "474,473",
-    "request_body": {
-        "years": [
-            {
-                "start":  "2022-01-01",
-                "end":  "2022-01-31",
-            },
-            {
-                "start":  "2022-02-01",
-                "end":  "2022-03-31",
-            },
-        ]
-    }
+    "request_body": [
+        {
+            "start":  "2022-01-01",
+            "end":  "2022-01-31",
+        },
+        {
+            "start":  "2022-02-01",
+            "end":  "2022-03-31",
+        },
+    ]
 }
 //custom time frame
 {
