@@ -15,8 +15,10 @@ function handle_custom_query_var($query, $query_vars){
      
         $query['meta_query'][] = array(
             'key' => 'event_location',
-            'value' => explode(',', $query_vars['event_location']),
-            'compare' => 'IN',
+            // 'value' => explode(',', $query_vars['event_location']),
+            // 'compare' => 'IN',
+            'value' => $query_vars['event_location'],
+            'compare' => '=',
 
         );
     }
@@ -27,7 +29,7 @@ function handle_custom_query_var($query, $query_vars){
     if (!empty($query_vars['event_start_date'])) {
         $query['meta_query'][] = array(
             'key' => 'event_start_time',
-            'value' => $query_vars['event_start_date'],
+            'value' => array($query_vars['event_start_date'],$query_vars['event_end_date']),
             'compare'   => 'BETWEEN',
             'type'      => 'DATETIME'
 
@@ -77,12 +79,25 @@ function get_event_by_locations($request){
 
             // code here--------------
             $year   = $single_year['year'];
-            $months = explode(',', $single_year->months); 
-            $start_date         = $year . '-' . $month . '-01 00:00:00';
-            $end_date           =  new DateTime($year . '-' . $month . '01 11:59:59');
-            $end_date = $end_date->format('Y-m-t h:i:s');
+            $months = explode(',', $single_year['months']); 
+            $the_count = 0;
+
+            foreach ( $months as $month ) {
+                $start_date         = $year . '-' . $month . '-01 00:00:00';
+                $end_date           =  new DateTime($year . '-' . $month . '-01 11:59:59');
+                $end_date = $end_date->format('Y-m-t h:i:s');
+                
+                // $monthly_order_ids  = elux_get_all_event_orders_by_date( $start_date, $end_date, $disallowed_event_types );
+                // $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
+                $the_count += count(get_order_count($gallery_location,$filter_type,$start_date,$end_date));
+                
+            }
+            $my_data[$single_year['year']] =  $the_count;
+            // $start_date         = $year . '-' . $month . '-01 00:00:00';
+            // $end_date           =  new DateTime($year . '-' . $month . '01 11:59:59');
+            // $end_date = $end_date->format('Y-m-t h:i:s');
             
-            $my_data[$single_year['year']] = count(get_order_count($gallery_location,$filter_type,$start_date,$end_date));
+            // $my_data[$single_year['year']] = count(get_order_count($gallery_location,$filter_type,$start_date,$end_date));
                
         }
 
@@ -103,18 +118,36 @@ function get_event_by_locations($request){
 
 
 function get_order_count($gallery_location,$filter_type,$start_date,$end_date){
+    error_log(print_r('start date in query args',1));
+    error_log(print_r($start_date,1));
+    
     $args = array(
         'limit' => -1,
-        'meta_relation' => 'AND',
+        
         'event_location' => $gallery_locations,
         'filter_type' => $filter_type,
         // 'request_body' => $request_body,
-        'event_start_date' => array($start_date, $end_date),
+        'event_start_date' => $start_date,
         'event_end_date' => $end_date,
         'return' => 'ids',
-        
+        'meta_query'    => array(
+            array(
+                'relation' => 'AND',
+                array(
+                    'key'   => 'event_start_time',
+                    'compare' => 'EXISTS'
+                )
+            )
+            
+        )
     );
-    $order_data = new WC_Order_Query($args);
+    // $order_data = new WC_Order_Query($args);
     $order_data = wc_get_orders($args);
     return $order_data;
+
+    // new query
+    
+
+
+
 }
