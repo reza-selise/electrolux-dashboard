@@ -52,6 +52,9 @@ function get_event_by_locations($request){
         "type"  => $request_data
     );
 
+    $start_date= ''; 
+    $end_date = '';
+
     $my_returned_data = array();
     $my_years = array();
     foreach($gallery_locations_arr as $gallery_location){
