@@ -19,7 +19,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
         $allowed_filter_types   = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
         $filter_type            = $request->get_params()['filter_type'];
         $request_data           = $request->get_params()['request_data']; // can be events or participants.
-        $request_body           = $request->get_params()['request_body'];
+        $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
             "type"  => $request_data
         );
@@ -84,6 +84,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                 }
 
                 $response['years'] = $all_yearly_data;
+                
                 break;
             case 'custom_date_range':
             default: 

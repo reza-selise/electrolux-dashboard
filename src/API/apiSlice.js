@@ -35,6 +35,12 @@ export const eluxAPI = createApi({
             }),
             invalidatesTags: ['GenericComment'],
         }),
+        eventByYear: builder.query({
+            query: (payload) => ({
+                url: `elux-dashboard/v1/events-by-year?${new URLSearchParams(payload)}`,
+                method: 'GET',
+            }),
+        }),
     }),
 });
 
@@ -43,4 +49,5 @@ export const {
     useInsetGenericCommentMutation,
     useDeleteGenericCommentMutation,
     useUpdateGenericCommentMutation,
+    useEventByYearQuery,
 } = eluxAPI;
