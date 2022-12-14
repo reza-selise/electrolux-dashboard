@@ -106,7 +106,7 @@ function el_add_section_comments($ReqObj){
     -- PARAMETERS
     1. section_name 
     2. page
-    
+    3. comment_year : 2022,2021
 --------------------------------------------------------*/
 
 add_action( 'rest_api_init', function () {
@@ -153,6 +153,15 @@ function el_get_section_comments($ReqObj){
                 $args['offset'] = $offset_value;
             }
         }   
+
+         // Filter by year
+         $comment_year   =  intval(  $ReqObj->get_param('comment_year') )  ?  intval(  $ReqObj->get_param('comment_year') ) : date("Y");
+         if( $comment_year ){
+             $args['date_query'] = [
+                'year' => $comment_year
+             ];
+         }
+
 
 
         $comments_query = new WP_Comment_Query;
