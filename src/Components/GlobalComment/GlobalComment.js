@@ -102,7 +102,6 @@ function GlobalComment() {
 
             years.push(yearObject);
             setYears(years);
-            console.log('Years');
         }
     }, []);
 
