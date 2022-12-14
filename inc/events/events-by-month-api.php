@@ -2,17 +2,17 @@
 
 add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
-    register_rest_route( $namespace, '/events-by-year', [
+    register_rest_route( $namespace, '/events-by-month', [
         'methods'             => 'GET',
-        'callback'            => 'elux_get_events_by_year',
+        'callback'            => 'elux_get_events_by_month',
         'permission_callback' => '__return_true',
     ] );
 } );
 
-if( ! function_exists( 'elux_get_events_by_year' ) ){
+if( ! function_exists( 'elux_get_events_by_month' ) ){
     
-    function elux_get_events_by_year( $request ) {
-
+    function elux_get_events_by_month( $request ) {
+        
         $disallowed_event_types = array( 'giftcard', 'voucher' );
         $allowed_request_data   = array( 'events', 'participants' );
         $allowed_filter_types   = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
@@ -41,16 +41,17 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                     $year   = $single_year->year;
                     $months = explode(',', $single_year->months);
                     
-                    $yearly_order_ids           = array();
+                    $single_year_data           = array();
+                    $single_year_data["year"]   = $year;
+
                     foreach ( $months as $month ) {
                         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
                         $end_date           = $year . '-' . $month . '-31 23:59:59' ;
                         $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
-                        $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
+                        $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $request_data );
+                        $single_year_data["months"][] = $monthly_data;
                     }
-
-                    $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data );
-                    array_push( $all_yearly_data, $yearly_data );
+                    array_push( $all_yearly_data, $single_year_data );
                 }
 
                 $response['years'] = $all_yearly_data;
@@ -77,39 +78,39 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
     
 }
 
-function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data ){
-    $yearly_elux                = 0;
-    $yearly_b2b                 = 0;
-    $yearly_b2c                 = 0;
-    $yearly_event_participants  = 0;
+function elux_prepare_single_month_data( $month, $monthly_order_ids, $request_data ){
+    $monthly_elux                = 0;
+    $monthly_b2b                 = 0;
+    $monthly_b2c                 = 0;
+    $monthly_event_participants  = 0;
 
-    foreach( $yearly_order_ids as $order_id ){
+    foreach( $monthly_order_ids as $order_id ){
         $order      = wc_get_order( $order_id );
         $event      = $order->get_items()[0];
         $product_id = (int) $event->get_product_id();
         $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
        
         $participants_qty           = (int) $event->get_quantity();
-        $yearly_event_participants += $participants_qty;
+        $monthly_event_participants += $participants_qty;
 
         switch( $request_data ){
             case 'events':
                 if ( 'b2b' === $type ){
-                    $yearly_b2b++;
+                    $monthly_b2b++;
                 } elseif ( 'b2c' === $type ){
-                    $yearly_b2c++;
+                    $monthly_b2c++;
                 } elseif ( 'electrolux_internal' === $type ){
-                    $yearly_elux++;
+                    $monthly_elux++;
                 }
 
                 break;
             case 'participants':
                 if ( 'b2b' === $type ){
-                    $yearly_b2b += $participants_qty;
+                    $monthly_b2b += $participants_qty;
                 } elseif ( 'b2c' === $type ){
-                    $yearly_b2c += $participants_qty;
+                    $monthly_b2c += $participants_qty;
                 } elseif ( 'electrolux_internal' === $type ){
-                    $yearly_elux += $participants_qty;
+                    $monthly_elux += $participants_qty;
                 }
 
                 break;
@@ -118,13 +119,13 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
         }
     }
 
-    $yearly_data = array(
-        "year"  => $year,
-        "elux"  => $yearly_elux,
-        "b2b"   => $yearly_b2b,
-        "b2c"   => $yearly_b2c,
+    $monthly_data = array(
+        "month"  => $month,
+        "elux"  => $monthly_elux,
+        "b2b"   => $monthly_b2b,
+        "b2c"   => $monthly_b2c,
     );
-    $yearly_data['total']   = 'events' === $request_data ? count( $yearly_order_ids ) : $yearly_event_participants;
+    $monthly_data['total']   = 'events' === $request_data ? count( $monthly_order_ids ) : $monthly_event_participants;
     
-    return $yearly_data;
+    return $monthly_data;
 }

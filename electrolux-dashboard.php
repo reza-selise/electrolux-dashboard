@@ -109,6 +109,7 @@ final class Electrolux_Dashboard {
      * @return void
      */
     private function include_files() {
+        require_once ELUX_DB_PLUGIN_DIR . 'inc/helpers.php';
         require_once ELUX_DB_PLUGIN_DIR . 'inc/add-menu-page.php';
         require_once ELUX_DB_PLUGIN_DIR . 'inc/api.php';
     }
