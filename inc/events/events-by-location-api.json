@@ -4,20 +4,15 @@
 {
     "filter_type": "months",
     "request_data": "events",
-    "locations": "45900,47400",
+    "locations": "45900",
    "request_body": [
         {
-            "year": "2021",
-            "months": "01,03,09"
+            "year": "2012",
+            "months": "01"
         },
          {
-            "year": "2022",
-            "months": "01,03,09"
-        }
-        ,
-         {
-            "year": "2019",
-            "months": "01,03,09"
+            "year": "2021",
+            "months": "01"
         }
     ]
    
