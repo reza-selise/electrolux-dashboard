@@ -3,6 +3,10 @@
 // ------------- GET Comments ---------------
 /**
  * GET > page  for set the page number start from 1 
+ * -- PARAMETERS
+ * comment_year : 2022 | 2021 | 2020
+ * page: 1 | 2 | 3
+ * 
  * 
  */
 
