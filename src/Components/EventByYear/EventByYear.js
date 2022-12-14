@@ -1,8 +1,50 @@
-import React from 'react';
+import { Table } from 'antd';
+import {
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    Title,
+    Tooltip
+} from 'chart.js';
+import React, { useState } from 'react';
+import { Bar } from 'react-chartjs-2';
 import { useEventByYearQuery } from '../../API/apiSlice';
+import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
+import LocalFilter from '../LocalFilter/LocalFilter';
+import './EventByYear.scss';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+export const options = {
+    plugins: {
+        title: {
+            display: false,
+        },
+    },
+    responsive: true,
+    scales: {
+        x: {
+            stacked: true,
+        },
+        y: {
+            stacked: true,
+        },
+    },
+};
+const { Column } = Table;
 
 function EventByYear() {
+    const [requestData, setRequestData] = useState('events');
+    console.log('re', requestData);
+
+    const [grapOrTable, setgGrapOrTable] = useState('graph');
+    const handleSwitchChange = (e) => {
+        setgGrapOrTable(e.target.value);
+        console.log(e.target.value);
+    };
     const payload = {
         request_data: 'events',
         filter_type: 'years',
@@ -11,25 +53,68 @@ function EventByYear() {
                 year: '2022',
                 months: '09,10,11',
             },
-            // },
-            // {
-            //     year: '2023',
-            //     months: '02,11,06',
-            // },
-            // {
-            //     year: '2021',
-            //     months: '02,07,04',
-            // },
         ]),
     };
-    const { data, error, isLoading } = useEventByYearQuery(payload);
-    console.log('isload', isLoading);
-    console.log('is Error', error);
-    console.log('data', data);
+    const { data } = useEventByYearQuery(payload);
+    const labels =
+        data && data.data.years.map((year) => year.year)
+            ? data.data.years.map((year) => year.year)
+            : ['2022'];
+    const graphData = {
+        labels,
+        datasets: [
+            {
+                label: 'ELUX',
+                data:
+                    data && data.data.years.map((year) => year.elux)
+                        ? data.data.years.map((year) => year.elux)
+                        : 0,
+                backgroundColor: '#4A2017',
+            },
+            {
+                label: 'B2B',
+                data:
+                    data && data.data.years.map((year) => year.b2b)
+                        ? data.data.years.map((year) => year.b2b)
+                        : 0,
+                backgroundColor: '#937359',
+            },
+            {
+                label: 'B2C',
+                data:
+                    data && data.data.years.map((year) => year.b2c)
+                        ? data.data.years.map((year) => year.b2c)
+                        : 0,
+                backgroundColor: '#D0B993',
+            },
+        ],
+    };
     return (
         <>
-            <GraphTableSwitch />
-            <GraphTableSwitch />
+            <div className="header-wrapper">
+                <GraphTableSwitch
+                    grapOrTable={grapOrTable}
+                    handleSwitchChange={handleSwitchChange}
+                />
+                <DownloadButton />
+            </div>
+            <div className="graph-overview">
+                <h2 className="graph-title">
+                    Overview of Events <span>by year</span>
+                </h2>
+                <LocalFilter requestData={requestData} setRequestData={setRequestData} />
+            </div>
+            {grapOrTable === 'graph' ? (
+                <Bar options={options} data={graphData} />
+            ) : (
+                <Table dataSource={data.data.years}>
+                    <Column title="Year" dataIndex="year" key="year" />
+                    <Column title="ELUX" dataIndex="elux" key="elux" />
+                    <Column title="B2B" dataIndex="b2b" key="b2b" />
+                    <Column title="B2C" dataIndex="b2c" key="b2c" />
+                    <Column title="Total" dataIndex="total" key="total" />
+                </Table>
+            )}
         </>
     );
 }

@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import React from 'react';
 import Container from '../../Components/Container/Container';
 import CustomModal from '../../Components/CustomModal/CustomModal';
@@ -12,7 +13,11 @@ function Events() {
         <>
             <h2 className="section-title">{eventDashboard}</h2>
             <Container>
-                <EventByYear />
+                <Row>
+                    <Col span={12}>
+                        <EventByYear />
+                    </Col>
+                </Row>
             </Container>
             <GlobalFilterButton />
             <CustomModal />
