@@ -89,40 +89,44 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $request_da
         $order_items = $order->get_items();
         
         if( is_array( $order_items ) && !empty( $order_items )){
-            $event      = $order_items[0];
-            if( ! $event->get_product_id() ){
-                $event      = $order_items[1];
-            }
             
-            $product_id = (int) $event->get_product_id();
-            $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
-        
-            $participants_qty           = (int) $event->get_quantity();
-            $monthly_event_participants += $participants_qty;
-
-            switch( $request_data ){
-                case 'events':
-                    if ( 'b2b' === $type ){
-                        $monthly_b2b++;
-                    } elseif ( 'b2c' === $type ){
-                        $monthly_b2c++;
-                    } elseif ( 'electrolux_internal' === $type ){
-                        $monthly_elux++;
-                    }
-
-                    break;
-                case 'participants':
-                    if ( 'b2b' === $type ){
-                        $monthly_b2b += $participants_qty;
-                    } elseif ( 'b2c' === $type ){
-                        $monthly_b2c += $participants_qty;
-                    } elseif ( 'electrolux_internal' === $type ){
-                        $monthly_elux += $participants_qty;
-                    }
-
-                    break;
-                default:
-                    break;
+            foreach( $order_items as $key => $value ){
+                // if( $value->get_product_id() ){
+                //     $event      = $order_items[0];
+                // }else{
+                //     $event      = $order_items[1];
+                // }
+    
+                $product_id = (int) $value->get_product_id();
+                $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
+            
+                $participants_qty           = (int) $value->get_quantity();
+                $monthly_event_participants += $participants_qty;
+    
+                switch( $request_data ){
+                    case 'events':
+                        if ( 'b2b' === $type ){
+                            $monthly_b2b++;
+                        } elseif ( 'b2c' === $type ){
+                            $monthly_b2c++;
+                        } elseif ( 'electrolux_internal' === $type ){
+                            $monthly_elux++;
+                        }
+    
+                        break;
+                    case 'participants':
+                        if ( 'b2b' === $type ){
+                            $monthly_b2b += $participants_qty;
+                        } elseif ( 'b2c' === $type ){
+                            $monthly_b2c += $participants_qty;
+                        } elseif ( 'electrolux_internal' === $type ){
+                            $monthly_elux += $participants_qty;
+                        }
+    
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
