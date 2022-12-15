@@ -7,26 +7,30 @@ import EventByLocation from '../../Components/EventByLocation/EventByLocation';
 import GlobalFilterButton from '../../Components/GlobalFilterButton/GlobalFilterButton';
 import { eluxTranslation } from '../../Translation/Translation';
 import './Events.scss';
+import EventByMonth from '../../Components/EventByMonth/EventByMonth';
 
 function Events() {
-    const { eventDashboard } = eluxTranslation;
-    return (
-        <>
-            <h2 className="section-title">{eventDashboard}</h2>
-            <Container>
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <EventByYear />
-                    </Col>
-                    <Col span={12}>
-                        <EventByLocation />
-                    </Col>
-                </Row>
-            </Container>
-            <GlobalFilterButton />
-            <CustomModal />
-        </>
-    );
+  const { eventDashboard } = eluxTranslation;
+  return (
+    <>
+      <h2 className="section-title">{eventDashboard}</h2>
+      <Container>
+        <Row gutter={16}>
+          <Col span={12}>
+            <EventByYear />
+          </Col>
+          <Col span={12}>
+            <EventByLocation />
+          </Col>
+          <Col span={24}>
+            <EventByMonth />
+          </Col>
+        </Row>
+      </Container>
+      <GlobalFilterButton />
+      <CustomModal />
+    </>
+  );
 }
 
 export default Events;
