@@ -8,12 +8,15 @@ import './CustomModal.scss';
 
 function CustomModal() {
     const isModalOpen = useSelector((state) => state.modal.value);
-    const { genericComments } = eluxTranslation;
+    const location = useSelector((state) => state.location.value);
+    const { genericComments, timeline } = eluxTranslation;
     const dispatch = useDispatch();
     const handleCancel = () => {
         dispatch(setModal());
     };
-    const location = 'global-comment';
+    console.log(location);
+    // const location = 'global-comment';
+    // const location = 'event-by-year';
 
     switch (location) {
         case 'global-comment':
@@ -27,6 +30,19 @@ function CustomModal() {
                     className="global-comment-modal"
                 >
                     <GlobalComment />
+                </Modal>
+            );
+        case 'event-by-year':
+            return (
+                <Modal
+                    title={timeline}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={991}
+                    className="timeline-modal"
+                >
+                    Hello Timeline
                 </Modal>
             );
         default:

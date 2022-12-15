@@ -1,9 +1,11 @@
 import { Select } from 'antd';
 import React from 'react';
+import ModalButton from '../ModalButton/ModalButton';
 import './LocalFilter.scss';
 
-function LocalFilter({ requestData, setRequestData }) {
-    // const currentYear = new Date().getFullYear();
+function LocalFilter({ location, requestData, setRequestData }) {
+    // const dispatch = useDispatch();
+    const currentYear = new Date().getFullYear();
 
     // const [years, setYears] = useState([]);
 
@@ -22,11 +24,18 @@ function LocalFilter({ requestData, setRequestData }) {
     const handleYearChange = (value) => {
         setRequestData(value);
     };
+    // const openTimelineModal = () => {
+    //     dispatch(setModal);
+    // };
+
     return (
-        <div>
+        <>
+            <ModalButton type="button" className="open-timeline-btn" location={location}>
+                {currentYear - 5} -{currentYear}
+            </ModalButton>
             <Select
                 defaultValue={requestData}
-                style={{ width: 200, height: 54 }}
+                style={{ width: 120 }}
                 onChange={handleYearChange}
                 options={[
                     {
@@ -39,7 +48,7 @@ function LocalFilter({ requestData, setRequestData }) {
                     },
                 ]}
             />
-        </div>
+        </>
     );
 }
 

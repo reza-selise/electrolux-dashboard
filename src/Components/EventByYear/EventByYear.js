@@ -11,6 +11,7 @@ import {
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useEventByYearQuery } from '../../API/apiSlice';
+import { eluxTranslation } from '../../Translation/Translation';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
@@ -22,6 +23,18 @@ export const options = {
     plugins: {
         title: {
             display: false,
+        },
+        // legend: {
+        //     align: 'start',
+        //     height: '16px',
+        //     width: '16px',
+        // },
+        legend: {
+            align: 'start',
+            labels: {
+                boxWidth: 16,
+                boxHeight: 16,
+            },
         },
     },
     responsive: true,
@@ -38,7 +51,7 @@ const { Column } = Table;
 
 function EventByYear() {
     const [requestData, setRequestData] = useState('events');
-    console.log('re', requestData);
+    // console.log('re', requestData);
 
     const [grapOrTable, setgGrapOrTable] = useState('graph');
     const handleSwitchChange = (e) => {
@@ -46,7 +59,7 @@ function EventByYear() {
         console.log(e.target.value);
     };
     const payload = {
-        request_data: 'events',
+        request_data: requestData,
         filter_type: 'years',
         request_body: JSON.stringify([
             {
@@ -60,6 +73,7 @@ function EventByYear() {
         data && data.data.years.map((year) => year.year)
             ? data.data.years.map((year) => year.year)
             : ['2022'];
+
     const graphData = {
         labels,
         datasets: [
@@ -89,6 +103,9 @@ function EventByYear() {
             },
         ],
     };
+
+    const { pleaseWait } = eluxTranslation;
+
     return (
         <>
             <div className="header-wrapper">
@@ -102,11 +119,15 @@ function EventByYear() {
                 <h2 className="graph-title">
                     Overview of Events <span>by year</span>
                 </h2>
-                <LocalFilter requestData={requestData} setRequestData={setRequestData} />
+                <LocalFilter
+                    requestData={requestData}
+                    setRequestData={setRequestData}
+                    location="event-by-year"
+                />
             </div>
             {grapOrTable === 'graph' ? (
                 <Bar options={options} data={graphData} />
-            ) : (
+            ) : data ? (
                 <Table dataSource={data.data.years}>
                     <Column title="Year" dataIndex="year" key="year" />
                     <Column title="ELUX" dataIndex="elux" key="elux" />
@@ -114,6 +135,8 @@ function EventByYear() {
                     <Column title="B2C" dataIndex="b2c" key="b2c" />
                     <Column title="Total" dataIndex="total" key="total" />
                 </Table>
+            ) : (
+                pleaseWait
             )}
         </>
     );
