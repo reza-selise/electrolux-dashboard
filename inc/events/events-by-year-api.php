@@ -90,12 +90,6 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
         if( is_array( $order_items ) && !empty( $order_items )){
             
             foreach( $order_items as $key => $value ){
-                // if( $order_items[0]->get_product_id() ){
-                //     $event      = $order_items[0];
-                // }else{
-                //     $event      = $order_items[1];
-                // }
-
                 $product_id = (int) $value->get_product_id();
                 $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                 
