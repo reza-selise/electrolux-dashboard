@@ -77,26 +77,6 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
     
 }
 
-function elux_get_all_valid_event_order_ids_between_date( $start_date = '', $end_date = '', $disallowed_event_types = array() ){
-    global $wpdb;
-    $query      = "SELECT DISTINCT $wpdb->postmeta.post_id from $wpdb->postmeta LEFT JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID WHERE $wpdb->posts.post_type = 'shop_order' AND ( $wpdb->postmeta.meta_key = 'event_start_time' AND ( $wpdb->postmeta.meta_value BETWEEN '%s' AND '%s' ))";
-    $response   = $wpdb->get_results( $wpdb->prepare( $query, $start_date, $end_date ) );
-    $order_ids  = array_map( "elux_order_id_array_map", $response );
-    $valid_event_order_ids = array_filter( $order_ids, function( $order_id ){
-        if( 'voucher' !== get_post_meta( $order_id, 'order_service_type', true ) ){
-            return true;
-        } else {
-            return false;
-        }
-    } );
-    return $valid_event_order_ids;
-}
-// elux_get_all_valid_event_order_ids_between_date( '2022-10-01 00:00:00', '2022-10-31 11:59:59', array( 'giftcard', 'voucher' ) );
-
-function elux_order_id_array_map( $order ){
-    return $order->post_id;
-}
-
 function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data ){
     $yearly_elux                = 0;
     $yearly_b2b                 = 0;
@@ -105,36 +85,48 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
 
     foreach( $yearly_order_ids as $order_id ){
         $order      = wc_get_order( $order_id );
-        $event      = $order->get_items()[0];
-        $product_id = (int) $event->get_product_id();
-        $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
-       
-        $participants_qty           = (int) $event->get_quantity();
-        $yearly_event_participants += $participants_qty;
+        $order_items = $order->get_items();
+        
+        if( is_array( $order_items ) && !empty( $order_items )){
+            
+            foreach( $order_items as $key => $value ){
+                // if( $order_items[0]->get_product_id() ){
+                //     $event      = $order_items[0];
+                // }else{
+                //     $event      = $order_items[1];
+                // }
 
-        switch( $request_data ){
-            case 'events':
-                if ( 'b2b' === $type ){
-                    $yearly_b2b++;
-                } elseif ( 'b2c' === $type ){
-                    $yearly_b2c++;
-                } elseif ( 'electrolux_internal' === $type ){
-                    $yearly_elux++;
-                }
-
-                break;
-            case 'participants':
-                if ( 'b2b' === $type ){
-                    $yearly_b2b += $participants_qty;
-                } elseif ( 'b2c' === $type ){
-                    $yearly_b2c += $participants_qty;
-                } elseif ( 'electrolux_internal' === $type ){
-                    $yearly_elux += $participants_qty;
-                }
-
-                break;
-            default:
-                break;
+                $product_id = (int) $value->get_product_id();
+                $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
+                
+                $participants_qty           = (int) $value->get_quantity();
+                $yearly_event_participants += $participants_qty;
+        
+                switch( $request_data ){
+                    case 'events':
+                        if ( 'b2b' === $type ){
+                            $yearly_b2b++;
+                        } elseif ( 'b2c' === $type ){
+                            $yearly_b2c++;
+                        } elseif ( 'electrolux_internal' === $type ){
+                            $yearly_elux++;
+                        }
+        
+                        break;
+                    case 'participants':
+                        if ( 'b2b' === $type ){
+                            $yearly_b2b += $participants_qty;
+                        } elseif ( 'b2c' === $type ){
+                            $yearly_b2c += $participants_qty;
+                        } elseif ( 'electrolux_internal' === $type ){
+                            $yearly_elux += $participants_qty;
+                        }
+        
+                        break;
+                    default:
+                        break;
+                } 
+            }
         }
     }
 
