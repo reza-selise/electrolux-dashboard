@@ -15,7 +15,7 @@ import { useEventByYearQuery } from '../../API/apiSlice';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
-import './EventByYear.scss';
+import './EventByLocation.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -37,7 +37,7 @@ export const options = {
 };
 const { Column } = Table;
 
-function EventByYear() {
+function EventByLocation() {
     const [requestData, setRequestData] = useState('events');
     console.log('re', requestData);
 
@@ -120,4 +120,4 @@ function EventByYear() {
     );
 }
 
-export default EventByYear;
+export default EventByLocation;
