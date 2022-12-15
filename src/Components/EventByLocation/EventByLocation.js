@@ -6,7 +6,7 @@ import {
     Legend,
     LinearScale,
     Title,
-    Tooltip,
+    Tooltip
 } from 'chart.js';
 import React, { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
@@ -101,10 +101,10 @@ function EventByLocation() {
             </div>
             <div className="graph-overview">
                 <h2 className="graph-title">
-                    Overview of Events <span>by year</span>
+                    Overview of Events per location <span>by year</span>
                 </h2>
-                <LocalFilter requestData={requestData} setRequestData={setRequestData} />
             </div>
+            <LocalFilter requestData={requestData} setRequestData={setRequestData} displayClass={"d-block"}/>
             {grapOrTable === 'graph' ? (
                 <Bar options={options} data={graphData} />
             ) : (
