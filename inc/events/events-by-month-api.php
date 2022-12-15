@@ -89,11 +89,13 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $request_da
         $order_items = $order->get_items();
         
         if( is_array( $order_items ) && !empty( $order_items )){
-            $event      = $order_items[0];
-            if( ! $event->get_product_id() ){
+            
+            if( $order_items[0]->get_product_id() ){
+                $event      = $order_items[0];
+            }else{
                 $event      = $order_items[1];
             }
-            
+
             $product_id = (int) $event->get_product_id();
             $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
         
