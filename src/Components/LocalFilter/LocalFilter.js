@@ -30,9 +30,11 @@ function LocalFilter({ location, requestData, setRequestData }) {
 
     return (
         <>
-            <ModalButton type="button" className="open-timeline-btn" location={location}>
-                {currentYear - 5} -{currentYear}
-            </ModalButton>
+            <div className="timeline-button-wrapper">
+                <ModalButton location={location}>
+                    {currentYear - 5} -{currentYear}
+                </ModalButton>
+            </div>
             <Select
                 defaultValue={requestData}
                 style={{ width: 120 }}

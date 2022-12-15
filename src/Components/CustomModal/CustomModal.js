@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '../../Redux/Slice/modalSlice';
 import { eluxTranslation } from '../../Translation/Translation';
 import GlobalComment from '../GlobalComment/GlobalComment';
+import Timeline from '../Timeline/Timeline';
 import './CustomModal.scss';
 
 function CustomModal() {
@@ -39,10 +40,11 @@ function CustomModal() {
                     open={isModalOpen}
                     onCancel={handleCancel}
                     footer={null}
-                    width={991}
+                    width={461}
+                    centered
                     className="timeline-modal"
                 >
-                    Hello Timeline
+                    <Timeline />
                 </Modal>
             );
         default:
