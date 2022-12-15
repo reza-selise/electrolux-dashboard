@@ -88,8 +88,9 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
         $order_items = $order->get_items();
         
         if( is_array( $order_items ) && !empty( $order_items )){
-            $event      = $order_items[0];
-            if( ! $event->get_product_id() ){
+            if( $order_items[0]->get_product_id() ){
+                $event      = $order_items[0];
+            }else{
                 $event      = $order_items[1];
             }
 
