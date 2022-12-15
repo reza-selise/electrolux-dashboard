@@ -41,9 +41,9 @@ function EventByLocation() {
     const [requestData, setRequestData] = useState('events');
     console.log('re', requestData);
 
-    const [grapOrTable, setgGrapOrTable] = useState('graph');
+    const [grapOrTableForLocation, setgGrapOrTableForLocation] = useState('graph');
     const handleSwitchChange = (e) => {
-        setgGrapOrTable(e.target.value);
+        setgGrapOrTableForLocation(e.target.value);
         console.log(e.target.value);
     };
     const payload = {
@@ -94,7 +94,7 @@ function EventByLocation() {
         <>
             <div className="header-wrapper">
                 <GraphTableSwitch
-                    grapOrTable={grapOrTable}
+                    grapOrTable={grapOrTableForLocation}
                     handleSwitchChange={handleSwitchChange}
                 />
                 <DownloadButton />
@@ -105,7 +105,7 @@ function EventByLocation() {
                 </h2>
             </div>
             <LocalFilter requestData={requestData} setRequestData={setRequestData} displayClass={"d-block"}/>
-            {grapOrTable === 'graph' ? (
+            {grapOrTableForLocation === 'graph' ? (
                 <Bar options={options} data={graphData} />
             ) : (
                 <Table dataSource={data.data.years}>
