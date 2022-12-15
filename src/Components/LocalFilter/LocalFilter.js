@@ -2,7 +2,7 @@ import { Select } from 'antd';
 import React from 'react';
 import './LocalFilter.scss';
 
-function LocalFilter({ requestData, setRequestData }) {
+function LocalFilter({ requestData, setRequestData, displayClass }) {
     // const currentYear = new Date().getFullYear();
 
     // const [years, setYears] = useState([]);
@@ -23,7 +23,7 @@ function LocalFilter({ requestData, setRequestData }) {
         setRequestData(value);
     };
     return (
-        <div>
+        <div className={displayClass} >
             <Select
                 defaultValue={requestData}
                 style={{ width: 200, height: 54 }}

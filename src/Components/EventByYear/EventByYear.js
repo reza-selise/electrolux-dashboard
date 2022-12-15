@@ -9,6 +9,7 @@ import {
     Tooltip
 } from 'chart.js';
 import React, { useState } from 'react';
+// eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
 import { useEventByYearQuery } from '../../API/apiSlice';
 import DownloadButton from '../DownloadButton/DownloadButton';
@@ -102,6 +103,7 @@ function EventByYear() {
                 <h2 className="graph-title">
                     Overview of Events <span>by year</span>
                 </h2>
+                
                 <LocalFilter requestData={requestData} setRequestData={setRequestData} />
             </div>
             {grapOrTable === 'graph' ? (
