@@ -10,6 +10,7 @@ import {
 } from 'chart.js';
 import React, { useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
 import { useEventByYearQuery } from '../../API/apiSlice';
 import { eluxTranslation } from '../../Translation/Translation';
 import DownloadButton from '../DownloadButton/DownloadButton';
@@ -50,8 +51,10 @@ export const options = {
 const { Column } = Table;
 
 function EventByYear() {
+    const eventbyYearTimelineYears = useSelector((state) => state.eventbyYearTimelineYears.value);
+
     const [requestData, setRequestData] = useState('events');
-    // console.log('re', requestData);
+    console.log('eventbyYearTimelineYears', eventbyYearTimelineYears);
 
     const [grapOrTable, setgGrapOrTable] = useState('graph');
     const handleSwitchChange = (e) => {
@@ -64,11 +67,11 @@ function EventByYear() {
         request_body: JSON.stringify([
             {
                 year: '2022',
-                months: '09,10,11',
+                months: '01,02,03,04,04,06,07,08,09,10,11,12',
             },
         ]),
     };
-    const { data } = useEventByYearQuery(payload);
+    const { data, queryInfo } = useEventByYearQuery(payload);
     const labels =
         data && data.data.years.map((year) => year.year)
             ? data.data.years.map((year) => year.year)
@@ -105,6 +108,12 @@ function EventByYear() {
     };
 
     const { pleaseWait } = eluxTranslation;
+
+    // useEffect(() => {
+    //     if (typeof queryInfo !== 'undefined') {
+    //         queryInfo.refetch(payload);
+    //     }
+    // }, [payload]);
 
     return (
         <>

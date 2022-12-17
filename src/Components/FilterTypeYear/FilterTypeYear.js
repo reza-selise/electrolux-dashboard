@@ -1,13 +1,18 @@
 import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setEventbyYearTimelineYears } from '../../Redux/Slice/eventByYearTimelineYear';
 
 function FilterTypeYear() {
     const [years, setYears] = useState([]);
 
     const currentYear = new Date().getFullYear();
 
+    const dispatch = useDispatch();
+
     const handleYearChange = (value) => {
         console.log(value);
+        dispatch(setEventbyYearTimelineYears(value));
     };
 
     useEffect(() => {
