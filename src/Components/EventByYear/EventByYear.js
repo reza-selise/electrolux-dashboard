@@ -9,6 +9,7 @@ import {
     Tooltip
 } from 'chart.js';
 import React, { useState } from 'react';
+// eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import { useEventByYearQuery } from '../../API/apiSlice';
