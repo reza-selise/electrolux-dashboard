@@ -6,7 +6,7 @@ import {
   Legend,
   LinearScale,
   Title,
-  Tooltip,
+  Tooltip
 } from 'chart.js';
 import React, { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
@@ -56,77 +56,60 @@ function EventByMonth() {
   };
   const payload = {
     request_data: 'events',
-    filter_type: 'years',
+    filter_type: 'months',
     request_body: JSON.stringify([
       {
-        year: '2022',
-        months: '09,10,11',
-      },
+        "year": "2022",
+        "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+    },
+    {
+        "year": "2021",
+        "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+    },
+    {
+        "year": "2020",
+        "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+    }
     ]),
   };
-  const { data } = useEventByMonthQuery(payload);
+ const { data, error, isLoading }  = useEventByMonthQuery(payload);
+  
   const labels =
     data && data.data.years.map((year) => year.year)
-      ? data.data.years.map((year) => year.year)
-      : [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Apr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec',
-        ];
-  const graphData = {
-    labels,
-    datasets: [
-      {
-        label: '2018',
-        data:
-          data && data.data.years.map((year) => year.elux)
-            ? data.data.years.map((year) => year.elux)
-            : 0,
-        backgroundColor: '#001C3F',
-      },
-      {
-        label: '2019',
-        data:
-          data && data.data.years.map((year) => year.b2b)
-            ? data.data.years.map((year) => year.b2b)
-            : 0,
-        backgroundColor: '#797285',
-      },
-      {
-        label: '2020',
-        data:
-          data && data.data.years.map((year) => year.b2c)
-            ? data.data.years.map((year) => year.b2c)
-            : 0,
-        backgroundColor: '#79899B',
-      },
-      {
-        label: '2021',
-        data:
-          data && data.data.years.map((year) => year.b2c)
-            ? data.data.years.map((year) => year.b2c)
-            : 0,
-        backgroundColor: '#D2BA96',
-      },
-      {
-        label: '2022',
-        data:
-          data && data.data.years.map((year) => year.b2c)
-            ? data.data.years.map((year) => year.b2c)
-            : 0,
-        backgroundColor: '#697B68',
-      },
-    ],
+    ? data.data.years.map((year) => year.year)
+    : ['2022'];
+
+  
+    const graphData = {
+      labels,
+      datasets: [
+          {
+              label: 'ELUX',
+              data:
+                  data && data.data.years.map((year) => year.elux)
+                      ? data.data.years.map((year) => year.elux)
+                      : 0,
+              backgroundColor: '#4A2017',
+          },
+          {
+              label: 'B2B',
+              data:
+                  data && data.data.years.map((year) => year.b2b)
+                      ? data.data.years.map((year) => year.b2b)
+                      : 0,
+              backgroundColor: '#937359',
+          },
+          {
+              label: 'B2C',
+              data:
+                  data && data.data.years.map((year) => year.b2c)
+                      ? data.data.years.map((year) => year.b2c)
+                      : 0,
+              backgroundColor: '#D0B993',
+          },
+      ],
   };
+  console.log(graphData)
   return (
     <>
       <div className="header-wrapper">
