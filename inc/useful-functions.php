@@ -127,7 +127,7 @@ function el_add_leading_zero($month_number){
         }
 }
  */
-function get_product_by_timeline_filter( $timeline_type , $timeline_filter ){
+function get_products_by_timeline_filter( $timeline_type , $timeline_filter ){
 
     $final_ids = [];
 
@@ -211,5 +211,4 @@ function get_product_by_timeline_filter( $timeline_type , $timeline_filter ){
 
 
 }
-
 
