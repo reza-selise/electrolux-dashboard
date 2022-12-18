@@ -56,8 +56,14 @@ function get_event_by_locations($request){
                     $my_data[$single_year['year']] =  count($yearly_order_ids2); // push to main array
                    
                 }
+                else{
+                    $my_data[$single_year['year']] = 0;
+                }
                 if(!empty($yearly_order_ids) && 'participants'== $request_data){
                     $my_data[$single_year['year']] = event_person_count($yearly_order_ids2);
+                }
+                else{
+                    $my_data[$single_year['year']] = 0;
                 }
                 error_log(print_r('year order ids -------------- ',1));
                 error_log(print_r($yearly_order_ids2,1));
