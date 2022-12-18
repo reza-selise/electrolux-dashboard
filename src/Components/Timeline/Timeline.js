@@ -1,47 +1,61 @@
 import { Select } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setEventByYearFilterType } from '../../Redux/Slice/EventByYear/eventByYearFilterType';
 import FilterTypeCustomDate from '../FilterTypeCustomDate/FilterTypeCustomDate';
 import FilterTypeMonth from '../FilterTypeMonth/FilterTypeMonth';
+import FilterTypeTimeFrame from '../FilterTypeTImeFrame/FilterTypeTimeFrame';
 import FilterTypeYear from '../FilterTypeYear/FilterTypeYear';
 import './Timeline.scss';
 
 function Timeline() {
-    const [filterType, setFilterType] = useState('year');
+    const eventByYearFilterType = useSelector((state) => state.eventByYearFilterType.value);
+    const location = useSelector((state) => state.location.value);
+
+    const dispatch = useDispatch();
+    // const [filterType, setFilterType] = useState('year');
     const handleFilterType = (value) => {
-        setFilterType(value);
+        switch (location) {
+            case 'event-by-year-timeline':
+                dispatch(setEventByYearFilterType(value));
+                break;
+
+            default:
+                console.log('filter type year month default');
+        }
     };
     return (
         <>
             <Select
                 className="timeline-filter"
-                defaultValue={filterType}
+                defaultValue={eventByYearFilterType}
                 style={{
                     width: '100%',
                 }}
                 onChange={handleFilterType}
                 options={[
                     {
-                        value: 'month',
-                        label: 'Month',
+                        value: 'months',
+                        label: 'Months',
                     },
                     {
-                        value: 'year',
-                        label: 'Year',
+                        value: 'years',
+                        label: 'Years',
                     },
                     {
-                        value: 'custom-date-range',
+                        value: 'custom_date_range',
                         label: 'Custom Date Range',
                     },
                     {
-                        value: 'custom-time-frame',
+                        value: 'custom_time_frame',
                         label: 'Custom Time Frame',
                     },
                 ]}
             />
-            {filterType === 'month' && <FilterTypeMonth />}
-            {filterType === 'year' && <FilterTypeYear />}
-            {filterType === 'custom-date-range' && <FilterTypeCustomDate />}
-            {filterType === 'custom-time-frame' && 'custom-time-frame sectected'}
+            {eventByYearFilterType === 'months' && <FilterTypeMonth />}
+            {eventByYearFilterType === 'years' && <FilterTypeYear />}
+            {eventByYearFilterType === 'custom_date_range' && <FilterTypeCustomDate />}
+            {eventByYearFilterType === 'custom_time_frame' && <FilterTypeTimeFrame />}
         </>
     );
 }

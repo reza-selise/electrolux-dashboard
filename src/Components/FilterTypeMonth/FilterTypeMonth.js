@@ -1,7 +1,7 @@
 import { Select } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEventbyYearTimelineMonth } from '../../Redux/Slice/eventByYearTimelineMonth';
+import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 
 function FilterTypeMonth() {
     const location = useSelector((state) => state.location.value);

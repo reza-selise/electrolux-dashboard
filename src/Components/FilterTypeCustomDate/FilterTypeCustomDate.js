@@ -75,8 +75,6 @@ function FilterTypeCustomDate() {
             (month) => commonMonths[month] === dateRanges.length
         );
     };
-    console.log('common years', commonSelectedYears);
-    console.log('common months', commonSelectedMonths);
 
     return (
         <div className="custom-date-range-wrapper">

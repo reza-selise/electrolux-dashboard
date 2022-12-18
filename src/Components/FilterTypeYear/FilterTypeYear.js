@@ -1,8 +1,8 @@
 import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEventbyYearTimelineMonth } from '../../Redux/Slice/eventByYearTimelineMonth';
-import { setEventbyYearTimelineYears } from '../../Redux/Slice/eventByYearTimelineYear';
+import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
+import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
 import './FilterTypeYear.scss';
 
 function FilterTypeYear() {

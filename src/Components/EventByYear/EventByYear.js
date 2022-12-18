@@ -54,6 +54,7 @@ const { Column } = Table;
 function EventByYear() {
     const eventbyYearTimelineYears = useSelector((state) => state.eventbyYearTimelineYears.value);
     const eventbyYearTimelineMonth = useSelector((state) => state.eventbyYearTimelineMonth.value);
+    const eventByYearFilterType = useSelector((state) => state.eventByYearFilterType.value);
     const [requestData, setRequestData] = useState('events');
 
     const [grapOrTable, setgGrapOrTable] = useState('graph');
@@ -61,7 +62,7 @@ function EventByYear() {
         setgGrapOrTable(e.target.value);
     };
 
-    console.log('hhhh', eventbyYearTimelineMonth);
+    console.log('hhhh', eventbyYearTimelineYears);
 
     const requestBody = eventbyYearTimelineYears.map((year) => ({
         year: year.toString(),
@@ -70,7 +71,7 @@ function EventByYear() {
 
     const payload = {
         request_data: requestData,
-        filter_type: 'years',
+        filter_type: eventByYearFilterType,
         request_body: JSON.stringify(requestBody),
     };
     const { data, error, isLoading } = useEventByYearQuery(payload);
