@@ -73,18 +73,18 @@ function EventByMonth() {
     ]),
   };
  const { data, error, isLoading }  = useEventByMonthQuery(payload);
+
   
   const labels =
     data && data.data.years.map((year) => year.year)
     ? data.data.years.map((year) => year.year)
     : ['2022'];
-
-  
+    
     const graphData = {
       labels,
       datasets: [
           {
-              label: 'ELUX',
+              label: '2022',
               data:
                   data && data.data.years.map((year) => year.elux)
                       ? data.data.years.map((year) => year.elux)
@@ -92,7 +92,7 @@ function EventByMonth() {
               backgroundColor: '#4A2017',
           },
           {
-              label: 'B2B',
+              label: '2021',
               data:
                   data && data.data.years.map((year) => year.b2b)
                       ? data.data.years.map((year) => year.b2b)
@@ -100,7 +100,7 @@ function EventByMonth() {
               backgroundColor: '#937359',
           },
           {
-              label: 'B2C',
+              label: '2020',
               data:
                   data && data.data.years.map((year) => year.b2c)
                       ? data.data.years.map((year) => year.b2c)
@@ -109,7 +109,6 @@ function EventByMonth() {
           },
       ],
   };
-  console.log(graphData)
   return (
     <>
       <div className="header-wrapper">
