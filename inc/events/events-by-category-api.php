@@ -78,18 +78,20 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
         }
 
 
-        print_r($timeline_type,$timeline_filter);
+        // print_r($timeline_type,$timeline_filter);
         /// 1. ---------- Get product IDs
         $product_ids               = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
 
-        /// 2. ---------- Get Structure data 
+        /// 2. ---------- Get Structure data along with post id
         $structure_data         = el_events_by_category_STRUCTURE_DATA($product_ids);
 
-        // print_r($structure_data);
 
+        /// 3. ---------- PASS ONLY FILTERED STRUCTURE DATA
+        $filtered_data            = el_events_by_category_FILTER_DATA($structure_data, $received_data);
 
-        /// 3. ---------- Get Final output
-        $final_data             = el_events_by_category_FINAL_DATA($structure_data, $received_data);
+        
+        /// 4. ---------- Get Final output
+        $final_data             = el_events_by_category_FINAL_DATA($filter_data, $received_data);
 
 
 
@@ -114,9 +116,52 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
     }
 }
 
+// this function will use to 
+function el_events_by_category_FILTER_DATA($structure_data, $requestData){
+
+    // var_dump($requestData);
+    $filter_arr = $requestData['filter_key_value'];
+    $output = [];
+
+    // loop through all the posts
+    foreach($structure_data as $product_id => $product_data ){        
+
+        $is_satisfy = true;
+
+        // loop through all the filter if not match/fount return false
+        foreach( $filter_arr as $key => $value ){
+
+            if( isset( $product_data[$key] ) ){
+                
+                $saved_value_to_match   = sanitize_key( $product_data[$key] );
+                $request_value_to_match = sanitize_key( $value );
+
+                if( $saved_value_to_match == $request_value_to_match ){
+                    // do nothing        
+                }else{
+                    $is_satisfy = false;
+                }
+
+            }else{
+                $is_satisfy = false;
+            }
+
+        }
+
+        if($is_satisfy == true){
+            $output[$product_id] = $product_data;
+        }
+
+    }
+
+
+    return $output;
+
+}
+
 
 // this function will output the final data to 
-function el_events_by_category_FINAL_DATA($structure_data, $request_parm){
+function el_events_by_category_FINAL_DATA($structure_data, $requestData){
     $all_labels             = [] ;  // to hold x-axis data 
     $category_list_unique   = [];    // [ id => 'name' , 51 => steam-demo ]
 
@@ -260,8 +305,8 @@ function el_events_by_category_FINAL_DATA($structure_data, $request_parm){
 
 
     return [
-        'labels'      => $final_label,
-        'data_Sheets' => $final_data_sheet_by_year
+        'labels'    => $final_label,
+        'dataset'   => $final_data_sheet_by_year
     ];
 }
 
@@ -269,36 +314,36 @@ function el_events_by_category_FINAL_DATA($structure_data, $request_parm){
 
 
 
-/**
- * This will use to serve structure each product data data along with post ids
- * 
- * return 
- * 
- * example output
-[
-    1500 => [
-        'year' => 2022,
-        'month' => 01,
-        'category' => [ cat_id =>  cat_name , cat_id =>  cat_name ]
-        'filter_name' => filter_value
-        'attribute_name' => attribute_value
-        'filter_name_2' => filter_value 
-    ],
-    1496 => [
-        'year' => 2021,
-        'month' => 12,
-        'filter_name' => filter_value
-        'attribute_name' => attribute_value
-        'filter_name_2' => filter_value 
-    ]
-
-  
-]
- * 
- * 
- */
 
 function el_events_by_category_STRUCTURE_DATA($product_ids){
+    /**
+     * This will use to serve structure each product data data along with post ids
+     * 
+     * return 
+     * 
+     * example output
+    [
+        1500 => [
+            'year' => 2022,
+            'month' => 01,
+            'category' => [ cat_id =>  cat_name , cat_id =>  cat_name ]
+            'filter_name' => filter_value
+            'attribute_name' => attribute_value
+            'filter_name_2' => filter_value 
+        ],
+        1496 => [
+            'year' => 2021,
+            'month' => 12,
+            'filter_name' => filter_value
+            'attribute_name' => attribute_value
+            'filter_name_2' => filter_value 
+        ]
+    
+      
+    ]
+     * 
+     * 
+     */
 
     $structure_data = [];
 
@@ -313,12 +358,16 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
         // START --------- Event time (month:01|02|03... , year: 2020|2021|2021 , day: 1,2,3,4 )
         $event_time_string  = (string) get_post_meta( $single_product_id, 'date', true );
 
+        // add total-sale/Participant 
+        $total_sales  = intval(get_post_meta( $single_product_id, 'total_sales', true ));
+        $structure_data[$single_product_id]['total_sales'] = $total_sales;
+
 
 
         if( $product_status ){
             $structure_data[$single_product_id]['product_status'] = $product_status;
         }else{
-            $structure_data[$single_product_id]['product_status'] = 'Not Set';
+            $structure_data[$single_product_id]['product_status'] = 'false';
         }
         // END ------------ Event status (Taken place, planed, cancelled)
         
@@ -336,7 +385,7 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
             ];
 
         }else{
-            $structure_data[$single_product_id]['event_time'] = false;
+            $structure_data[$single_product_id]['event_time'] = 'false';
         }
         // END --------- Event time 
 
