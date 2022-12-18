@@ -52,14 +52,14 @@ function get_event_by_locations($request){
                    
                 }
     
-                if(!empty($yearly_order_ids) && 'events'== $request_data){
+                if(!empty($yearly_order_ids2) && 'events'== $request_data){
                     $my_data[$single_year['year']] =  count($yearly_order_ids2); // push to main array
-                   
+                    error_log(print_r('events data...count= ',1));
+                    error_log(print_r(count($yearly_order_ids2),1));
+                    error_log(print_r($yearly_order_ids2,1));
                 }
-                else{
-                    $my_data[$single_year['year']] = 0;
-                }
-                if(!empty($yearly_order_ids) && 'participants'== $request_data){
+                
+                elseif(!empty($yearly_order_ids2) && 'participants'== $request_data){
                     $my_data[$single_year['year']] = event_person_count($yearly_order_ids2);
                 }
                 else{
