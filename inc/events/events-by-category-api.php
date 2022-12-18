@@ -91,7 +91,7 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
         
         /// 4. ---------- Get Final output
-        $final_data             = el_events_by_category_FINAL_DATA($filter_data, $received_data);
+        $final_data             = el_events_by_category_FINAL_DATA($filtered_data, $received_data);
 
 
 
