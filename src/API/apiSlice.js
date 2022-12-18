@@ -41,6 +41,12 @@ export const eluxAPI = createApi({
                 method: 'GET',
             }),
         }),
+        eventByLocation: builder.query({
+            query: (payload) => ({
+                url: `elux-dashboard/v1/consultations-by-acquisition-type?${new URLSearchParams(payload)}`,
+                method: 'GET',
+            }),
+        }),
     }),
 });
 
@@ -50,4 +56,5 @@ export const {
     useDeleteGenericCommentMutation,
     useUpdateGenericCommentMutation,
     useEventByYearQuery,
+    useEventByLocationQuery,
 } = eluxAPI;

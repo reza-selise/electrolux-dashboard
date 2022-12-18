@@ -11,7 +11,7 @@ import {
 import React, { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
-import { useEventByYearQuery } from '../../API/apiSlice';
+import { useEventByLocationQuery } from '../../API/apiSlice';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
@@ -48,15 +48,21 @@ function EventByLocation() {
     };
     const payload = {
         request_data: 'events',
-        filter_type: 'years',
+        filter_type: 'months',
         request_body: JSON.stringify([
             {
-                year: '2022',
-                months: '09,10,11',
+                "year": "2012",
+                "months": "01"
             },
+             {
+                "year": "2021",
+                "months": "01"
+            }
         ]),
     };
-    const { data } = useEventByYearQuery(payload);
+
+    const { data } = useEventByLocationQuery(payload);
+    // console.log('data', data);
     const labels =
         data && data.data.years.map((year) => year.year)
             ? data.data.years.map((year) => year.year)
