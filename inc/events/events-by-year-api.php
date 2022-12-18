@@ -56,6 +56,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                 $response['years'] = $all_yearly_data;
                 break;
             case 'custom_date_range':
+                // first, prepare all order id's according to year.
                 $yearly_order_ids = array();
                 foreach ( $request_body as $single_range ) {
                     $start_date = $single_range->start . ' 00:00:00' ;
@@ -72,9 +73,30 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                         } else {
                             $yearly_order_ids[$start_year] = array_merge( $yearly_order_ids[$start_year], $range_order_ids );
                         }
-                    } 
+                    } elseif ( $start_year !== $end_year ) {
+                        for( $i = $start_year; $i <= $end_year; $i++ ) {
+                            if ( $i === $start_year ){
+                                $single_start_date  = $start_date;
+                                $single_end_date    = $start_year . "-12-31 23:59:59";
+                            } elseif ( $i === $end_year ) {
+                                $single_start_date  = $end_year . "-01-01 00:00:00";
+                                $single_end_date    = $end_date;
+                            } else {
+                                $single_start_date  = $i . "-01-01 00:00:00";
+                                $single_end_date    = $i . "-12-31 23:59:59";
+                            }
+                            
+                            $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $single_start_date, $single_end_date, $disallowed_event_types );
+                            if( ! array_key_exists( $i, $yearly_order_ids ) ){
+                                $yearly_order_ids[$i] = $range_order_ids;
+                            } else {
+                                $yearly_order_ids[$i] = array_merge( $yearly_order_ids[$i], $range_order_ids );
+                            }
+                        }
+                    }
                 }
 
+                // store yearly event/participants objects.
                 $all_yearly_data = array();
                 foreach( $yearly_order_ids as $year => $yearly_order_ids ){
                     $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data );
@@ -162,15 +184,25 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
     return $yearly_data;
 }
 
-function process_mixed_year_data( $start, $end ){
-    $start_date = $start . ' 00:00:00' ;
-    $end_date   = $end . ' 23:59:59' ;
-    $start_year = explode( '-', $start_date )[0];
-    $end_year   = explode( '-', $end_date )[0];
+// function process_mixed_year_data( $start, $end ){
 
-    for( $i = $start_year; $i <= $end_year; $i++ ) {
+//     $disallowed_event_types = array( 'giftcard', 'voucher' );
+//     $start_date = $start . ' 00:00:00' ;
+//     $end_date   = $end . ' 23:59:59' ;
 
-    }
-}
+//     $start_year = date( "Y", strtotime( $start_date ) );
+//     $end_year   = date( "Y", strtotime( $end_date ) );
 
-process_mixed_year_data( "2022-12-01", "2024-31-01");
+//     for( $i = $start_year; $i <= $end_year; $i++ ) {
+//         if ( $i === $start_year ){
+//             $end_date = $start_year . "-12-31 23:59:59";
+//             $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
+//         } elseif ( $i === $end_year ) {
+
+//         } else {
+
+//         }
+//     }
+// }
+
+// process_mixed_year_data( "2022-12-01", "2024-31-01");
