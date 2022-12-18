@@ -165,6 +165,8 @@ function el_events_by_category_FINAL_DATA($structure_data, $requestData){
     $all_labels             = [] ;  // to hold x-axis data 
     $category_list_unique   = [];    // [ id => 'name' , 51 => steam-demo ]
 
+    
+
 
     /*
         $all_data_sheet     structure
@@ -233,12 +235,23 @@ function el_events_by_category_FINAL_DATA($structure_data, $requestData){
             // pushing the category count
             if(isset($all_data_sheet[$year]['category_data'][$id]['count'])){
 
-                $previous_count = $all_data_sheet[$year]['category_data'][$id]['count']  ;
+                if( $requestData['type'] == 'participant' ){
+                    $previous_count = intval($all_data_sheet[$year]['category_data'][$id]['count'] ) ;
+                    $all_data_sheet[$year]['category_data'][$id]['count'] = $previous_count + $each_product_data['total_sales'] ;
+                }else{
 
-                $all_data_sheet[$year]['category_data'][$id]['count'] = $previous_count + 1;
+                    
+                    $previous_count = intval( $all_data_sheet[$year]['category_data'][$id]['count'])  ;
+                    
+                    $all_data_sheet[$year]['category_data'][$id]['count'] = $previous_count + 1;
+                }
 
             }else{
-                $all_data_sheet[$year]['category_data'][$id]['count'] = 1;
+                if( $requestData['type'] == 'participant' ){
+                    $all_data_sheet[$year]['category_data'][$id]['count'] = intval( $each_product_data['total_sales']);
+                }else{
+                    $all_data_sheet[$year]['category_data'][$id]['count'] = 1;
+                }
             }
         }
     }    
@@ -301,12 +314,16 @@ function el_events_by_category_FINAL_DATA($structure_data, $requestData){
         $final_data_sheet_by_year[$dataSheetYear]['data']  = $yearlyDataSheet;
     }
 
-
+    // format dataset
+    $final_data_set = [];
+    foreach( $final_data_sheet_by_year as $year => $each_dataset ){
+        $final_data_set[] = $each_dataset;
+    }
 
 
     return [
         'labels'    => $final_label,
-        'dataset'   => $final_data_sheet_by_year
+        'dataset'   => $final_data_set
     ];
 }
 

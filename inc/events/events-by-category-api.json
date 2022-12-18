@@ -17,3 +17,14 @@
 
 
 }
+
+// Real example
+
+{
+    "type" : "participant",
+    "timeline_type" : "year",
+    "timeline_filter" : ["2022","2024","2020"],
+    "filter_key_value" : {
+        "product_status" : "Planned"
+    }
+}
