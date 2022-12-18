@@ -31,7 +31,7 @@ function get_event_by_locations($request){
     
         
         );
-        if(count($request_body) > 0){
+        if(!empty($request_body)){
             foreach( $request_body as $single_year){
                 $year   = $single_year['year'];
                 $months = explode(',', $single_year['months']); 
