@@ -79,8 +79,6 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
             // START --------- Product Category information
             $product_cats = get_the_terms( $single_post_id , 'product_cat' );
-
-
             $each_product_category_arr = []; // use to store all the category along with post id 
 
             foreach( $product_cats as $cat){
@@ -99,7 +97,6 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
             // push data 
             $structure_data[$single_post_id]['category'] = $each_product_category_arr;
-
             // END ------------ Category information assign complete in STRUCTURE DATA variable
 
             
@@ -141,6 +138,23 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
         } // for loop end
         // print_r($structure_data);
 
+        /*
+        =======================================================================
+            structure_data end
+        =======================================================================
+        */
+
+        // prepare data for chart/output
+
+        foreach( $category_list_unique as $cat_id => $cat_name ){
+
+        }
+
+
+
+
+
+        print_r($category_list_unique);
         print_r($structure_data);
 
         
