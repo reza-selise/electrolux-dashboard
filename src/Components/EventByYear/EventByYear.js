@@ -53,26 +53,27 @@ const { Column } = Table;
 
 function EventByYear() {
     const eventbyYearTimelineYears = useSelector((state) => state.eventbyYearTimelineYears.value);
-
+    const eventbyYearTimelineMonth = useSelector((state) => state.eventbyYearTimelineMonth.value);
     const [requestData, setRequestData] = useState('events');
-    console.log('eventbyYearTimelineYears', eventbyYearTimelineYears);
 
     const [grapOrTable, setgGrapOrTable] = useState('graph');
     const handleSwitchChange = (e) => {
         setgGrapOrTable(e.target.value);
-        console.log(e.target.value);
     };
+
+    console.log('hhhh', eventbyYearTimelineMonth);
+
+    const requestBody = eventbyYearTimelineYears.map((year) => ({
+        year: year.toString(),
+        months: eventbyYearTimelineMonth.toString(),
+    }));
+
     const payload = {
         request_data: requestData,
         filter_type: 'years',
-        request_body: JSON.stringify([
-            {
-                year: '2022',
-                months: '01,02,03,04,04,06,07,08,09,10,11,12',
-            },
-        ]),
+        request_body: JSON.stringify(requestBody),
     };
-    const { data, queryInfo } = useEventByYearQuery(payload);
+    const { data, error, isLoading } = useEventByYearQuery(payload);
     const labels =
         data && data.data.years.map((year) => year.year)
             ? data.data.years.map((year) => year.year)
@@ -122,6 +123,7 @@ function EventByYear() {
                 <GraphTableSwitch
                     grapOrTable={grapOrTable}
                     handleSwitchChange={handleSwitchChange}
+                    name="event-by-year"
                 />
                 <DownloadButton />
             </div>
@@ -132,12 +134,16 @@ function EventByYear() {
                 <LocalFilter
                     requestData={requestData}
                     setRequestData={setRequestData}
-                    location="event-by-year"
+                    location="event-by-year-timeline"
                 />
             </div>
-            {grapOrTable === 'graph' ? (
+            {error ? (
+                'error'
+            ) : isLoading ? (
+                pleaseWait
+            ) : grapOrTable === 'graph' ? (
                 <Bar options={options} data={graphData} />
-            ) : data ? (
+            ) : (
                 <Table dataSource={data.data.years}>
                     <Column title="Year" dataIndex="year" key="year" />
                     <Column title="ELUX" dataIndex="elux" key="elux" />
@@ -145,8 +151,6 @@ function EventByYear() {
                     <Column title="B2C" dataIndex="b2c" key="b2c" />
                     <Column title="Total" dataIndex="total" key="total" />
                 </Table>
-            ) : (
-                pleaseWait
             )}
         </>
     );

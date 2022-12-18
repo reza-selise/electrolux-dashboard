@@ -33,7 +33,7 @@ function CustomModal() {
                     <GlobalComment />
                 </Modal>
             );
-        case 'event-by-year':
+        case 'event-by-year-timeline':
             return (
                 <Modal
                     title={timeline}

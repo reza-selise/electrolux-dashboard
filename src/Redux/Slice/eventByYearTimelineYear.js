@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const years = [];
+const currentYear = new Date().getFullYear();
+for (let i = 0; i < 5; i += 1) {
+    years.push(currentYear - i);
+}
 const initialState = {
-    value: [],
+    value: years,
 };
 
 export const eventbyYearTimelineYearsSlice = createSlice({

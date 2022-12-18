@@ -1,0 +1,54 @@
+.custom-date-range-wrapper {
+  margin-top: 24px;
+  .el-custom-date-picker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    .from-to-title {
+      font-family: 'Electrolux Sans';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 150%;
+      color: #011e41;
+    }
+    .ant-picker {
+      padding: 0;
+      border: none;
+
+      .ant-picker-input {
+        width: 173px;
+        height: 54px;
+        background: #ffffff;
+        border: 1px solid #adb9c3;
+        border-radius: 0;
+        padding: 15px;
+        & > input::placeholder {
+          font-family: 'Electrolux Sans';
+          font-style: normal;
+          font-weight: 400;
+          font-size: 16px;
+          color: #011e41;
+        }
+      }
+    }
+  }
+  .el-delete-btn,
+  .el-add-another-btn {
+    background-color: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: 'Electrolux Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 150%;
+    color: #011e41;
+  }
+  .el-delete-btn {
+    margin-bottom: 24px;
+  }
+}

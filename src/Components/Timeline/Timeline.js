@@ -1,5 +1,7 @@
 import { Select } from 'antd';
 import React, { useState } from 'react';
+import FilterTypeCustomDate from '../FilterTypeCustomDate/FilterTypeCustomDate';
+import FilterTypeMonth from '../FilterTypeMonth/FilterTypeMonth';
 import FilterTypeYear from '../FilterTypeYear/FilterTypeYear';
 import './Timeline.scss';
 
@@ -11,6 +13,7 @@ function Timeline() {
     return (
         <>
             <Select
+                className="timeline-filter"
                 defaultValue={filterType}
                 style={{
                     width: '100%',
@@ -35,9 +38,9 @@ function Timeline() {
                     },
                 ]}
             />
-            {filterType === 'month' && 'month sectected'}
+            {filterType === 'month' && <FilterTypeMonth />}
             {filterType === 'year' && <FilterTypeYear />}
-            {filterType === 'custom-date-range' && 'custom-date-range sectected'}
+            {filterType === 'custom-date-range' && <FilterTypeCustomDate />}
             {filterType === 'custom-time-frame' && 'custom-time-frame sectected'}
         </>
     );
