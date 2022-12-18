@@ -56,6 +56,33 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                 $response['years'] = $all_yearly_data;
                 break;
             case 'custom_date_range':
+                $yearly_order_ids = array();
+                foreach ( $request_body as $single_range ) {
+                    $start_date = $single_range->start . ' 00:00:00' ;
+                    $end_date   = $single_range->end . ' 23:59:59' ;
+                    
+                    $start_year = date( "Y", strtotime( $start_date ) );
+                    $end_year   = date( "Y", strtotime( $end_date ) );
+                    
+                    if( $start_year === $end_year ){
+                        $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
+                        
+                        if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
+                            $yearly_order_ids[$start_year] = $range_order_ids;
+                        } else {
+                            $yearly_order_ids[$start_year] = array_merge( $yearly_order_ids[$start_year], $range_order_ids );
+                        }
+                    } 
+                }
+
+                $all_yearly_data = array();
+                foreach( $yearly_order_ids as $year => $yearly_order_ids ){
+                    $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data );
+                    array_push( $all_yearly_data, $yearly_data );
+                }
+
+                $response['years'] = $all_yearly_data;
+                break;
             default: 
                 return rest_ensure_response( array(
                     'status_code' => 403,
@@ -134,3 +161,16 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
     
     return $yearly_data;
 }
+
+function process_mixed_year_data( $start, $end ){
+    $start_date = $start . ' 00:00:00' ;
+    $end_date   = $end . ' 23:59:59' ;
+    $start_year = explode( '-', $start_date )[0];
+    $end_year   = explode( '-', $end_date )[0];
+
+    for( $i = $start_year; $i <= $end_year; $i++ ) {
+
+    }
+}
+
+process_mixed_year_data( "2022-12-01", "2024-31-01");
