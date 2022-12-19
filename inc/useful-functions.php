@@ -127,7 +127,7 @@ function el_add_leading_zero($month_number){
         }
 }
  */
-function get_product_by_timeline_filter( $timeline_type , $timeline_filter ){
+function get_products_by_timeline_filter( $timeline_type , $timeline_filter ){
 
     $final_ids = [];
 
@@ -213,3 +213,52 @@ function get_product_by_timeline_filter( $timeline_type , $timeline_filter ){
 }
 
 
+
+function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData){
+
+    if( 
+        isset($requestData['filter_key_value']) && 
+        !empty($requestData['filter_key_value']) 
+    ){
+        
+        // var_dump($requestData);
+        $filter_arr = $requestData['filter_key_value'];
+        $output = [];
+
+        // loop through all the posts
+        foreach($structure_data as $product_id => $product_data ){        
+
+            $is_satisfy = true;
+
+            // loop through all the filter if not match/fount return false
+            foreach( $filter_arr as $key => $value ){
+
+                if( isset( $product_data[$key] ) ){
+                    
+                    $saved_value_to_match   = sanitize_key( $product_data[$key] );
+                    $request_value_to_match = sanitize_key( $value );
+
+                    if( $saved_value_to_match == $request_value_to_match ){
+                        // do nothing        
+                    }else{
+                        $is_satisfy = false;
+                    }
+
+                }else{
+                    $is_satisfy = false;
+                }
+
+            }
+
+            if($is_satisfy == true){
+                $output[$product_id] = $product_data;
+            }
+
+        }
+
+        return $output;
+    }else{
+        return $structure_data;
+    }
+
+}

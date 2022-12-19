@@ -1,0 +1,21 @@
+.filter-type-time-frame {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 24px;
+  .ant-select-selector {
+    height: 54px !important;
+    background: #ffffff;
+    border: 1px solid #adb9c3;
+    border-radius: 0;
+    .ant-select-selection-item {
+      font-family: 'Electrolux Sans';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 52px;
+      color: #011e41;
+    }
+  }
+}

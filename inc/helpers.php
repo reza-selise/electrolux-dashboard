@@ -6,13 +6,7 @@ if( ! function_exists( 'elux_get_all_valid_event_order_ids_between_date' ) ){
         $query      = "SELECT DISTINCT $wpdb->postmeta.post_id from $wpdb->postmeta LEFT JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID WHERE $wpdb->posts.post_type = 'shop_order' AND ( $wpdb->postmeta.meta_key = 'event_start_time' AND ( $wpdb->postmeta.meta_value BETWEEN '%s' AND '%s' ))";
         $response   = $wpdb->get_results( $wpdb->prepare( $query, $start_date, $end_date ) );
         $order_ids  = array_map( "elux_order_id_array_map", $response );
-        $valid_event_order_ids = array_filter( $order_ids, function( $order_id ){
-            if( 'voucher' !== get_post_meta( $order_id, 'order_service_type', true ) ){
-                return true;
-            } else {
-                return false;
-            }
-        } );
+        $valid_event_order_ids = array_filter( $order_ids, "elux_filter_valid_events" );
         return $valid_event_order_ids;
     }
 }
@@ -21,5 +15,15 @@ if( ! function_exists( 'elux_get_all_valid_event_order_ids_between_date' ) ){
 if( ! function_exists( 'elux_order_id_array_map' ) ){
     function elux_order_id_array_map( $order ){
         return $order->post_id;
+    }
+}
+
+if( !function_exists( 'elux_filter_valid_events' ) ){
+    function elux_filter_valid_events( $order_id ){
+        if( 'voucher' !== get_post_meta( $order_id, 'order_service_type', true ) ){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
