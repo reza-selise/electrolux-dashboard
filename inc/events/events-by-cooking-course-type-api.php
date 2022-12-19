@@ -60,9 +60,11 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
         $structure_data     = el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids);
 
 
+
         /// 3. ---------- Filter data
         $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
 
+        print_r($filtered_data);
         
         // /// 4. ---------- Get Final output
         $final_data         = el_events_by_cooking_course_type_FINAL_DATA($filtered_data, $received_data);
@@ -188,7 +190,7 @@ function el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids){
 
 
 
-function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $received_data){
+function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestData){
 
     $labels_by_id = [];
 
@@ -211,7 +213,7 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $received_
     // get dataset by year
     $dataset_by_year    = [];
 
-
+    // Loop through all the products and store the cat id 
     foreach( $structure_data as $single_product_id =>  $each_product_data  ){
 
         // loop through all the category 
@@ -232,15 +234,26 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $received_
                     isset($dataset_by_year[$year][$cat_id]) && 
                     isset($dataset_by_year[$year][$cat_id]['count']) 
                 ){
+
+                    if( $requestData['type'] == 'participant' ){
+                        
+                        $previous_count = intval($dataset_by_year[$year]['category_data'][$id]['count'] ) ;
+                        $dataset_by_year[$year]['category_data'][$cat_id]['count'] = $previous_count + $each_product_data['total_sales'] ;
+
+                    }else{
+                        $previous_count = intval($dataset_by_year[$year][$cat_id]['count']);
+                        // update count 
+                        $dataset_by_year[$year][$cat_id]['count'] = $previous_count + 1;
+                    }
                     
-                    $previous_count = intval($dataset_by_year[$year][$cat_id]['count']);
-                    // update count 
-                    $dataset_by_year[$year][$cat_id]['count'] = $previous_count + 1;
 
                 }else{
-
-                    $dataset_by_year[$year][$cat_id]['count'] = 1 ;
-                    $dataset_by_year[$year][$cat_id]['label'] = $cat_name ;
+                    if( $requestData['type'] == 'participant' ){
+                        $dataset_by_year[$year][$cat_id]['count'] = intval( $each_product_data['total_sales']);
+                    }else{
+                        $dataset_by_year[$year][$cat_id]['count'] = 1 ;
+                        $dataset_by_year[$year][$cat_id]['label'] = $cat_name ;
+                    }
 
                 }
                 
