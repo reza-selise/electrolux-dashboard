@@ -64,7 +64,6 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
         /// 3. ---------- Filter data
         $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
 
-        // print_r($filtered_data);
         
         // /// 4. ---------- Get Final output
         $final_data         = el_events_by_cooking_course_type_FINAL_DATA($filtered_data, $received_data);
@@ -226,6 +225,8 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestDa
 
                 // labels updated
                 $labels_by_id[$cat_id] = $cat_name;
+
+                // took year
                 $year   = $each_product_data['event_time']['year'];
 
                 // assign label
