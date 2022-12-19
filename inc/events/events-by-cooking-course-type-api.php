@@ -78,9 +78,9 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
             ) );
         }else{
             return rest_ensure_response( array(
-                'status'    => false,
-                'message'   => 'Something is wrong while updating',
-                'dev_message'   => '$structure_data & $final_data failed to receive',
+                'status'        => false,                
+                'message'   => 'No data found.',
+                'dev_message'   => '$structure_data & $final_data receive failed to receive',
                 'data'      => [],
             ) );
         }
