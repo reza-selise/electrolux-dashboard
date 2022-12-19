@@ -13,7 +13,7 @@ add_action( 'rest_api_init', function () {
 function get_event_by_locations($request){
     $request_data =  $request->get_params()['request_data'];
     $filter_type =  $request->get_params()['filter_type'];
-    $request_body =  $request->get_params()['request_body'];
+    $request_body = json_decode($request->get_params()['request_body'], true);
     
     $gallery_locations = $request->get_params()['locations'];
     $gallery_locations_arr =  explode(',',$gallery_locations);
