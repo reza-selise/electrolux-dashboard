@@ -6,7 +6,7 @@ import {
   Legend,
   LinearScale,
   Title,
-  Tooltip
+  Tooltip,
 } from 'chart.js';
 import React, { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
@@ -119,50 +119,9 @@ function EventByMonth() {
       'Nov',
       'Dec',
     ],
-
-    //   {
-    //     label: '2022',
-    //     data:
-    //       data && data.data.years.map((year) => year.elux)
-    //         ? data.data.years.map((year) => year.elux)
-    //         : 0,
-    //     backgroundColor: '#4A2017',
-    //   },
-    //   {
-    //     label: '2021',
-    //     data:
-    //       data && data.data.years.map((year) => year.b2b)
-    //         ? data.data.years.map((year) => year.b2b)
-    //         : 0,
-    //     backgroundColor: '#937359',
-    //   },
-    //   {
-    //     label: '2020',
-    //     data:
-    //       data && data.data.years.map((year) => year.b2c)
-    //         ? data.data.years.map((year) => year.b2c)
-    //         : 0,
-    //     backgroundColor: '#D0B993',
-    //   },
-    //   {
-    //     label: '2019',
-    //     data:
-    //       data && data.data.years.map((year) => year.b2c)
-    //         ? data.data.years.map((year) => year.b2c)
-    //         : 0,
-    //     backgroundColor: '#D0B993',
-    //   },
-    //   {
-    //     label: '2018',
-    //     data:
-    //       data && data.data.years.map((year) => year.b2c)
-    //         ? data.data.years.map((year) => year.b2c)
-    //         : 0,
-    //     backgroundColor: '#D0B993',
-    //   },
-    // ],
     datasets: chartjsDataSet && chartjsDataSet,
   };
+
   return isLoading ? (
     <h1>Loading...</h1>
   ) : (
