@@ -11,7 +11,9 @@ import {
 import React, { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
 import { useEventByYearQuery } from '../../API/apiSlice';
+import { eluxTranslation } from '../../Translation/Translation';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
@@ -23,6 +25,18 @@ export const options = {
     plugins: {
         title: {
             display: false,
+        },
+        // legend: {
+        //     align: 'start',
+        //     height: '16px',
+        //     width: '16px',
+        // },
+        legend: {
+            align: 'start',
+            labels: {
+                boxWidth: 16,
+                boxHeight: 16,
+            },
         },
     },
     responsive: true,
@@ -38,29 +52,34 @@ export const options = {
 const { Column } = Table;
 
 function EventByYear() {
+    const eventbyYearTimelineYears = useSelector((state) => state.eventbyYearTimelineYears.value);
+    const eventbyYearTimelineMonth = useSelector((state) => state.eventbyYearTimelineMonth.value);
+    const eventByYearFilterType = useSelector((state) => state.eventByYearFilterType.value);
     const [requestData, setRequestData] = useState('events');
-    console.log('re', requestData);
 
     const [grapOrTable, setgGrapOrTable] = useState('graph');
     const handleSwitchChange = (e) => {
         setgGrapOrTable(e.target.value);
-        console.log(e.target.value);
     };
+
+    console.log('hhhh', eventbyYearTimelineYears);
+
+    const requestBody = eventbyYearTimelineYears.map((year) => ({
+        year: year.toString(),
+        months: eventbyYearTimelineMonth.toString(),
+    }));
+
     const payload = {
-        request_data: 'events',
-        filter_type: 'years',
-        request_body: JSON.stringify([
-            {
-                year: '2022',
-                months: '09,10,11',
-            },
-        ]),
+        request_data: requestData,
+        filter_type: eventByYearFilterType,
+        request_body: JSON.stringify(requestBody),
     };
-    const { data } = useEventByYearQuery(payload);
+    const { data, error, isLoading } = useEventByYearQuery(payload);
     const labels =
         data && data.data.years.map((year) => year.year)
             ? data.data.years.map((year) => year.year)
             : ['2022'];
+
     const graphData = {
         labels,
         datasets: [
@@ -90,12 +109,22 @@ function EventByYear() {
             },
         ],
     };
+
+    const { pleaseWait } = eluxTranslation;
+
+    // useEffect(() => {
+    //     if (typeof queryInfo !== 'undefined') {
+    //         queryInfo.refetch(payload);
+    //     }
+    // }, [payload]);
+
     return (
         <>
             <div className="header-wrapper">
                 <GraphTableSwitch
                     grapOrTable={grapOrTable}
                     handleSwitchChange={handleSwitchChange}
+                    name="event-by-year"
                 />
                 <DownloadButton />
             </div>
@@ -103,10 +132,17 @@ function EventByYear() {
                 <h2 className="graph-title">
                     Overview of Events <span>by year</span>
                 </h2>
-                
-                <LocalFilter requestData={requestData} setRequestData={setRequestData} />
+                <LocalFilter
+                    requestData={requestData}
+                    setRequestData={setRequestData}
+                    location="event-by-year-timeline"
+                />
             </div>
-            {grapOrTable === 'graph' ? (
+            {error ? (
+                'error'
+            ) : isLoading ? (
+                pleaseWait
+            ) : grapOrTable === 'graph' ? (
                 <Bar options={options} data={graphData} />
             ) : (
                 <Table dataSource={data.data.years}>

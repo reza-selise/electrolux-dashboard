@@ -22,6 +22,7 @@
     "no-restricted-imports": "off",
     "no-nested-ternary": "off",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "react/no-array-index-key": "off",
     "react/jsx-filename-extension": [
       1,
       {
@@ -31,7 +32,7 @@
     "prettier/prettier": [
       "error",
       {
-        "trailingComma": "es6",
+        "trailingComma": "es5",
         "singleQuote": true,
         "printWidth": 100,
         "tabWidth": 4,

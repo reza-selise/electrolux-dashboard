@@ -5,4 +5,5 @@ export const eluxTranslation = {
     startTyping: 'Start typing...',
     errorOccured: 'An error happened during api call',
     pleaseWait: 'Please wait...',
+    timeline: 'Timeline',
 };
