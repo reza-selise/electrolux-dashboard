@@ -4,16 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '../../Redux/Slice/modalSlice';
 import { eluxTranslation } from '../../Translation/Translation';
 import GlobalComment from '../GlobalComment/GlobalComment';
+import Timeline from '../Timeline/Timeline';
 import './CustomModal.scss';
 
 function CustomModal() {
     const isModalOpen = useSelector((state) => state.modal.value);
-    const { genericComments } = eluxTranslation;
+    const location = useSelector((state) => state.location.value);
+    const { genericComments, timeline } = eluxTranslation;
     const dispatch = useDispatch();
     const handleCancel = () => {
         dispatch(setModal());
     };
-    const location = 'global-comment';
+    console.log(location);
+    // const location = 'global-comment';
+    // const location = 'event-by-year';
 
     switch (location) {
         case 'global-comment':
@@ -27,6 +31,20 @@ function CustomModal() {
                     className="global-comment-modal"
                 >
                     <GlobalComment />
+                </Modal>
+            );
+        case 'event-by-year-timeline':
+            return (
+                <Modal
+                    title={timeline}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={461}
+                    centered
+                    className="timeline-modal"
+                >
+                    <Timeline />
                 </Modal>
             );
         default:

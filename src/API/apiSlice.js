@@ -47,6 +47,12 @@ export const eluxAPI = createApi({
                 method: 'GET',
             }),
         }),
+        eventByMoths: builder.query({
+            query: (payload) => ({
+                url: `elux-dashboard/v1/events-by-year?${new URLSearchParams(payload)}`,
+                method: 'GET',
+            }),
+        }),
     }),
 });
 
