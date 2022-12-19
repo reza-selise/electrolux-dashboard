@@ -20,6 +20,10 @@ function Timeline() {
                 dispatch(setEventByYearFilterType(value));
                 break;
 
+            case 'event-by-months-timeline':
+                dispatch(setEventByYearFilterType(value));
+                break;
+
             default:
                 console.log('filter type year month default');
         }
