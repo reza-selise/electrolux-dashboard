@@ -87,7 +87,7 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
 
         /// 3. ---------- PASS ONLY FILTERED STRUCTURE DATA
-        $filtered_data            = el_events_by_category_FILTER_DATA($structure_data, $received_data);
+        $filtered_data            = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
 
         
         /// 4. ---------- Get Final output
@@ -116,48 +116,48 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
     }
 }
 
-// this function will use to 
-function el_events_by_category_FILTER_DATA($structure_data, $requestData){
+// // this function will use to 
+// function el_events_by_category_FILTER_DATA($structure_data, $requestData){
 
-    // var_dump($requestData);
-    $filter_arr = $requestData['filter_key_value'];
-    $output = [];
+//     // var_dump($requestData);
+//     $filter_arr = $requestData['filter_key_value'];
+//     $output = [];
 
-    // loop through all the posts
-    foreach($structure_data as $product_id => $product_data ){        
+//     // loop through all the posts
+//     foreach($structure_data as $product_id => $product_data ){        
 
-        $is_satisfy = true;
+//         $is_satisfy = true;
 
-        // loop through all the filter if not match/fount return false
-        foreach( $filter_arr as $key => $value ){
+//         // loop through all the filter if not match/fount return false
+//         foreach( $filter_arr as $key => $value ){
 
-            if( isset( $product_data[$key] ) ){
+//             if( isset( $product_data[$key] ) ){
                 
-                $saved_value_to_match   = sanitize_key( $product_data[$key] );
-                $request_value_to_match = sanitize_key( $value );
+//                 $saved_value_to_match   = sanitize_key( $product_data[$key] );
+//                 $request_value_to_match = sanitize_key( $value );
 
-                if( $saved_value_to_match == $request_value_to_match ){
-                    // do nothing        
-                }else{
-                    $is_satisfy = false;
-                }
+//                 if( $saved_value_to_match == $request_value_to_match ){
+//                     // do nothing        
+//                 }else{
+//                     $is_satisfy = false;
+//                 }
 
-            }else{
-                $is_satisfy = false;
-            }
+//             }else{
+//                 $is_satisfy = false;
+//             }
 
-        }
+//         }
 
-        if($is_satisfy == true){
-            $output[$product_id] = $product_data;
-        }
+//         if($is_satisfy == true){
+//             $output[$product_id] = $product_data;
+//         }
 
-    }
+//     }
 
 
-    return $output;
+//     return $output;
 
-}
+// }
 
 
 // this function will output the final data to 

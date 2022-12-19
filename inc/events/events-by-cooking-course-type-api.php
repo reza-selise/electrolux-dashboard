@@ -64,7 +64,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
         /// 3. ---------- Filter data
         $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
 
-        print_r($filtered_data);
+        // print_r($filtered_data);
         
         // /// 4. ---------- Get Final output
         $final_data         = el_events_by_cooking_course_type_FINAL_DATA($filtered_data, $received_data);
@@ -228,21 +228,20 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestDa
                 $labels_by_id[$cat_id] = $cat_name;
                 $year   = $each_product_data['event_time']['year'];
 
+                // assign label
+                $dataset_by_year[$year][$cat_id]['label'] = $cat_name ;
 
                 if( 
                     isset($dataset_by_year[$year]) && 
                     isset($dataset_by_year[$year][$cat_id]) && 
                     isset($dataset_by_year[$year][$cat_id]['count']) 
                 ){
+                    $previous_count = intval($dataset_by_year[$year][$cat_id]['count']);
 
+                    // update count 
                     if( $requestData['type'] == 'participant' ){
-                        
-                        $previous_count = intval($dataset_by_year[$year]['category_data'][$id]['count'] ) ;
-                        $dataset_by_year[$year]['category_data'][$cat_id]['count'] = $previous_count + $each_product_data['total_sales'] ;
-
+                        $dataset_by_year[$year][$cat_id]['count'] = intval($each_product_data['total_sales']) + $previous_count;
                     }else{
-                        $previous_count = intval($dataset_by_year[$year][$cat_id]['count']);
-                        // update count 
                         $dataset_by_year[$year][$cat_id]['count'] = $previous_count + 1;
                     }
                     
@@ -252,7 +251,6 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestDa
                         $dataset_by_year[$year][$cat_id]['count'] = intval( $each_product_data['total_sales']);
                     }else{
                         $dataset_by_year[$year][$cat_id]['count'] = 1 ;
-                        $dataset_by_year[$year][$cat_id]['label'] = $cat_name ;
                     }
 
                 }
