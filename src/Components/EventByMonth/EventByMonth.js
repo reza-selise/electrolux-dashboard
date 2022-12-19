@@ -55,61 +55,117 @@ function EventByMonth() {
     console.log(e.target.value);
   };
   const payload = {
-    request_data: 'events',
+    request_data: requestData,
     filter_type: 'months',
     request_body: JSON.stringify([
       {
-        "year": "2022",
-        "months": "01,02,03,04,05,06,07,08,09,10,11,12"
-    },
-    {
-        "year": "2021",
-        "months": "01,02,03,04,05,06,07,08,09,10,11,12"
-    },
-    {
-        "year": "2020",
-        "months": "01,02,03,04,05,06,07,08,09,10,11,12"
-    }
+        year: '2022',
+        months: '01,02,03,04,05,06,07,08,09,10,11,12',
+      },
+      {
+        year: '2021',
+        months: '01,02,03,04,05,06,07,08,09,10,11,12',
+      },
+      {
+        year: '2020',
+        months: '01,02,03,04,05,06,07,08,09,10,11,12',
+      },
+      {
+        year: '2019',
+        months: '01,02,03,04,05,06,07,08,09,10,11,12',
+      },
+      {
+        year: '2018',
+        months: '01,02,03,04,05,06,07,08,09,10,11,12',
+      },
     ]),
   };
- const { data, error, isLoading }  = useEventByMonthQuery(payload);
+  const { data, error, isLoading } = useEventByMonthQuery(payload);
 
-  
-  const labels =
-    data && data.data.years.map((year) => year.year)
-    ? data.data.years.map((year) => year.year)
-    : ['2022'];
-    
-    const graphData = {
-      labels,
-      datasets: [
-          {
-              label: '2022',
-              data:
-                  data && data.data.years.map((year) => year.elux)
-                      ? data.data.years.map((year) => year.elux)
-                      : 0,
-              backgroundColor: '#4A2017',
-          },
-          {
-              label: '2021',
-              data:
-                  data && data.data.years.map((year) => year.b2b)
-                      ? data.data.years.map((year) => year.b2b)
-                      : 0,
-              backgroundColor: '#937359',
-          },
-          {
-              label: '2020',
-              data:
-                  data && data.data.years.map((year) => year.b2c)
-                      ? data.data.years.map((year) => year.b2c)
-                      : 0,
-              backgroundColor: '#D0B993',
-          },
-      ],
+  const chartjsDataSet = [];
+
+  if (data && data.data) {
+    const { years: resData } = data.data;
+
+    if (resData) {
+      resData.map((item, index) => {
+        const singleDataSet = {};
+        singleDataSet.label = item.year;
+
+        if (item.months.length > 0) {
+          let data = [];
+          item.months.map((m) => {
+            data.push(m.total);
+          });
+          singleDataSet.data = data;
+        }
+        chartjsDataSet.push(singleDataSet);
+      });
+    }
+  }
+
+  const graphData = {
+    labels: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+
+    //   {
+    //     label: '2022',
+    //     data:
+    //       data && data.data.years.map((year) => year.elux)
+    //         ? data.data.years.map((year) => year.elux)
+    //         : 0,
+    //     backgroundColor: '#4A2017',
+    //   },
+    //   {
+    //     label: '2021',
+    //     data:
+    //       data && data.data.years.map((year) => year.b2b)
+    //         ? data.data.years.map((year) => year.b2b)
+    //         : 0,
+    //     backgroundColor: '#937359',
+    //   },
+    //   {
+    //     label: '2020',
+    //     data:
+    //       data && data.data.years.map((year) => year.b2c)
+    //         ? data.data.years.map((year) => year.b2c)
+    //         : 0,
+    //     backgroundColor: '#D0B993',
+    //   },
+    //   {
+    //     label: '2019',
+    //     data:
+    //       data && data.data.years.map((year) => year.b2c)
+    //         ? data.data.years.map((year) => year.b2c)
+    //         : 0,
+    //     backgroundColor: '#D0B993',
+    //   },
+    //   {
+    //     label: '2018',
+    //     data:
+    //       data && data.data.years.map((year) => year.b2c)
+    //         ? data.data.years.map((year) => year.b2c)
+    //         : 0,
+    //     backgroundColor: '#D0B993',
+    //   },
+    // ],
+    datasets: chartjsDataSet && chartjsDataSet,
   };
-  return (
+  return isLoading ? (
+    <h1>Loading...</h1>
+  ) : (
     <>
       <div className="header-wrapper">
         <GraphTableSwitch
