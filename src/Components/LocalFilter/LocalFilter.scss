@@ -1,3 +1,9 @@
-.d-block{
-    display: block;
-} 
+.timeline-button-wrapper {
+  .ant-btn-default {
+    padding: 12px 16px;
+    width: 155px;
+    height: 48px;
+    border: 1px solid #dfe7ea;
+    border-radius: 2px;
+  }
+}
