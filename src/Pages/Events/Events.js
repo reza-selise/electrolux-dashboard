@@ -2,6 +2,7 @@ import { Col, Row } from 'antd';
 import React from 'react';
 import Container from '../../Components/Container/Container';
 import CustomModal from '../../Components/CustomModal/CustomModal';
+import EventByCategory from '../../Components/EventByCategory/EventByCategory';
 import EventByLocation from '../../Components/EventByLocation/EventByLocation';
 import EventByYear from '../../Components/EventByYear/EventByYear';
 import GlobalFilterButton from '../../Components/GlobalFilterButton/GlobalFilterButton';
@@ -14,12 +15,18 @@ function Events() {
         <>
             <h2 className="section-title">{eventDashboard}</h2>
             <Container>
-                <Row gutter={16}>
+                <Row gutter={20}>
                     <Col span={12}>
                         <EventByYear />
                     </Col>
                     <Col span={12}>
                         <EventByLocation />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <hr className="horizontal-bar" />
+                        <EventByCategory />
                     </Col>
                 </Row>
             </Container>

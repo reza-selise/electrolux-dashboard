@@ -62,7 +62,7 @@
     ]
 }
 
-
+// for custom date range
 {
     "request_data": "events/participants",
     "filter_type": "custom_date_range",

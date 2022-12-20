@@ -19,58 +19,59 @@ function CustomModal() {
   // const location = 'global-comment';
   // const location = 'event-by-year';
 
-  switch (location) {
-    case 'global-comment':
-      return (
-        <Modal
-          title={genericComments}
-          open={isModalOpen}
-          onCancel={handleCancel}
-          footer={null}
-          width={991}
-          className="global-comment-modal"
-        >
-          <GlobalComment />
-        </Modal>
-      );
-    case 'event-by-year-timeline':
-      return (
-        <Modal
-          title={timeline}
-          open={isModalOpen}
-          onCancel={handleCancel}
-          footer={null}
-          width={461}
-          centered
-          className="timeline-modal"
-        >
-          <Timeline />
-        </Modal>
-      );
-    case 'event-by-location-timeline':
-      return (
-        <Modal
-          title={timeline}
-          open={isModalOpen}
-          onCancel={handleCancel}
-          footer={null}
-          width={461}
-          centered
-          className="timeline-modal"
-        >
-          <Timeline />
-        </Modal>
-      );
-    default:
-      return (
-        <Modal
-          title="Nothing found"
-          open={isModalOpen}
-          onCancel={handleCancel}
-          footer={null}
-        />
-      );
-  }
+    switch (location) {
+        case 'global-comment':
+            return (
+                <Modal
+                    title={genericComments}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={991}
+                    centered
+                    className="global-comment-modal"
+                >
+                    <GlobalComment />
+                </Modal>
+            );
+        case 'event-by-year-timeline':
+            return (
+                <Modal
+                    title={timeline}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={461}
+                    centered
+                    className="timeline-modal"
+                >
+                    <Timeline />
+                </Modal>
+            );
+        case 'event-by-category-timeline':
+            return (
+                <Modal
+                    title={timeline}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={461}
+                    centered
+                    className="timeline-modal"
+                >
+                    <Timeline />
+                </Modal>
+            );
+        default:
+            return (
+                <Modal
+                    title="Nothing found"
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                />
+            );
+    }
 }
 
 export default CustomModal;
