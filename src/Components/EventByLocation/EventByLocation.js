@@ -106,6 +106,7 @@ function EventByLocation() {
                 <GraphTableSwitch
                     grapOrTable={grapOrTableForLocation}
                     handleSwitchChange={handleSwitchChange}
+                    name="event-by-location"
                 />
                 <DownloadButton />
             </div>
