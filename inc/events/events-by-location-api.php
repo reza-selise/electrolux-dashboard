@@ -3,7 +3,7 @@
 
 add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
-    register_rest_route($namespace, '/consultations-by-acquisition-type', array(
+    register_rest_route($namespace, '/events-by-location', array(
         'methods' => 'GET',
         'callback' => 'get_event_by_locations',
         'permission_callback' => '__return_true',
@@ -21,6 +21,14 @@ function get_event_by_locations($request){
         "type"  => $request_data
     );
 
+    if($filter_type=='' || $request_data=='' || $request_body == ''){
+        return rest_ensure_response( array(
+            'status_code' => 403,
+            'message'     => 'failure',
+            'data'        => array(),
+        ) );
+    }
+
   
     $my_returned_data = array();
     $my_years = array();
@@ -33,30 +41,50 @@ function get_event_by_locations($request){
         );
         if(!empty($request_body)){
             foreach( $request_body as $single_year){
+              
+
                 $year   = $single_year['year'];
                 $months = explode(',', $single_year['months']); 
                 // $the_count = 0;
                 $yearly_order_ids =  array();
                 $yearly_order_ids2 =  array();
-                foreach ( $months as $month ) {
-                    $start_date         = $year . '-' . $month . '-01 00:00:00';
-                    $end_date           =  new DateTime($year . '-' . $month . '-01 11:59:59');
-                    $end_date = $end_date->format('Y-m-t h:i:s');
-                      
+
+                // for custom date range
+                if($request_data == 'custom_date_range'){
+                    $start_date = $single_year['start'];
+                    $end_date = $single_year['end'];
+                    
                     $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date);
                     if(!empty($monthly_order_ids)){
                         array_push( $yearly_order_ids, $monthly_order_ids );
                         $yearly_order_ids2 = array_merge( $yearly_order_ids2, $monthly_order_ids );
                        
                     }
-                   
                 }
+                else{
+                    foreach ( $months as $month ) {
+                        $start_date         = $year . '-' . $month . '-01 00:00:00';
+                        $end_date           =  new DateTime($year . '-' . $month . '-01 11:59:59');
+                        $end_date = $end_date->format('Y-m-t h:i:s');
+                          
+                        $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                        if(!empty($monthly_order_ids)){
+                            array_push( $yearly_order_ids, $monthly_order_ids );
+                            $yearly_order_ids2 = array_merge( $yearly_order_ids2, $monthly_order_ids );
+                           
+                        }
+                       
+                    }
+                }
+
+
+               
     
                 if(!empty($yearly_order_ids2) && 'events'== $request_data){
                     $my_data[$single_year['year']] =  count($yearly_order_ids2); // push to main array
-                    error_log(print_r('events data...count= ',1));
-                    error_log(print_r(count($yearly_order_ids2),1));
-                    error_log(print_r($yearly_order_ids2,1));
+                    // error_log(print_r('events data...count= ',1));
+                    // error_log(print_r(count($yearly_order_ids2),1));
+                    // error_log(print_r($yearly_order_ids2,1));
                 }
                 
                 elseif(!empty($yearly_order_ids2) && 'participants'== $request_data){
@@ -65,8 +93,8 @@ function get_event_by_locations($request){
                 else{
                     $my_data[$single_year['year']] = 0;
                 }
-                error_log(print_r('year order ids -------------- ',1));
-                error_log(print_r($yearly_order_ids2,1));
+                // error_log(print_r('year order ids -------------- ',1));
+                // error_log(print_r($yearly_order_ids2,1));
                 
             }
         }
