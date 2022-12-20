@@ -240,7 +240,7 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestDa
                     $previous_count = intval($dataset_by_year[$year][$cat_id]['count']);
 
                     // update count 
-                    if( $requestData['type'] == 'participant' ){
+                    if( $requestData['type'] == 'participants' ){
                         $dataset_by_year[$year][$cat_id]['count'] = intval($each_product_data['total_sales']) + $previous_count;
                     }else{
                         $dataset_by_year[$year][$cat_id]['count'] = $previous_count + 1;
@@ -248,7 +248,7 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestDa
                     
 
                 }else{
-                    if( $requestData['type'] == 'participant' ){
+                    if( $requestData['type'] == 'participants' ){
                         $dataset_by_year[$year][$cat_id]['count'] = intval( $each_product_data['total_sales']);
                     }else{
                         $dataset_by_year[$year][$cat_id]['count'] = 1 ;

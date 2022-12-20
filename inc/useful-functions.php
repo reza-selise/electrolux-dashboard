@@ -142,7 +142,7 @@ function get_products_by_timeline_filter( $timeline_type , $timeline_filter ){
     $query_arr = []; 
 
     // If month type selected selected 
-    if($timeline_type == 'month'){
+    if($timeline_type == 'months'){
         
         // store the month array 
         $months = $timeline_filter;
@@ -169,7 +169,7 @@ function get_products_by_timeline_filter( $timeline_type , $timeline_filter ){
 
 
     // -------- Year filter START
-    if($timeline_type == 'year'){
+    if($timeline_type == 'years'){
         $years = $timeline_filter;
         foreach($years as $year ){
             $start_range = $year . '01' . '01';
@@ -279,7 +279,7 @@ function get_ORDERS_by_timeline_filter( $timeline_type , $timeline_filter ){
     $query_arr = []; 
 
     // If month type selected selected 
-    if($timeline_type == 'month'){
+    if($timeline_type == 'months'){
         
         // store the month array 
         $months = $timeline_filter;
@@ -306,7 +306,7 @@ function get_ORDERS_by_timeline_filter( $timeline_type , $timeline_filter ){
 
 
     // -------- Year filter START
-    if($timeline_type == 'year'){
+    if($timeline_type == 'years'){
         $years = $timeline_filter;
         foreach($years as $year ){
             $start_range = $year . '01' . '01';

@@ -236,7 +236,7 @@ function el_events_by_category_FINAL_DATA($structure_data, $requestData){
             // pushing the category count
             if(isset($all_data_sheet[$year]['category_data'][$id]['count'])){
 
-                if( $requestData['type'] == 'participant' ){
+                if( $requestData['type'] == 'participants' ){
                     $previous_count = intval($all_data_sheet[$year]['category_data'][$id]['count'] ) ;
                     $all_data_sheet[$year]['category_data'][$id]['count'] = $previous_count + $each_product_data['total_sales'] ;
                 }else{
@@ -248,7 +248,7 @@ function el_events_by_category_FINAL_DATA($structure_data, $requestData){
                 }
 
             }else{
-                if( $requestData['type'] == 'participant' ){
+                if( $requestData['type'] == 'participants' ){
                     $all_data_sheet[$year]['category_data'][$id]['count'] = intval( $each_product_data['total_sales']);
                 }else{
                     $all_data_sheet[$year]['category_data'][$id]['count'] = 1;
