@@ -135,6 +135,26 @@
     ]
 }
 
+// for custom date range
+{
+    "request_data": "events/participants",
+    "filter_type": "custom_date_range",
+    "request_body": [
+        {
+            "start":  "2022-01-01",
+            "end":  "2022-01-31",
+        },
+        {
+            "start":  "2022-02-01",
+            "end":  "2022-03-15",
+        },
+        {
+            "start":  "2022-12-01",
+            "end":  "2024-31-01",
+        },
+    ]
+}
+
 // for custom time frame
 {
     "filter_type": "custom_time_frame",

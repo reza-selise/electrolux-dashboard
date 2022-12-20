@@ -57,6 +57,83 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                 $response['years'] = $all_yearly_data;
                 break;
             case 'custom_date_range':
+                $all_yearly_data    = array();
+                $yearly_order_ids   = array();
+
+                // prepare yearly order ids
+                if( is_array( $request_body ) && ! empty( $request_body )){
+                    foreach ( $request_body as $single_range ) {
+                        if( empty( $single_range->start ) || empty( $single_range->end ) ){
+                            continue;
+                        }
+
+                        $start_date = $single_range->start . ' 00:00:00' ;
+                        $end_date   = $single_range->end . ' 23:59:59' ;
+                        
+                        $start_year = date( "Y", strtotime( $start_date ) );
+                        $end_year   = date( "Y", strtotime( $end_date ) );
+
+                        if( $start_year === $end_year ){    // selected range is within same year
+                            $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
+                            
+                            if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
+                                $yearly_order_ids[$start_year] = $range_order_ids;
+                            } else {
+                                $yearly_order_ids[$start_year] = array_merge( $yearly_order_ids[$start_year], $range_order_ids );
+                            }
+                        } elseif ( $start_year !== $end_year ) {    // selected range is not within same year
+                            for( $i = $start_year; $i <= $end_year; $i++ ) {
+                                if ( $i === $start_year ){
+                                    $single_start_date  = $start_date;
+                                    $single_end_date    = $start_year . "-12-31 23:59:59";
+                                } elseif ( $i === $end_year ) {
+                                    $single_start_date  = $end_year . "-01-01 00:00:00";
+                                    $single_end_date    = $end_date;
+                                } else {
+                                    $single_start_date  = $i . "-01-01 00:00:00";
+                                    $single_end_date    = $i . "-12-31 23:59:59";
+                                }
+                                
+                                $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $single_start_date, $single_end_date, $disallowed_event_types );
+                                if( ! array_key_exists( $i, $yearly_order_ids ) ){
+                                    $yearly_order_ids[$i] = $range_order_ids;
+                                } else {
+                                    $yearly_order_ids[$i] = array_merge( $yearly_order_ids[$i], $range_order_ids );
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if( is_array( $yearly_order_ids ) && !empty( $yearly_order_ids ) ){
+                    foreach( $yearly_order_ids as $year => $yearly_order_ids ){
+                        $single_year_data           = array();
+                        $single_year_data["year"]   = $year;
+
+                        $monthly_order_ids = array();
+                        foreach( $yearly_order_ids as $order_id ){
+                            if( empty( get_post_meta( $order_id, 'event_start_time', true ) ) ){
+                                continue;
+                            }
+                            $order_start_date   = get_post_meta( $order_id, 'event_start_time', true );
+                            $start_month        = date( "m", strtotime( $order_start_date ) );
+                            if( ! array_key_exists( $start_month, $monthly_order_ids ) ){
+                                $monthly_order_ids[$start_month] = [$order_id];
+                            } else {
+                                $monthly_order_ids[$start_month] = array_merge( $monthly_order_ids[$start_month], $order_id );
+                            }
+                        }
+
+                        foreach ( $monthly_order_ids as $month => $ids ) {
+                            $monthly_data       = elux_prepare_single_month_data( $month, $ids, $request_data );
+                            $single_year_data["months"][] = $monthly_data;
+                        }
+                        array_push( $all_yearly_data, $single_year_data );
+                    }
+                }
+
+                $response['years'] = $all_yearly_data;
+                break;
             default: 
                 return rest_ensure_response( array(
                     'status_code' => 403,
