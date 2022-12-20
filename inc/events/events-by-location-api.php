@@ -70,7 +70,7 @@ function get_event_by_locations($request){
                 }
             }
             // by custom date range
-            if($filter_type == 'custom_date_range'){
+            if($filter_type == 'custom_date_range' || $filter_type == 'custom_time_frame'){
                 $yearly_order_ids = array();
                
                     foreach ( $request_body as $single_range ) {

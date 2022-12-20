@@ -58,7 +58,7 @@
     "request_data": "events/participants",
     "locations": "474,473",
     "request_body": {
-        "start":  "2022-01-01",
+        "start":  "2021-01-01",
         "end":  "2022-01-31",
     }
 }
