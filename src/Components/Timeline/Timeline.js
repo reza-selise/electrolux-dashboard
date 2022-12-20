@@ -9,12 +9,12 @@ import FilterTypeYear from '../FilterTypeYear/FilterTypeYear';
 import './Timeline.scss';
 
 function Timeline() {
-    const eventByYearFilterType = useSelector((state) => state.eventByYearFilterType.value);
-    const location = useSelector((state) => state.location.value);
+    const eventByYearFilterType = useSelector(state => state.eventByYearFilterType.value);
+    const location = useSelector(state => state.location.value);
 
     const dispatch = useDispatch();
     // const [filterType, setFilterType] = useState('year');
-    const handleFilterType = (value) => {
+    const handleFilterType = value => {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventByYearFilterType(value));

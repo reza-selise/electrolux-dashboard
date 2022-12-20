@@ -24,9 +24,6 @@ function LocalFilter({ location, requestData, setRequestData }) {
     const handleYearChange = (value) => {
         setRequestData(value);
     };
-    // const openTimelineModal = () => {
-    //     dispatch(setModal);
-    // };
 
     return (
         <>
