@@ -6,8 +6,8 @@ import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/event
 import './FilterTypeYear.scss';
 
 function FilterTypeYear() {
-    const eventbyYearTimelineYears = useSelector((state) => state.eventbyYearTimelineYears.value);
-    const location = useSelector((state) => state.location.value);
+    const eventbyYearTimelineYears = useSelector(state => state.eventbyYearTimelineYears.value);
+    const location = useSelector(state => state.location.value);
     const [years, setYears] = useState([]);
     const [needMonth, setNeedMonth] = useState(false);
 
@@ -15,9 +15,12 @@ function FilterTypeYear() {
 
     const dispatch = useDispatch();
 
-    const handleYearChange = (value) => {
+    const handleYearChange = value => {
         switch (location) {
             case 'event-by-year-timeline':
+                dispatch(setEventbyYearTimelineYears(value));
+                break;
+            case 'event-by-category-timeline':
                 dispatch(setEventbyYearTimelineYears(value));
                 break;
 
@@ -30,7 +33,7 @@ function FilterTypeYear() {
         setNeedMonth(!needMonth);
     };
 
-    const handleMonthChange = (value) => {
+    const handleMonthChange = value => {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineMonth(value));
