@@ -59,6 +59,91 @@ function EventByMonth() {
     };
     const { data, isLoading } = useEventByMonthsQuery(payload);
 
+    // data for table
+    const getTableColumns = (data) => {
+        if (data) {
+            const { years: columnsData } = data.data;
+            const columnsSet = [
+                {
+                    title: 'Month',
+                    dataIndex: 'month',
+                    key: 'month',
+                    render: (text) => <p>{text}</p>,
+                },
+            ];
+
+            if (columnsData.length > 0) {
+                columnsData.map((item) => {
+                    const columnItem = {
+                        title: item.year,
+                        children: [
+                            {
+                                title: 'B2B',
+                                dataIndex: 'B2B',
+                                key: 'B2B',
+                            },
+                            {
+                                title: 'B2C',
+                                dataIndex: 'B2C',
+                                key: 'B2C',
+                            },
+                            {
+                                title: 'Elux',
+                                dataIndex: 'Elux',
+                                key: 'Elux',
+                            },
+                        ],
+                    };
+
+                    columnsSet.push(columnItem);
+                });
+            }
+
+            return columnsSet;
+        }
+    };
+
+    const columnDataSet = getTableColumns(data);
+
+    const getTableSourceData = (data) => {
+        if (data) {
+            const { years: columnsData } = data.data;
+            const sourseData = [];
+
+            for (let i = 0; i < columnsData.length; i++) {
+                for (let j = 0; j < columnsData[i].months.length; j++) {
+                    const sourceData = {
+                        key: i + j + 1,
+                        month: j,
+                        B2B: columnsData[i].months[j].b2b,
+                        B2C: columnsData[i].months[j].b2c,
+                        Elux: columnsData[i].months[j].elux,
+                    };
+
+                    sourseData.push(sourceData);
+                }
+            }
+
+            // if (columnsData.length > 0) {
+            //     columnsData.map((item, index) => {
+            //         const sourceData = {
+            //             key: index + 1,
+            //             month: 'Jan',
+            //             B2B: item.months && item.months.map((i) => i.b2b),
+            //             B2C: item.months && item.months.map((i) => i.b2c),
+            //             Elux: item.months && item.months.map((i) => i.elux),
+            //         };
+
+            //         sourseData.push(sourceData);
+            //     });
+            // }
+            return sourseData;
+        }
+    };
+
+    const tableSrc = getTableSourceData(data);
+
+    // data for graph
     const chartjsDataSet = [];
 
     if (data && data.data) {
@@ -124,13 +209,7 @@ function EventByMonth() {
             {graphTableforMonth === 'graph' ? (
                 <Bar options={options} data={graphData} />
             ) : (
-                <Table dataSource={data.data.years}>
-                    <Column title="Year" dataIndex="year" key="year" />
-                    <Column title="ELUX" dataIndex="elux" key="elux" />
-                    <Column title="B2B" dataIndex="b2b" key="b2b" />
-                    <Column title="B2C" dataIndex="b2c" key="b2c" />
-                    <Column title="Total" dataIndex="total" key="total" />
-                </Table>
+                <Table dataSource={tableSrc} columns={columnDataSet} />
             )}
         </>
     );
