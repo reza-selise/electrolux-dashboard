@@ -53,20 +53,32 @@ if( ! function_exists( 'elux_get_events_by_cancellation' ) ){
 
 
         // print_r($timeline_type,$timeline_filter);
-        /// 1. ---------- Get product IDs
-        $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
 
-        /// 2. ---------- Get Structure data along with post id
-        $structure_data     = el_events_by_cancellation_STRUCTURE_DATA($product_ids);
+        if( 
+            isset($received_data['type']) &&
+            $received_data['type'] == 'participants' 
+        ){
 
+            
+            $order_ids        = get_ORDERS_by_timeline_filter( $timeline_type,$timeline_filter);
+            
+            print_r(get_post_meta( 1510 ));
+            print_r(  $order_ids );
+        }else{
+    
+            /// 1. ---------- Get product IDs
+            $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
+    
+            /// 2. ---------- Get Structure data along with post id
+            $structure_data     = el_events_by_cancellation_STRUCTURE_DATA($product_ids);
+    
+            //// 3. ---------- Filter data
+            $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
+            
+            //// 4. ---------- Get Final output
+            $final_data         = el_events_cancellation_FINAL_DATA($filtered_data, $received_data);
 
-
-        /// 3. ---------- Filter data
-        $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
-
-        
-        // /// 4. ---------- Get Final output
-        $final_data         = el_events_cancellation_FINAL_DATA($filtered_data, $received_data);
+        }
         // print_r($final_data);
 
  
