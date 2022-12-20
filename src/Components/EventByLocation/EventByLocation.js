@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import {Table} from 'antd';
 import {
     BarElement,
     CategoryScale,
@@ -6,12 +6,13 @@ import {
     Legend,
     LinearScale,
     Title,
-    Tooltip,
+    Tooltip
 } from 'chart.js';
-import React, { useState } from 'react';
+import React,{useState} from 'react';
+import { useSelector } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
-import { Bar } from 'react-chartjs-2';
-import { useEventByLocationQuery } from '../../API/apiSlice';
+import {Bar} from 'react-chartjs-2';
+import {useEventByLocationQuery} from '../../API/apiSlice';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
@@ -38,8 +39,10 @@ export const options = {
 const { Column } = Table;
 
 function EventByLocation() {
-    const [requestData, setRequestData] = useState('events');
-    console.log('re', requestData);
+    const eventByLocationFilterType = useSelector((state) => state.eventbyYearTimelineYears.value);
+
+    const [requestDataForLocation, setRequestDataForLocation] = useState('events');
+    console.log('re', requestDataForLocation);
 
     const [grapOrTableForLocation, setgGrapOrTableForLocation] = useState('graph');
     const handleSwitchChange = (e) => {
@@ -47,8 +50,8 @@ function EventByLocation() {
         console.log(e.target.value);
     };
     const payload = {
-        request_data: 'events',
-        filter_type: 'months',
+        request_data: requestDataForLocation,
+        filter_type: eventByLocationFilterType,
         locations: '191,188',
         request_body: JSON.stringify([
             {
@@ -78,13 +81,14 @@ function EventByLocation() {
 
     const getYears = () => ['2022', '2021', '2020', '2019', '2018'];
     const getLocations = () => ['191', '188', '183', '512', '507'];
-    const getDataFromLocation = (location) => getYears().map((year) => location[year]);
+    const getDataFromLocation = (location, locationYear) =>
+        getYears().map((year) => locationYear === year && location[year]);
 
     const colors = ['#93735a', '#4a2016', '#a6b2a4', '#6b7a66', '#3b4536'];
     const labels = getLocations();
     const datasets = getYears().map((year, index) => ({
         label: year,
-        data: data && data.data.locations.map((location) => getDataFromLocation(location)),
+        data: data && data.data.locations.map((location) => getDataFromLocation(location, year)),
         backgroundColor: colors[index % colors.length],
     }));
     // console.log('labels', labels);
@@ -111,9 +115,8 @@ function EventByLocation() {
                 </h2>
             </div>
             <LocalFilter
-                requestData={requestData}
-                setRequestData={setRequestData}
-                displayClass="d-block"
+                requestData={requestDataForLocation}
+                setRequestData={setRequestDataForLocation}
             />
             {grapOrTableForLocation === 'graph' ? (
                 <Bar options={options} data={graphData} />
