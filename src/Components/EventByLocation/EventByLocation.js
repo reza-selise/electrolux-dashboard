@@ -1,17 +1,17 @@
-import {Table} from 'antd';
+import { Table } from 'antd';
 import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-  Tooltip
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    Title,
+    Tooltip,
 } from 'chart.js';
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
-import {Bar} from 'react-chartjs-2';
-import {useEventByLocationQuery} from '../../API/apiSlice';
+import { Bar } from 'react-chartjs-2';
+import { useEventByLocationQuery } from '../../API/apiSlice';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
@@ -55,18 +55,36 @@ function EventByLocation() {
                 year: '2022',
                 months: '02,08,12',
             },
+            {
+                year: '2021',
+                months: '02,08,12',
+            },
+            {
+                year: '2020',
+                months: '02,08,12',
+            },
+            {
+                year: '2019',
+                months: '02,08,12',
+            },
+            {
+                year: '2018',
+                months: '02,08,12',
+            },
         ]),
     };
     const { data } = useEventByLocationQuery(payload);
     console.log('data', data);
 
-    const getYears = () => [2022];
+    const getYears = () => ['2022', '2021', '2020', '2019', '2018'];
+    const getLocations = () => ['191', '188', '183', '512', '507'];
+    const getDataFromLocation = (location) => getYears().map((year) => location[year]);
 
     const colors = ['#93735a', '#4a2016', '#a6b2a4', '#6b7a66', '#3b4536'];
-    const labels = getYears(data);
-    const datasets = data.data.locations.map((location, index) => ({
-        label,
-        data: (data && data.data.locations.map((location) => location.label)) || 0,
+    const labels = getLocations();
+    const datasets = getYears().map((year, index) => ({
+        label: year,
+        data: data && data.data.locations.map((location) => getDataFromLocation(location)),
         backgroundColor: colors[index % colors.length],
     }));
     // console.log('labels', labels);
@@ -76,6 +94,8 @@ function EventByLocation() {
         labels,
         datasets,
     };
+
+    console.log('dataset event per location ', graphData);
     return (
         <>
             <div className="header-wrapper">
