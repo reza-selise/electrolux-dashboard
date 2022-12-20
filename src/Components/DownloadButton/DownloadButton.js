@@ -15,10 +15,37 @@ const items = [
     },
 ];
 
-function DownloadButton() {
+function DownloadButton({ identifier }) {
+    const downloadPNG = id => {
+        const chartData = document.getElementById(id).toDataURL('image/png');
+
+        const link = document.createElement('a');
+        link.download = 'evnet-by-year.png';
+        link.href = chartData;
+        link.click();
+        link.remove();
+        // document.body.removeChild(link);
+    };
     const assetsPath = window.eluxDashboard.assetsUrl;
     const onClick = ({ key }) => {
-        console.log(key);
+        if (key === 'download_as_xls') {
+            console.log('Downloading csv');
+        } else if (key === 'download_as_svg') {
+            console.log('Downloading PNG');
+
+            switch (identifier) {
+                case 1: {
+                    downloadPNG('event-by-year-graph');
+                    break;
+                }
+                case 4: {
+                    downloadPNG('eventCategoryChartRef');
+                    break;
+                }
+                default:
+                    console.log('Nothing to download');
+            }
+        }
     };
     return (
         <div className="download-button-wrapper">
@@ -33,7 +60,7 @@ function DownloadButton() {
                 placement="bottomRight"
                 arrow
             >
-                <button type="button" onClick={(e) => e.preventDefault()}>
+                <button type="button" onClick={e => e.preventDefault()}>
                     <img src={assetsPath + DownloadIcon} alt="comment icon" />
                 </button>
             </Dropdown>

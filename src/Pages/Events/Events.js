@@ -25,6 +25,7 @@ function Events() {
                 </Row>
                 <Row>
                     <Col span={24}>
+                        <hr className="horizontal-bar" />
                         <EventByCategory />
                     </Col>
                 </Row>

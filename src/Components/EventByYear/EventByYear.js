@@ -52,19 +52,14 @@ export const options = {
 const { Column } = Table;
 
 function EventByYear() {
-    const eventbyYearTimelineYears = useSelector((state) => state.eventbyYearTimelineYears.value);
-    const eventbyYearTimelineMonth = useSelector((state) => state.eventbyYearTimelineMonth.value);
-    const eventByYearFilterType = useSelector((state) => state.eventByYearFilterType.value);
+    const eventbyYearTimelineYears = useSelector(state => state.eventbyYearTimelineYears.value);
+    const eventbyYearTimelineMonth = useSelector(state => state.eventbyYearTimelineMonth.value);
+    const eventByYearFilterType = useSelector(state => state.eventByYearFilterType.value);
     const [requestData, setRequestData] = useState('events');
 
-    const [grapOrTable, setgGrapOrTable] = useState('graph');
-    const handleSwitchChange = (e) => {
-        setgGrapOrTable(e.target.value);
-    };
+    const [grapOrTableEvntYear, setGrapOrTableEvntYear] = useState('graph');
 
-    console.log('hhhh', eventbyYearTimelineYears);
-
-    const requestBody = eventbyYearTimelineYears.map((year) => ({
+    const requestBody = eventbyYearTimelineYears.map(year => ({
         year: year.toString(),
         months: eventbyYearTimelineMonth.toString(),
     }));
@@ -76,8 +71,8 @@ function EventByYear() {
     };
     const { data, error, isLoading } = useEventByYearQuery(payload);
     const labels =
-        data && data.data.years.map((year) => year.year)
-            ? data.data.years.map((year) => year.year)
+        data && data.data.years.map(year => year.year)
+            ? data.data.years.map(year => year.year)
             : ['2022'];
 
     const graphData = {
@@ -86,24 +81,24 @@ function EventByYear() {
             {
                 label: 'ELUX',
                 data:
-                    data && data.data.years.map((year) => year.elux)
-                        ? data.data.years.map((year) => year.elux)
+                    data && data.data.years.map(year => year.elux)
+                        ? data.data.years.map(year => year.elux)
                         : 0,
                 backgroundColor: '#4A2017',
             },
             {
                 label: 'B2B',
                 data:
-                    data && data.data.years.map((year) => year.b2b)
-                        ? data.data.years.map((year) => year.b2b)
+                    data && data.data.years.map(year => year.b2b)
+                        ? data.data.years.map(year => year.b2b)
                         : 0,
                 backgroundColor: '#937359',
             },
             {
                 label: 'B2C',
                 data:
-                    data && data.data.years.map((year) => year.b2c)
-                        ? data.data.years.map((year) => year.b2c)
+                    data && data.data.years.map(year => year.b2c)
+                        ? data.data.years.map(year => year.b2c)
                         : 0,
                 backgroundColor: '#D0B993',
             },
@@ -112,18 +107,13 @@ function EventByYear() {
 
     const { pleaseWait } = eluxTranslation;
 
-    // useEffect(() => {
-    //     if (typeof queryInfo !== 'undefined') {
-    //         queryInfo.refetch(payload);
-    //     }
-    // }, [payload]);
-
     return (
         <>
             <div className="header-wrapper">
                 <GraphTableSwitch
-                    grapOrTable={grapOrTable}
-                    handleSwitchChange={handleSwitchChange}
+                    identifier={1}
+                    grapOrTable={grapOrTableEvntYear}
+                    setgGrapOrTable={setGrapOrTableEvntYear}
                     name="event-by-year"
                 />
                 <DownloadButton />
@@ -142,10 +132,10 @@ function EventByYear() {
                 'error'
             ) : isLoading ? (
                 pleaseWait
-            ) : grapOrTable === 'graph' ? (
-                <Bar options={options} data={graphData} />
+            ) : grapOrTableEvntYear === 'graph' ? (
+                <Bar id="event-by-year-graph" options={options} data={graphData} />
             ) : (
-                <Table dataSource={data.data.years}>
+                <Table dataSource={data.data.years} pagination={false}>
                     <Column title="Year" dataIndex="year" key="year" />
                     <Column title="ELUX" dataIndex="elux" key="elux" />
                     <Column title="B2B" dataIndex="b2b" key="b2b" />
