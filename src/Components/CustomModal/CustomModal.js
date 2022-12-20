@@ -28,12 +28,27 @@ function CustomModal() {
                     onCancel={handleCancel}
                     footer={null}
                     width={991}
+                    centered
                     className="global-comment-modal"
                 >
                     <GlobalComment />
                 </Modal>
             );
         case 'event-by-year-timeline':
+            return (
+                <Modal
+                    title={timeline}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={461}
+                    centered
+                    className="timeline-modal"
+                >
+                    <Timeline />
+                </Modal>
+            );
+        case 'event-by-category-timeline':
             return (
                 <Modal
                     title={timeline}
