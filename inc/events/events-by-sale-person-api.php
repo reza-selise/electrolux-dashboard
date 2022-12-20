@@ -313,12 +313,12 @@ function el_events_salesperson_FINAL_DATA($structure_data, $requestData){
     }
 
     // modify the year columns
-    $table_years_columns['total'] = 'Total';
+    $table_years_columns[] = 'Total';
     array_unshift($table_years_columns, "Sales Person");
 
 
     return [
-        'table_header' => $table_header,
+        'table_header' => $table_years_columns,
         'table_rows' => $table_rows,
     ];
 
