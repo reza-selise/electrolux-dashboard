@@ -93,13 +93,29 @@ function get_event_by_locations($request){
                             
                             if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
                                 $yearly_order_ids[$start_year] = $range_order_ids;
-                                $yearly_order_ids[$start_year] = count($range_order_ids);
-                                $my_data[$start_year] = $yearly_order_ids[$start_year];
+                                
+                                if('events'== $request_data){
+                                    // $yearly_order_ids[$start_year] = count($yearly_order_ids[$start_year]);
+                                    $my_data[$start_year] = count($yearly_order_ids[$start_year]);
+                                }
+                                elseif('participants'== $request_data){
+                                    $my_data[$start_year] = event_person_count($yearly_order_ids[$start_year]);
+                                }
+                                
                             } else {
                                 $yearly_order_ids[$start_year] = array_merge( $yearly_order_ids[$start_year], $range_order_ids );
-                                $yearly_order_ids[$start_year] =  count($yearly_order_ids[$start_year]);
+                                // $yearly_order_ids[$start_year] =  count($yearly_order_ids[$start_year]);
                             
-                                $my_data[$start_year] = $yearly_order_ids[$start_year];
+                                // $my_data[$start_year] = $yearly_order_ids[$start_year];
+
+                                if('events'== $request_data){
+                                    $my_data[$start_year] = count($yearly_order_ids[$start_year]);
+                                }
+                                elseif('participants'== $request_data){
+                                    $my_data[$start_year] = event_person_count($yearly_order_ids[$start_year]);
+                                }
+
+                                
                             }
                         } elseif ( $start_year !== $end_year ) {    // selected range is not within same year
                             for( $i = $start_year; $i <= $end_year; $i++ ) {
@@ -118,35 +134,31 @@ function get_event_by_locations($request){
                                 if( ! array_key_exists( $i, $yearly_order_ids ) ){
                                     $yearly_order_ids[$i] = $range_order_ids;
 
-                                    $yearly_order_ids[$i] =  count($yearly_order_ids[$i]);
-                                    $my_data[$i] = $yearly_order_ids[$i];
+                                    // $yearly_order_ids[$i] =  count($yearly_order_ids[$i]);
+                                    // $my_data[$i] = $yearly_order_ids[$i];
+                                    if('events'== $request_data){
+                                        $my_data[$i] = count($yearly_order_ids[$i]);
+                                    }
+                                    elseif('participants'== $request_data){
+                                        $my_data[$i] = event_person_count($yearly_order_ids[$i]);
+                                    }
+
                                 } else {
                                     $yearly_order_ids[$i] = array_merge( $yearly_order_ids[$i], $range_order_ids );
-                                    $yearly_order_ids[$i] =  count($yearly_order_ids[$i]);
-                                    $my_data[$i] = $yearly_order_ids[$i];
+                                    // $yearly_order_ids[$i] =  count($yearly_order_ids[$i]);
+                                    // $my_data[$i] = $yearly_order_ids[$i];
+
+                                    if('events'== $request_data){
+                                        $my_data[$i] = count($yearly_order_ids[$i]);
+                                    }
+                                    elseif('participants'== $request_data){
+                                        $my_data[$i] = event_person_count($yearly_order_ids[$i]);
+                                    }
                                 }
                             }
                         }
-                        error_log(print_r( 'custom_date_range',1));
-                        error_log(print_r( $yearly_order_ids,1));
-                        // $my_data_1 = array_merge( $my_data, $yearly_order_ids);
                     }
                     $my_data['location'] = $gallery_location;
-                    // array_push($my_data,$yearly_order_ids);
-
-                   
-                    // $my_data = $my_data_1;
-
-                // store yearly event/participants objects.
-                // $all_yearly_data = array();
-                // if( is_array( $yearly_order_ids ) && !empty( $yearly_order_ids ) ){
-                //     foreach( $yearly_order_ids as $year => $yearly_order_ids ){
-                //         $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data );
-                //         array_push( $all_yearly_data, $yearly_data );
-                //     }
-                // }
-
-                // $response['years'] = $all_yearly_data;
             }
         }
         
