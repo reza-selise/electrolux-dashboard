@@ -52,7 +52,7 @@ if( ! function_exists( 'elux_get_events_by_salesperson' ) ){
 
         // print_r($timeline_type,$timeline_filter);
         /// 1. ---------- Get product IDs
-        $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
+        $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter, $received_data);
 
         /// 2. ---------- Get Structure data along with post id
         $structure_data     = el_events_by_salesperson_STRUCTURE_DATA($product_ids);

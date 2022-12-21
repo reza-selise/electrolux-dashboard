@@ -360,7 +360,6 @@ function get_ORDERS_by_timeline_filter( $timeline_type , $timeline_filter, $rece
             }
         }else{
 
-
             foreach($years as $year ){
                 $start_range = $year . '01' . '01';
                 $end_range   = $year . '12' . '31';

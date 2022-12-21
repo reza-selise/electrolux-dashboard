@@ -2,11 +2,13 @@
     "taken_place":    ["planed","cancelled", "etc"],
     "type":           "event|participant" ,
 
-    "timeline_type" : "month|year|custom_date_range|custom_time_frame",
+    "timeline_type" : "months|years|custom_date_range",
 
     "filter_key_value" : {
         "product_status" : "Planned"
     },
+
+    "year_months" : ["01","02","03","04","05"], // only use in query while timeline_type=years
     
     
     "timeline_filter" : "
@@ -21,10 +23,12 @@
 // Real example
 
 {
-    "type" : "participant",
+    "type" : "participants",
     "timeline_type" : "year",
     "timeline_filter" : ["2022","2024","2020"],
     "filter_key_value" : {
         "product_status" : "Planned"
-    }
+    },
+    "year_months" : ["01","02"]
+
 }

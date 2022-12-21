@@ -61,7 +61,7 @@ if( ! function_exists( 'elux_get_events_by_cancellation' ) ){
 
 
             /// 1. ---------- Get Order IDs
-            $order_ids          = get_ORDERS_by_timeline_filter( $timeline_type,$timeline_filter);
+            $order_ids          = get_ORDERS_by_timeline_filter( $timeline_type, $timeline_filter, $received_data);
 
             //// 2. Structure data for farther filtering for this api only 
             $structure_data     = el_ORDERS_by_cancellation_STRUCTURE_DATA($order_ids);
@@ -70,7 +70,7 @@ if( ! function_exists( 'elux_get_events_by_cancellation' ) ){
         }else{
     
             /// 1. ---------- Get product IDs
-            $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
+            $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter, $received_data);
     
             /// 2. ---------- Get Structure data along with post id
             $structure_data     = el_events_by_cancellation_STRUCTURE_DATA($product_ids);
@@ -86,7 +86,7 @@ if( ! function_exists( 'elux_get_events_by_cancellation' ) ){
         //// 4. ---------- Get Final output
         $final_data         = el_events_cancellation_FINAL_DATA($filtered_data, $received_data);
 
-        print_r($final_data);
+        // print_r($final_data);
 
  
 
