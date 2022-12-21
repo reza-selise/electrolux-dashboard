@@ -142,7 +142,7 @@ function get_products_by_timeline_filter( $timeline_type , $timeline_filter ){
     $query_arr = []; 
 
     // If month type selected selected 
-    if($timeline_type == 'month'){
+    if($timeline_type == 'months'){
         
         // store the month array 
         $months = $timeline_filter;
@@ -169,7 +169,7 @@ function get_products_by_timeline_filter( $timeline_type , $timeline_filter ){
 
 
     // -------- Year filter START
-    if($timeline_type == 'year'){
+    if($timeline_type == 'years'){
         $years = $timeline_filter;
         foreach($years as $year ){
             $start_range = $year . '01' . '01';
@@ -260,5 +260,113 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData){
     }else{
         return $structure_data;
     }
+
+}
+
+
+function get_ORDERS_by_timeline_filter( $timeline_type , $timeline_filter ){
+
+    $final_ids = [];
+
+    /**
+     * Fixed Query arr will use for query by start and end date 
+     * [
+     *       [20220103 ,20220123 ],
+     *       [20210103 ,20220123 ]
+     *       [20200103 ,20201220 ]
+     * ]
+     */
+    $query_arr = []; 
+
+    // If month type selected selected 
+    if($timeline_type == 'months'){
+        
+        // store the month array 
+        $months = $timeline_filter;
+        
+
+        $years   = [ ];
+        for( $i=0; $i<5; $i++ ){
+            $years[] = date("Y") - $i;
+        }
+
+        // build query array by range
+        foreach($months as $month){
+            $month = el_add_leading_zero($month);
+            foreach($years as $year ){
+                $start_range = $year . $month . '01';
+                $end_range   = $year . $month . el_get_month_date($month, $year);
+
+                // push into the query array
+                $query_arr[] = [$start_range, $end_range];
+            }
+        }
+    }
+    // -------- Time filter end
+
+
+    // -------- Year filter START
+    if($timeline_type == 'years'){
+        $years = $timeline_filter;
+        foreach($years as $year ){
+            $start_range = $year . '01' . '01';
+            $end_range   = $year . '12' . '31';
+
+            // push into the query array
+            $query_arr[] = [$start_range, $end_range];
+        }
+    }
+    // -------- Year filter END
+
+    // -------- Custom date range filter START
+    if($timeline_type == 'custom_date_range'){
+        $filter_arr = $timeline_filter;
+
+        foreach($filter_arr as $filter_item ){
+            // push into the query array
+            $query_arr[] = [$filter_item[0], $filter_item[1]];
+        }
+    }
+    // Custom date range filter END
+    
+
+
+
+    // do the query 
+    foreach( $query_arr as $single_query_arr ){
+        $query_ids = get_order_ids_by_range( $single_query_arr[0],$single_query_arr[1] );
+        // var_dump($single_query_arr);
+        foreach($query_ids as $p_id){
+            $final_ids[]=$p_id;
+        }
+    }
+
+
+    $unique_ids =  array_unique($final_ids);
+
+    return $unique_ids;
+
+
+}
+
+function get_order_ids_by_range( $start_range, $end_range ){
+    global $wpdb;
+    $query      = "
+        SELECT DISTINCT 
+        $wpdb->postmeta.post_id 
+        FROM
+        $wpdb->postmeta 
+        LEFT JOIN 
+        $wpdb->posts 
+        ON 
+        $wpdb->postmeta.post_id = $wpdb->posts.ID 
+        WHERE 
+        $wpdb->posts.post_type = 'shop_order' 
+        AND 
+        $wpdb->postmeta.meta_key = 'date' AND  $wpdb->postmeta.meta_value BETWEEN '%s' AND '%s'
+    ";
+    $response   = $wpdb->get_results( $wpdb->prepare( $query, $start_range, $end_range ) );
+
+    return el_get_id_from_response($response);
 
 }
