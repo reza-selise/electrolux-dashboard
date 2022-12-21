@@ -273,6 +273,7 @@ function EventByMonth() {
                         data.push(m.total);
                     });
                     singleDataSet.data = data;
+                    singleDataSet.backgroundColor = '#282C34';
                 }
                 chartjsDataSet.push(singleDataSet);
             });
@@ -319,7 +320,9 @@ function EventByMonth() {
                 />
             </div>
 
-            {graphTableforMonth === 'graph' && <Bar options={options} data={graphData} /> && (
+            {graphTableforMonth === 'graph' ? (
+                <Bar options={options} data={graphData} />
+            ) : (
                 <Table
                     className="custom_footer"
                     pagination={false}
