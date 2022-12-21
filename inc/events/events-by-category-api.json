@@ -10,7 +10,7 @@
     
     
     "timeline_filter" : "
-        [01,02,03,04,05]  // for month
+        ["01",02,03,04,05]  // for month
         [2020,2022,2021]  //  for year
         [ [ 20200101, 20201231  ] [ 20210101, 20211231  ] ]  // for custom time-frame",
     "

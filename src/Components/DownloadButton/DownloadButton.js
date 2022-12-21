@@ -15,7 +15,7 @@ const items = [
     },
 ];
 
-function DownloadButton({ identifier }) {
+function DownloadButton({ identifier, refer }) {
     const downloadPNG = id => {
         const chartData = document.getElementById(id).toDataURL('image/png');
 
@@ -28,23 +28,27 @@ function DownloadButton({ identifier }) {
     };
     const assetsPath = window.eluxDashboard.assetsUrl;
     const onClick = ({ key }) => {
-        if (key === 'download_as_xls') {
-            console.log('Downloading csv');
-        } else if (key === 'download_as_svg') {
-            console.log('Downloading PNG');
-
-            switch (identifier) {
-                case 1: {
+        switch (identifier) {
+            case 1: {
+                if (key === 'download_as_xls') {
+                    console.log('Downloading csv');
+                } else if (key === 'download_as_svg') {
+                    console.log('Downloading PNG');
                     downloadPNG('event-by-year-graph');
-                    break;
                 }
-                case 4: {
-                    downloadPNG('eventCategoryChartRef');
-                    break;
-                }
-                default:
-                    console.log('Nothing to download');
+                break;
             }
+            case 4: {
+                if (key === 'download_as_xls') {
+                    console.log('Downloading csv');
+                } else if (key === 'download_as_svg') {
+                    console.log('Downloading PNG');
+                    downloadPNG('eventCategoryChartRef');
+                }
+                break;
+            }
+            default:
+                console.log('Nothing to download');
         }
     };
     return (

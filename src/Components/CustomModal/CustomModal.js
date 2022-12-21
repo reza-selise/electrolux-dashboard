@@ -8,16 +8,13 @@ import Timeline from '../Timeline/Timeline';
 import './CustomModal.scss';
 
 function CustomModal() {
-    const isModalOpen = useSelector((state) => state.modal.value);
-    const location = useSelector((state) => state.location.value);
+    const isModalOpen = useSelector(state => state.modal.value);
+    const location = useSelector(state => state.location.value);
     const { genericComments, timeline } = eluxTranslation;
     const dispatch = useDispatch();
     const handleCancel = () => {
         dispatch(setModal());
     };
-    console.log(location);
-    // const location = 'global-comment';
-    // const location = 'event-by-year';
 
     switch (location) {
         case 'global-comment':
