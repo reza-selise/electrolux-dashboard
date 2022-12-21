@@ -48,6 +48,9 @@ function EventByCategory() {
 
     const [grapTableEvntCat, setGrapTableEvntCat] = useState('graph');
     const eventByCategoryFilterType = useSelector(state => state.eventByCategoryFilterType.value);
+    const eventbyCategoryTimelineYears = useSelector(
+        state => state.eventbyCategoryTimelineYears.value
+    );
 
     const eventCategoryChartRef = useRef();
 
@@ -55,13 +58,24 @@ function EventByCategory() {
         console.log(value);
         setProductStatus(value);
     };
-    console.log('eventByCategoryFilterType', eventByCategoryFilterType);
+
+    // const payload = {
+    //     type: requestData,
+    //     timeline_type: eventByCategoryFilterType,
+    //     timeline_filter: eventbyCategoryTimelineYears,
+    //     filter_key_value: {
+    //         product_status: productStatus,
+    //     },
+    // };
     const payload = {
-        type: requestData,
-        timeline_type: 'year',
-        timeline_filter: ['2022', '2024', '2021'],
-        filter_key_value: {},
+        type: 'events',
+        timeline_type: 'years',
+        filter_key_value: {
+            product_status: 'Planned',
+        },
+        timeline_filter: ['2022', '2023'],
     };
+
     const { error, data } = useEventByCategoryQuery(payload);
     console.log('cat', data);
 
@@ -146,7 +160,7 @@ function EventByCategory() {
                             label: 'Taken Place',
                         },
                         {
-                            value: 'planned',
+                            value: 'Planned',
                             label: 'Planned',
                         },
                         {

@@ -4,6 +4,7 @@ import Container from '../../Components/Container/Container';
 import CustomModal from '../../Components/CustomModal/CustomModal';
 import EventByCategory from '../../Components/EventByCategory/EventByCategory';
 import EventByLocation from '../../Components/EventByLocation/EventByLocation';
+import EventByStatus from '../../Components/EventByStatus/EventByStatus';
 import EventByYear from '../../Components/EventByYear/EventByYear';
 import GlobalFilterButton from '../../Components/GlobalFilterButton/GlobalFilterButton';
 import { eluxTranslation } from '../../Translation/Translation';
@@ -11,6 +12,7 @@ import './Events.scss';
 
 function Events() {
     const { eventDashboard } = eluxTranslation;
+
     return (
         <>
             <h2 className="section-title">{eventDashboard}</h2>
@@ -28,6 +30,12 @@ function Events() {
                         <hr className="horizontal-bar" />
                         <EventByCategory />
                     </Col>
+                </Row>
+                <Row gutter={20}>
+                    <Col span={12}>
+                        <EventByStatus />
+                    </Col>
+                    <Col span={12} />
                 </Row>
             </Container>
             <GlobalFilterButton />
