@@ -1,39 +1,136 @@
 .header-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .graph-overview {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 40px;
-  margin-bottom: 24px;
-  .graph-title {
-    font-family: 'Electrolux Sans';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 26px;
-    line-height: 120%;
-    color: #011e41;
-    margin: 0;
-    padding: 0;
-    span {
-      font-size: 16px;
-      font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 40px;
+    margin-bottom: 24px;
+    .graph-title {
+        font-family: 'Electrolux Sans';
+        font-style: normal;
+        font-weight: 600;
+        font-size: 26px;
+        line-height: 120%;
+        color: #011e41;
+        margin: 0;
+        padding: 0;
+        span {
+            font-size: 16px;
+            font-weight: 400;
+        }
     }
-  }
-  .ant-select-selector {
-    height: 48px !important;
-    padding: 7px 11px !important;
-    border: 1px solid #dfe7ea !important;
-    border-radius: 2px;
-    .ant-select-selection-item {
-      font-family: 'Electrolux Sans';
-      font-style: normal;
-      font-weight: 400;
-      font-size: 14px;
-      color: #011e41;
+    .ant-select-selector {
+        height: 48px !important;
+        padding: 7px 11px !important;
+        border: 1px solid #dfe7ea !important;
+        border-radius: 2px;
+        .ant-select-selection-item {
+            font-family: 'Electrolux Sans';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #011e41;
+        }
     }
-  }
+}
+.ant-table-wrapper {
+    .ant-table-thead {
+        .ant-table-cell {
+            height: 42px;
+            background: #dfe7ea;
+            border-bottom: 1px solid #252969;
+            font-family: 'Electrolux Sans';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            color: #011e41;
+            &:not(:first-child) {
+                text-align: center;
+            }
+        }
+    }
+}
+.ant-table-wrapper {
+    .ant-table-row {
+        .ant-table-cell {
+            height: 42px;
+            font-family: 'Electrolux Sans';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            color: #011e41;
+            &:not(:first-child) {
+                text-align: center;
+            }
+        }
+    }
+}
+.ant-table-wrapper .ant-table-container table > thead > tr:first-child th:first-child {
+    border-start-start-radius: 0px;
+}
+.ant-table-wrapper .ant-table-container table > thead > tr:first-child th:last-child {
+    border-start-end-radius: 0px;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr:last-child > td {
+    border-bottom: 1px solid #adb9c3;
+}
+.ant-table-wrapper .ant-table-tbody > tr > td {
+    border-top: 1px solid #adb9c3 !important;
+    border-left: 1px solid #adb9c3;
+}
+.ant-table-wrapper .ant-table-tbody > tr > td:last-child {
+    border-right: 1px solid #adb9c3;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td:first-child,
+.ant-table-wrapper
+    .ant-table:not(.ant-table-bordered)
+    .ant-table-tbody
+    > tr
+    > td.ant-table-cell-row-hover:first-child {
+    border-start-start-radius: 0px !important;
+    border-end-start-radius: 0px !important;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td {
+    border-top-color: 1px solid #adb9c3 !important;
+    background: transparent !important;
+}
+.ant-table-wrapper
+    .ant-table:not(.ant-table-bordered)
+    .ant-table-tbody
+    > tr.ant-table-row:hover
+    > td:last-child,
+.ant-table-wrapper
+    .ant-table:not(.ant-table-bordered)
+    .ant-table-tbody
+    > tr
+    > td.ant-table-cell-row-hover:last-child,
+.ant-table-wrapper
+    .ant-table:not(.ant-table-bordered)
+    .ant-table-tbody
+    > tr.ant-table-row.ant-table-row-selected
+    > td:last-child {
+    border-start-end-radius: 0px !important;
+    border-end-end-radius: 0px !important;
+}
+
+.ant-table-wrapper
+    .ant-table:not(.ant-table-bordered)
+    .ant-table-tbody
+    > tr.ant-table-row:hover
+    > td {
+    border-top-color: 1px solid #adb9c3 !important;
+}
+.ant-table-wrapper
+    .ant-table:not(.ant-table-bordered)
+    .ant-table-tbody
+    > tr.ant-table-row:last-child:hover
+    > td {
+    border-bottom-color: #adb9c3;
 }

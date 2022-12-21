@@ -85,6 +85,7 @@ function EventByYear() {
                         ? data.data.years.map(year => year.elux)
                         : 0,
                 backgroundColor: '#4A2017',
+                barThickness: 32,
             },
             {
                 label: 'B2B',
@@ -93,6 +94,7 @@ function EventByYear() {
                         ? data.data.years.map(year => year.b2b)
                         : 0,
                 backgroundColor: '#937359',
+                barThickness: 32,
             },
             {
                 label: 'B2C',
@@ -101,6 +103,7 @@ function EventByYear() {
                         ? data.data.years.map(year => year.b2c)
                         : 0,
                 backgroundColor: '#D0B993',
+                barThickness: 32,
             },
         ],
     };
@@ -116,7 +119,7 @@ function EventByYear() {
                     setgGrapOrTable={setGrapOrTableEvntYear}
                     name="event-by-year"
                 />
-                <DownloadButton />
+                <DownloadButton identifier={1} />
             </div>
             <div className="graph-overview">
                 <h2 className="graph-title">
@@ -135,7 +138,11 @@ function EventByYear() {
             ) : grapOrTableEvntYear === 'graph' ? (
                 <Bar id="event-by-year-graph" options={options} data={graphData} />
             ) : (
-                <Table dataSource={data.data.years} pagination={false}>
+                <Table
+                    dataSource={data.data.years}
+                    pagination={false}
+                    className="event-by-year-table"
+                >
                     <Column title="Year" dataIndex="year" key="year" />
                     <Column title="ELUX" dataIndex="elux" key="elux" />
                     <Column title="B2B" dataIndex="b2b" key="b2b" />
