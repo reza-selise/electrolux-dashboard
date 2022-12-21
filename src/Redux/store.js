@@ -1,9 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
-import { eluxAPI } from '../API/apiSlice';
+import {configureStore} from '@reduxjs/toolkit';
+import {setupListeners} from '@reduxjs/toolkit/query';
+import {eluxAPI} from '../API/apiSlice';
+import eventbyLocationTimelineMonthReducer from './Slice/EventByLocation/eventByLocationTimelineMonth';
+import eventByLocationTimelineYearsReducer from './Slice/EventByLocation/eventByLocationTimelineYear';
+import eventByLocationFilterTypeReducer from './Slice/EventByLocation/eventByYearFilterType';
 import eventByYearFilterTypeReducer from './Slice/EventByYear/eventByYearFilterType';
 import eventbyYearTimelineMonthReducer from './Slice/EventByYear/eventByYearTimelineMonth';
-import eventbyLocationTimelineMonthReducer from './Slice/EventByLocation/eventByLocationTimelineMonth';
 import eventbyYearTimelineYearsReducer from './Slice/EventByYear/eventByYearTimelineYear';
 import locationReducer from './Slice/locationSlice';
 import modalReducer from './Slice/modalSlice';
@@ -16,9 +18,11 @@ export const store = configureStore({
         eventbyYearTimelineYears: eventbyYearTimelineYearsReducer,
         eventbyYearTimelineMonth: eventbyYearTimelineMonthReducer,
         eventByYearFilterType: eventByYearFilterTypeReducer,
-        eventByLocationFilterType: eventbyLocationTimelineMonthReducer,
+        eventByLocationFilterType: eventByLocationFilterTypeReducer,
+        eventByLocationTimelineMonths: eventbyLocationTimelineMonthReducer,
+        eventByLocationTimelineYears: eventByLocationTimelineYearsReducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(eluxAPI.middleware),
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });
 
 setupListeners(store.dispatch);

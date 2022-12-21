@@ -4,17 +4,17 @@ const initialState = {
     value: 'years',
 };
 
-export const eventByYearFilterTypeSlice = createSlice({
-    name: 'eventByYearFilterType',
+export const eventByLocationFilterTypeSlice = createSlice({
+    name: 'eventByLocationFilterType',
     initialState,
     reducers: {
-        setEventByYearFilterType: (state, action) => {
+        setEventByLocationFilterType: (state, action) => {
             state.value = action.payload;
         },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { setEventByYearFilterType } = eventByYearFilterTypeSlice.actions;
+export const { setEventByLocationFilterType } = eventByLocationFilterTypeSlice.actions;
 
-export default eventByYearFilterTypeSlice.reducer;
+export default eventByLocationFilterTypeSlice.reducer;

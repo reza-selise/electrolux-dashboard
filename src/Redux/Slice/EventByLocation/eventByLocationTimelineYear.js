@@ -9,17 +9,17 @@ const initialState = {
     value: years,
 };
 
-export const eventbyYearTimelineYearsSlice = createSlice({
-    name: 'eventbyYearTimelineYears',
+export const eventByLocationTimelineYearsSlice = createSlice({
+    name: 'eventByLocationTimelineYears',
     initialState,
     reducers: {
-        setEventbyYearTimelineYears: (state, action) => {
+        setEventByLocationTimelineYears: (state, action) => {
             state.value = action.payload;
         },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { setEventbyYearTimelineYears } = eventbyYearTimelineYearsSlice.actions;
+export const { setEventbyYearTimelineYears } = eventByLocationTimelineYearsSlice.actions;
 
-export default eventbyYearTimelineYearsSlice.reducer;
+export default eventByLocationTimelineYearsSlice.reducer;
