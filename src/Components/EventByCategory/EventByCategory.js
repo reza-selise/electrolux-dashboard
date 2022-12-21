@@ -44,7 +44,7 @@ export const options = {
 };
 function EventByCategory() {
     const [requestData, setRequestData] = useState('events');
-    const [productStatus, setProductStatus] = useState('taken-place');
+    const [productStatus, setProductStatus] = useState('Took Place');
 
     const [grapTableEvntCat, setGrapTableEvntCat] = useState('graph');
     const eventByCategoryFilterType = useSelector(state => state.eventByCategoryFilterType.value);
@@ -59,21 +59,13 @@ function EventByCategory() {
         setProductStatus(value);
     };
 
-    // const payload = {
-    //     type: requestData,
-    //     timeline_type: eventByCategoryFilterType,
-    //     timeline_filter: eventbyCategoryTimelineYears,
-    //     filter_key_value: {
-    //         product_status: productStatus,
-    //     },
-    // };
     const payload = {
-        type: 'events',
-        timeline_type: 'years',
+        type: requestData,
+        timeline_type: eventByCategoryFilterType,
+        timeline_filter: eventbyCategoryTimelineYears,
         filter_key_value: {
-            product_status: 'Planned',
+            product_status: productStatus,
         },
-        timeline_filter: ['2022', '2023'],
     };
 
     const { error, data } = useEventByCategoryQuery(payload);
@@ -156,7 +148,7 @@ function EventByCategory() {
                     onChange={handleProductStatusChange}
                     options={[
                         {
-                            value: 'taken-place',
+                            value: 'Took Place',
                             label: 'Taken Place',
                         },
                         {
@@ -164,8 +156,8 @@ function EventByCategory() {
                             label: 'Planned',
                         },
                         {
-                            value: 'cancelled',
-                            label: 'Cancelled',
+                            value: 'Reserved',
+                            label: 'Reserved',
                         },
                     ]}
                 />
@@ -174,15 +166,15 @@ function EventByCategory() {
             {error
                 ? 'error'
                 : grapTableEvntCat === 'graph'
-                    ? data && <Bar id="eventCategoryChartRef" options={options} data={graphData} />
-                : data && (
-                        <Table
-                            ref={eventCategoryChartRef}
-                            columns={columns}
-                            dataSource={tableData}
-                            pagination={false}
-                        />
-                    )}
+                ? data && <Bar id="eventCategoryChartRef" options={options} data={graphData} />
+                    : data && (
+                      <Table
+                          ref={eventCategoryChartRef}
+                          columns={columns}
+                          dataSource={tableData}
+                          pagination={false}
+                      />
+                  )}
         </div>
     );
 }
