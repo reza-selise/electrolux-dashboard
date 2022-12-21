@@ -411,7 +411,8 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
         $product_cats       = get_the_terms( $single_product_id , 'product_cat' );
         $each_product_category_arr = []; // use to store all the category along with post id 
         foreach( $product_cats as $cat){
-            $cat_id     = $cat->term_id;
+            // $cat_id     =  $cat->term_id;
+            $cat_id     =  sanitize_key( $cat->name ); // because we want to count if name is same
             $cat_name   = $cat->name;
 
             // store unique category
