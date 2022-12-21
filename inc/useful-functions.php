@@ -350,6 +350,40 @@ function get_ORDERS_by_timeline_filter( $timeline_type , $timeline_filter ){
 }
 
 function get_order_ids_by_range( $start_range, $end_range ){
+    
+    
+    /*
+        modify start and end range Because in Database it store as
+        YYYY-MM-DD
+
+        received : 20221231
+    */ 
+
+    if( strlen($start_range) == 8 &&  strlen($start_range) == 8 ){
+        $start_year = substr($start_range,0, 4);
+        $start_month = substr($start_range,4,2);
+        $start_date = substr($start_range,6,2);
+
+        // push the final version 
+        $start_range = $start_year ."-". $start_month."-". $start_date;
+
+        $end_year = substr($end_range,0, 4);
+        $end_month = substr($end_range,4,2);
+        $end_date = substr($end_range,6,2);
+
+        // update the final variable 
+        $end_range = $end_year ."-". $end_month."-". $end_date;
+
+        // var_dump($start_range);
+        // var_dump($end_range);
+
+
+    }else{
+        return [];
+    }
+
+    
+
     global $wpdb;
     $query      = "
         SELECT DISTINCT 
@@ -363,7 +397,7 @@ function get_order_ids_by_range( $start_range, $end_range ){
         WHERE 
         $wpdb->posts.post_type = 'shop_order' 
         AND 
-        $wpdb->postmeta.meta_key = 'date' AND  $wpdb->postmeta.meta_value BETWEEN '%s' AND '%s'
+        $wpdb->postmeta.meta_key = 'event_date' AND  $wpdb->postmeta.meta_value BETWEEN '%s' AND '%s'
     ";
     $response   = $wpdb->get_results( $wpdb->prepare( $query, $start_range, $end_range ) );
 
