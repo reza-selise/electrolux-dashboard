@@ -127,7 +127,7 @@ function el_add_leading_zero($month_number){
         }
 }
  */
-function get_products_by_timeline_filter( $timeline_type , $timeline_filter ){
+function get_products_by_timeline_filter( $timeline_type , $timeline_filter, $received_data = [] ){
 
     $final_ids = [];
 
@@ -171,13 +171,42 @@ function get_products_by_timeline_filter( $timeline_type , $timeline_filter ){
     // -------- Year filter START
     if($timeline_type == 'years'){
         $years = $timeline_filter;
-        foreach($years as $year ){
-            $start_range = $year . '01' . '01';
-            $end_range   = $year . '12' . '31';
 
-            // push into the query array
-            $query_arr[] = [$start_range, $end_range];
+        if( 
+            isset($received_data['year_months'])  && 
+            !empty($received_data['year_months']) 
+        ){
+            $month_arr = $received_data['year_months'];
+
+            foreach($years as $year ){
+
+                foreach($month_arr as $month ){
+                    $month = el_add_leading_zero($month);
+
+
+                    $start_range = $year . $month . '01';
+                    $end_range   = $year . $month . el_get_month_date($month, $year);
+
+                    // push into the query array
+                    $query_arr[] = [$start_range, $end_range];
+
+                }
+            }
+
+
+
+        }else{
+
+
+            foreach($years as $year ){
+                $start_range = $year . '01' . '01';
+                $end_range   = $year . '12' . '31';
+
+                // push into the query array
+                $query_arr[] = [$start_range, $end_range];
+            }
         }
+
     }
     // -------- Year filter END
 
@@ -264,7 +293,7 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData){
 }
 
 
-function get_ORDERS_by_timeline_filter( $timeline_type , $timeline_filter ){
+function get_ORDERS_by_timeline_filter( $timeline_type , $timeline_filter, $received_data =[] ){
 
     $final_ids = [];
 
@@ -308,13 +337,39 @@ function get_ORDERS_by_timeline_filter( $timeline_type , $timeline_filter ){
     // -------- Year filter START
     if($timeline_type == 'years'){
         $years = $timeline_filter;
-        foreach($years as $year ){
-            $start_range = $year . '01' . '01';
-            $end_range   = $year . '12' . '31';
 
-            // push into the query array
-            $query_arr[] = [$start_range, $end_range];
+        if( 
+            isset($received_data['year_months'])  && 
+            !empty($received_data['year_months']) 
+        ){
+            $month_arr = $received_data['year_months'];
+
+            foreach($years as $year ){
+
+                foreach($month_arr as $month ){
+                    $month = el_add_leading_zero($month);
+
+
+                    $start_range = $year . $month . '01';
+                    $end_range   = $year . $month . el_get_month_date($month, $year);
+
+                    // push into the query array
+                    $query_arr[] = [$start_range, $end_range];
+
+                }
+            }
+        }else{
+
+
+            foreach($years as $year ){
+                $start_range = $year . '01' . '01';
+                $end_range   = $year . '12' . '31';
+
+                // push into the query array
+                $query_arr[] = [$start_range, $end_range];
+            }
         }
+
     }
     // -------- Year filter END
 
