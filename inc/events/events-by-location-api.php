@@ -3,7 +3,7 @@
 
 add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
-    register_rest_route($namespace, '/consultations-by-acquisition-type', array(
+    register_rest_route($namespace, '/events-by-location', array(
         'methods' => 'GET',
         'callback' => 'get_event_by_locations',
         'permission_callback' => '__return_true',
@@ -11,10 +11,12 @@ add_action( 'rest_api_init', function () {
 });
 
 function get_event_by_locations($request){
-    $request_data =  $request->get_params()['request_data'];
+    $request_data =  $request->get_params()['request_data']; // events,participants 
     $filter_type =  $request->get_params()['filter_type'];
     $request_body =  $request->get_params()['request_body'];
-    
+    if(!empty($request_body) && 'string' == gettype($request_body)){
+        $request_body = json_decode($request->get_params()['request_body'],true);
+    }
     $gallery_locations = $request->get_params()['locations'];
     $gallery_locations_arr =  explode(',',$gallery_locations);
     $response               = array(
@@ -32,42 +34,131 @@ function get_event_by_locations($request){
         
         );
         if(!empty($request_body)){
-            foreach( $request_body as $single_year){
-                $year   = $single_year['year'];
-                $months = explode(',', $single_year['months']); 
-                // $the_count = 0;
-                $yearly_order_ids =  array();
-                $yearly_order_ids2 =  array();
-                foreach ( $months as $month ) {
-                    $start_date         = $year . '-' . $month . '-01 00:00:00';
-                    $end_date           =  new DateTime($year . '-' . $month . '-01 11:59:59');
-                    $end_date = $end_date->format('Y-m-t h:i:s');
-                      
-                    $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date);
-                    if(!empty($monthly_order_ids)){
-                        array_push( $yearly_order_ids, $monthly_order_ids );
-                        $yearly_order_ids2 = array_merge( $yearly_order_ids2, $monthly_order_ids );
+            // by months and year
+            if($filter_type == 'months' || $filter_type == 'years'){
+                foreach( $request_body as $single_year){
+                    $year   = $single_year['year'];
+                    $months = explode(',', $single_year['months']); 
+                    // $the_count = 0;
+                    $yearly_order_ids =  array();
+                    $yearly_order_ids2 =  array();
+                    foreach ( $months as $month ) {
+                        $start_date         = $year . '-' . $month . '-01 00:00:00';
+                        $end_date           =  new DateTime($year . '-' . $month . '-01 11:59:59');
+                        $end_date = $end_date->format('Y-m-t h:i:s');
+                          
+                        $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                        if(!empty($monthly_order_ids)){
+                            array_push( $yearly_order_ids, $monthly_order_ids );
+                            $yearly_order_ids2 = array_merge( $yearly_order_ids2, $monthly_order_ids );
+                           
+                        }
                        
                     }
-                   
-                }
-    
-                if(!empty($yearly_order_ids2) && 'events'== $request_data){
-                    $my_data[$single_year['year']] =  count($yearly_order_ids2); // push to main array
-                    error_log(print_r('events data...count= ',1));
-                    error_log(print_r(count($yearly_order_ids2),1));
-                    error_log(print_r($yearly_order_ids2,1));
-                }
+        
+                    if(!empty($yearly_order_ids2) && 'events'== $request_data){
+                        $my_data[$single_year['year']] =  count($yearly_order_ids2); // push to main array
                 
-                elseif(!empty($yearly_order_ids2) && 'participants'== $request_data){
-                    $my_data[$single_year['year']] = event_person_count($yearly_order_ids2);
+                    }
+                    
+                    elseif(!empty($yearly_order_ids2) && 'participants'== $request_data){
+                        $my_data[$single_year['year']] = event_person_count($yearly_order_ids2);
+                    }
+                    else{
+                        $my_data[$single_year['year']] = 0;
+                    }                    
                 }
-                else{
-                    $my_data[$single_year['year']] = 0;
-                }
-                error_log(print_r('year order ids -------------- ',1));
-                error_log(print_r($yearly_order_ids2,1));
-                
+            }
+            // by custom date range
+            if($filter_type == 'custom_date_range' || $filter_type == 'custom_time_frame'){
+                $yearly_order_ids = array();
+               
+                    foreach ( $request_body as $single_range ) {
+                        
+                        if( empty( $single_range['start'] ) || empty( $single_range['end'] ) ){
+                            continue;
+                        }
+                        error_log(print_r('single range',1));
+                        error_log(print_r($single_range,1));
+                        
+                        $start_date = $single_range['start'] . ' 00:00:00' ;
+                        $end_date   = $single_range['end'] . ' 23:59:59' ;
+                        
+                        $start_year = date( "Y", strtotime( $start_date ) );
+                        $end_year   = date( "Y", strtotime( $end_date ) );
+                        
+                        
+                        if( $start_year === $end_year ){    // selected range is within same year
+                            $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                            
+                            if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
+                                $yearly_order_ids[$start_year] = $range_order_ids;
+                                
+                                if('events'== $request_data){
+                                    // $yearly_order_ids[$start_year] = count($yearly_order_ids[$start_year]);
+                                    $my_data[$start_year] = count($yearly_order_ids[$start_year]);
+                                }
+                                elseif('participants'== $request_data){
+                                    $my_data[$start_year] = event_person_count($yearly_order_ids[$start_year]);
+                                }
+                                
+                            } else {
+                                $yearly_order_ids[$start_year] = array_merge( $yearly_order_ids[$start_year], $range_order_ids );
+                                // $yearly_order_ids[$start_year] =  count($yearly_order_ids[$start_year]);
+                            
+                                // $my_data[$start_year] = $yearly_order_ids[$start_year];
+
+                                if('events'== $request_data){
+                                    $my_data[$start_year] = count($yearly_order_ids[$start_year]);
+                                }
+                                elseif('participants'== $request_data){
+                                    $my_data[$start_year] = event_person_count($yearly_order_ids[$start_year]);
+                                }
+
+                                
+                            }
+                        } elseif ( $start_year !== $end_year ) {    // selected range is not within same year
+                            for( $i = $start_year; $i <= $end_year; $i++ ) {
+                                if ( $i === $start_year ){
+                                    $single_start_date  = $start_date;
+                                    $single_end_date    = $start_year . "-12-31 23:59:59";
+                                } elseif ( $i === $end_year ) {
+                                    $single_start_date  = $end_year . "-01-01 00:00:00";
+                                    $single_end_date    = $end_date;
+                                } else {
+                                    $single_start_date  = $i . "-01-01 00:00:00";
+                                    $single_end_date    = $i . "-12-31 23:59:59";
+                                }
+                                
+                                $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                                if( ! array_key_exists( $i, $yearly_order_ids ) ){
+                                    $yearly_order_ids[$i] = $range_order_ids;
+
+                                    // $yearly_order_ids[$i] =  count($yearly_order_ids[$i]);
+                                    // $my_data[$i] = $yearly_order_ids[$i];
+                                    if('events'== $request_data){
+                                        $my_data[$i] = count($yearly_order_ids[$i]);
+                                    }
+                                    elseif('participants'== $request_data){
+                                        $my_data[$i] = event_person_count($yearly_order_ids[$i]);
+                                    }
+
+                                } else {
+                                    $yearly_order_ids[$i] = array_merge( $yearly_order_ids[$i], $range_order_ids );
+                                    // $yearly_order_ids[$i] =  count($yearly_order_ids[$i]);
+                                    // $my_data[$i] = $yearly_order_ids[$i];
+
+                                    if('events'== $request_data){
+                                        $my_data[$i] = count($yearly_order_ids[$i]);
+                                    }
+                                    elseif('participants'== $request_data){
+                                        $my_data[$i] = event_person_count($yearly_order_ids[$i]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $my_data['location'] = $gallery_location;
             }
         }
         

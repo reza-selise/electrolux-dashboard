@@ -80,7 +80,7 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
         // print_r($timeline_type,$timeline_filter);
         /// 1. ---------- Get product IDs
-        $product_ids               = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
+        $product_ids               = get_products_by_timeline_filter( $timeline_type,$timeline_filter,$received_data );
 
         /// 2. ---------- Get Structure data along with post id
         $structure_data         = el_events_by_category_STRUCTURE_DATA($product_ids);
@@ -236,7 +236,7 @@ function el_events_by_category_FINAL_DATA($structure_data, $requestData){
             // pushing the category count
             if(isset($all_data_sheet[$year]['category_data'][$id]['count'])){
 
-                if( $requestData['type'] == 'participant' ){
+                if( $requestData['type'] == 'participants' ){
                     $previous_count = intval($all_data_sheet[$year]['category_data'][$id]['count'] ) ;
                     $all_data_sheet[$year]['category_data'][$id]['count'] = $previous_count + $each_product_data['total_sales'] ;
                 }else{
@@ -248,7 +248,7 @@ function el_events_by_category_FINAL_DATA($structure_data, $requestData){
                 }
 
             }else{
-                if( $requestData['type'] == 'participant' ){
+                if( $requestData['type'] == 'participants' ){
                     $all_data_sheet[$year]['category_data'][$id]['count'] = intval( $each_product_data['total_sales']);
                 }else{
                     $all_data_sheet[$year]['category_data'][$id]['count'] = 1;
@@ -411,7 +411,8 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
         $product_cats       = get_the_terms( $single_product_id , 'product_cat' );
         $each_product_category_arr = []; // use to store all the category along with post id 
         foreach( $product_cats as $cat){
-            $cat_id     = $cat->term_id;
+            // $cat_id     =  $cat->term_id;
+            $cat_id     =  sanitize_key( $cat->name ); // because we want to count if name is same
             $cat_name   = $cat->name;
 
             // store unique category

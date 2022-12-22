@@ -47,6 +47,13 @@ export const eluxAPI = createApi({
                 method: 'GET',
             }),
         }),
+        eventByCategory: builder.query({
+            query: (payload) => ({
+                url: 'elux-dashboard/v1/events-by-category',
+                method: 'POST',
+                body: payload,
+            }),
+        }),
     }),
 });
 
@@ -57,4 +64,5 @@ export const {
     useUpdateGenericCommentMutation,
     useEventByYearQuery,
     useEventByMonthsQuery,
+    useEventByCategoryQuery,
 } = eluxAPI;

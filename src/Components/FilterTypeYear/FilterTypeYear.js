@@ -1,13 +1,14 @@
 import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setEventbyCategoryTimelineYears } from '../../Redux/Slice/EventByCategory/eventbyCategoryTimelineYears';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
 import './FilterTypeYear.scss';
 
 function FilterTypeYear() {
-    const eventbyYearTimelineYears = useSelector((state) => state.eventbyYearTimelineYears.value);
-    const location = useSelector((state) => state.location.value);
+    const eventbyYearTimelineYears = useSelector(state => state.eventbyYearTimelineYears.value);
+    const location = useSelector(state => state.location.value);
     const [years, setYears] = useState([]);
     const [needMonth, setNeedMonth] = useState(false);
 
@@ -15,10 +16,13 @@ function FilterTypeYear() {
 
     const dispatch = useDispatch();
 
-    const handleYearChange = (value) => {
+    const handleYearChange = value => {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineYears(value));
+                break;
+            case 'event-by-category-timeline':
+                dispatch(setEventbyCategoryTimelineYears(value));
                 break;
 
             default:
@@ -30,10 +34,13 @@ function FilterTypeYear() {
         setNeedMonth(!needMonth);
     };
 
-    const handleMonthChange = (value) => {
+    const handleMonthChange = value => {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineMonth(value));
+                break;
+            case 'event-by-category-timeline':
+                dispatch(setEventbyCategoryTimelineYears(value));
                 break;
 
             default:

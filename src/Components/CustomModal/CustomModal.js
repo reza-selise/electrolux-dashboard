@@ -15,9 +15,6 @@ function CustomModal() {
     const handleCancel = () => {
         dispatch(setModal());
     };
-    console.log(location);
-    // const location = 'global-comment';
-    // const location = 'event-by-year';
 
     switch (location) {
         case 'global-comment':
@@ -28,6 +25,7 @@ function CustomModal() {
                     onCancel={handleCancel}
                     footer={null}
                     width={991}
+                    centered
                     className="global-comment-modal"
                 >
                     <GlobalComment />
@@ -48,6 +46,7 @@ function CustomModal() {
                 </Modal>
             );
         case 'event-by-months-timeline':
+        case 'event-by-category-timeline':
             return (
                 <Modal
                     title={timeline}

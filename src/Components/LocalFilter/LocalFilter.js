@@ -4,29 +4,11 @@ import ModalButton from '../ModalButton/ModalButton';
 import './LocalFilter.scss';
 
 function LocalFilter({ location, requestData, setRequestData }) {
-    // const dispatch = useDispatch();
     const currentYear = new Date().getFullYear();
 
-    // const [years, setYears] = useState([]);
-
-    // useEffect(() => {
-    //     const years = [];
-    //     for (let year = 1950; year <= currentYear; year += 1) {
-    //         const yearObject = {
-    //             label: year,
-    //             value: year,
-    //         };
-
-    //         years.push(yearObject);
-    //         setYears(years);
-    //     }
-    // }, []);
-    const handleYearChange = (value) => {
+    const handleYearChange = value => {
         setRequestData(value);
     };
-    // const openTimelineModal = () => {
-    //     dispatch(setModal);
-    // };
 
     return (
         <>

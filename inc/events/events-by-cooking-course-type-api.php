@@ -54,7 +54,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
 
         // print_r($timeline_type,$timeline_filter);
         /// 1. ---------- Get product IDs
-        $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
+        $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter, $received_data );
 
         /// 2. ---------- Get Structure data along with post id
         $structure_data     = el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids);
@@ -240,7 +240,7 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestDa
                     $previous_count = intval($dataset_by_year[$year][$cat_id]['count']);
 
                     // update count 
-                    if( $requestData['type'] == 'participant' ){
+                    if( $requestData['type'] == 'participants' ){
                         $dataset_by_year[$year][$cat_id]['count'] = intval($each_product_data['total_sales']) + $previous_count;
                     }else{
                         $dataset_by_year[$year][$cat_id]['count'] = $previous_count + 1;
@@ -248,7 +248,7 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestDa
                     
 
                 }else{
-                    if( $requestData['type'] == 'participant' ){
+                    if( $requestData['type'] == 'participants' ){
                         $dataset_by_year[$year][$cat_id]['count'] = intval( $each_product_data['total_sales']);
                     }else{
                         $dataset_by_year[$year][$cat_id]['count'] = 1 ;
