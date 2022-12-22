@@ -12,6 +12,7 @@ import {
 import React, { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
 import { useEventByMonthsQuery } from '../../API/apiSlice';
 import { eluxTranslation } from '../../Translation/Translation';
 import DownloadButton from '../DownloadButton/DownloadButton';
@@ -34,7 +35,8 @@ const { Column } = Table;
 function EventByMonth() {
     const [requestData, setRequestData] = useState('events');
     const [graphTableforMonth, setgGrapOrTableForMonth] = useState('graph');
-
+    const eventByMonthFilterType = useSelector(state => state.eventByMonthFilterType.value);
+   
     const handleSwitchChange = e => {
         setgGrapOrTableForMonth(e.target.value);
     };
@@ -42,7 +44,7 @@ function EventByMonth() {
 
     const payload = {
         request_data: requestData,
-        filter_type: "months",
+        filter_type: eventByMonthFilterType,
         request_body: JSON.stringify([
             {
                 year: '2022',
@@ -164,8 +166,8 @@ function EventByMonth() {
         }
     }
 
-    console.log('Table Data: ', tableData);
-    console.log('Event Total: ', eventTotals);
+    // console.log('Table Data: ', tableData);
+    // console.log('Event Total: ', eventTotals);
     // console.log('Test Data: ', data);
     // const getTableColumns = (data) => {
     //     if (data) {
@@ -362,9 +364,7 @@ function EventByMonth() {
                 />
             )}
         </>
-
-    )
-    
+    );
 }
 
 export default EventByMonth;
