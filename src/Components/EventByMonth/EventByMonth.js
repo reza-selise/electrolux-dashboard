@@ -13,6 +13,7 @@ import React, { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
 import { useEventByMonthsQuery } from '../../API/apiSlice';
+import { eluxTranslation } from '../../Translation/Translation';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
@@ -32,17 +33,16 @@ const { Column } = Table;
 
 function EventByMonth() {
     const [requestData, setRequestData] = useState('events');
-
     const [graphTableforMonth, setgGrapOrTableForMonth] = useState('graph');
 
-    const handleSwitchChange = (e) => {
+    const handleSwitchChange = e => {
         setgGrapOrTableForMonth(e.target.value);
     };
     const eventTotals = {};
 
     const payload = {
         request_data: requestData,
-        filter_type: 'months',
+        filter_type: "months",
         request_body: JSON.stringify([
             {
                 year: '2022',
@@ -58,7 +58,7 @@ function EventByMonth() {
             },
         ]),
     };
-    const { data, isLoading } = useEventByMonthsQuery(payload);
+    const { data, error, isLoading } = useEventByMonthsQuery(payload);
 
     // const yearColumnData =
     //     data &&
@@ -66,7 +66,7 @@ function EventByMonth() {
 
     // ************** dynamic years **********
     let years = [];
-    years = data && data.data.years.map((item) => item.year);
+    years = data && data.data.years.map(item => item.year);
 
     // const monthColumnData = data && data.data.years.map((item) => item.months);
 
@@ -80,7 +80,7 @@ function EventByMonth() {
         },
     ];
     years &&
-        years.forEach((year) => {
+        years.forEach(year => {
             eventTotals[`b2b_${year}`] = 0;
             eventTotals[`b2c_${year}`] = 0;
             eventTotals[`elux_${year}`] = 0;
@@ -105,11 +105,6 @@ function EventByMonth() {
                         key: `elux_${year}`,
                         width: 100,
                     },
-                    // {
-                    //     title: 'TOTAL',
-                    //     dataIndex: `total_${year}`,
-                    //     key: `total_${year}`,
-                    // },
                 ],
             });
         });
@@ -151,15 +146,15 @@ function EventByMonth() {
             years.map((year, index) => {
                 // console.log('Test: ', data && data.data.years[0].months[i].b2b);
                 // console.log('I ', i);
-                const testValue1 = Math.ceil(Math.random() * 50);
-                const testValue2 = Math.ceil(Math.random() * 50);
-                const testValue3 = Math.ceil(Math.random() * 50);
-                item[`b2b_${year}`] = testValue1;
-                item[`b2c_${year}`] = testValue2;
-                item[`elux_${year}`] = testValue3;
-                eventTotals[`b2b_${year}`] = eventTotals[`b2b_${year}`] + testValue1;
-                eventTotals[`b2c_${year}`] = eventTotals[`b2c_${year}`] + testValue2;
-                eventTotals[`elux_${year}`] = eventTotals[`elux_${year}`] + testValue3;
+                // const testValue1 = Math.ceil(Math.random() * 50);
+                // const testValue2 = Math.ceil(Math.random() * 50);
+                // const testValue3 = Math.ceil(Math.random() * 50);
+                item[`b2b_${year}`] = data && data.data.years[index].months[i].b2b;
+                item[`b2c_${year}`] = data && data.data.years[index].months[i].b2c;
+                item[`elux_${year}`] = data && data.data.years[index].months[i].elux;
+                eventTotals[`b2b_${year}`] = eventTotals[`b2b_${year}`] + item[`b2b_${year}`];
+                eventTotals[`b2c_${year}`] = eventTotals[`b2c_${year}`] + item[`b2c_${year}`];
+                eventTotals[`elux_${year}`] = eventTotals[`elux_${year}`] + item[`elux_${year}`];
                 // item[`total_${year}`] = Math.ceil(Math.random()*50);
                 // item[`elux_${year}`] = data && data.data.years[index].months[i].elux??Math.random()*50;
             });
@@ -270,7 +265,7 @@ function EventByMonth() {
 
                 if (item.months.length > 0) {
                     const data = [];
-                    item.months.map((m) => {
+                    item.months.map(m => {
                         data.push(m.total);
                     });
                     singleDataSet.data = data;
@@ -298,15 +293,16 @@ function EventByMonth() {
         ],
         datasets: chartjsDataSet && chartjsDataSet,
     };
+    const { pleaseWait } = eluxTranslation;
 
-    return isLoading ? (
-        <h1>Loading...</h1>
-    ) : (
+    return (
         <>
             <div className="header-wrapper">
                 <GraphTableSwitch
                     grapOrTable={graphTableforMonth}
-                    handleSwitchChange={handleSwitchChange}
+                    identifier={3}
+                    setgGrapOrTable={setgGrapOrTableForMonth}
+                    name="event-by-month"
                 />
                 <DownloadButton />
             </div>
@@ -320,9 +316,12 @@ function EventByMonth() {
                     location="event-by-months-timeline"
                 />
             </div>
-
-            {graphTableforMonth === 'graph' ? (
-                <Bar options={options} data={graphData} />
+            {error ? (
+                'error'
+            ) : isLoading ? (
+                pleaseWait
+            ) : graphTableforMonth === 'graph' ? (
+                <Bar className="custom_month_graph" options={options} data={graphData} />
             ) : (
                 <Table
                     className="custom_footer"
@@ -332,13 +331,14 @@ function EventByMonth() {
                     bordered
                     size="middle"
                     footer={() => (
-                        <Row style={{ justifyContent: 'space-between' }}>
+                        <Row>
                             <Col
                                 span={1}
                                 style={{
                                     flexBasis: '10%',
                                     maxWidth: '10%',
                                     padding: '12px 8px',
+                                    textAlign: 'left',
                                 }}
                             >
                                 <strong>TOTALS:</strong>
@@ -349,6 +349,7 @@ function EventByMonth() {
                                         flexBasis: '10%',
                                         maxWidth: '10%',
                                         padding: '12px 8px',
+                                        textAlign: 'center',
                                     }}
                                     key={index}
                                     span={1}
@@ -361,7 +362,9 @@ function EventByMonth() {
                 />
             )}
         </>
-    );
+
+    )
+    
 }
 
 export default EventByMonth;

@@ -1,6 +1,7 @@
 import { Select } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setEventbyMonthTimelineMonth } from '../../Redux/Slice/EventByMonth/eventMyMonthTimelineMonth';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 
 function FilterTypeMonth() {
@@ -63,7 +64,7 @@ function FilterTypeMonth() {
                 dispatch(setEventbyYearTimelineMonth(value));
                 break;
             case 'event-by-months-timeline':
-                dispatch(setEventbyYearTimelineMonth(value));
+                dispatch(setEventbyMonthTimelineMonth(value));
                 break;
 
             default:

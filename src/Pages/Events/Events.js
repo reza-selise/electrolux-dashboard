@@ -6,6 +6,7 @@ import CustomModal from '../../Components/CustomModal/CustomModal';
 import ErrorFallback from '../../Components/ErrorFallback/ErrorFallback';
 import EventByCategory from '../../Components/EventByCategory/EventByCategory';
 import EventByLocation from '../../Components/EventByLocation/EventByLocation';
+import EventByMonth from '../../Components/EventByMonth/EventByMonth';
 import EventByStatus from '../../Components/EventByStatus/EventByStatus';
 import EventByYear from '../../Components/EventByYear/EventByYear';
 import GlobalFilterButton from '../../Components/GlobalFilterButton/GlobalFilterButton';
@@ -28,6 +29,14 @@ function Events() {
                     <Col span={12}>
                         <ErrorBoundary FallbackComponent={ErrorFallback}>
                             <EventByLocation />
+                        </ErrorBoundary>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <hr className="horizontal-bar" />
+                        <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <EventByMonth />
                         </ErrorBoundary>
                     </Col>
                 </Row>

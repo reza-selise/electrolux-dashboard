@@ -2,6 +2,7 @@ import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEventByCategoryFilterType } from '../../Redux/Slice/EventByCategory/eventByCategoryFilterType';
+import { setEventByMonthFilterType } from '../../Redux/Slice/EventByMonth/eventByMonthFilterType';
 import { setEventByYearFilterType } from '../../Redux/Slice/EventByYear/eventByYearFilterType';
 import FilterTypeCustomDate from '../FilterTypeCustomDate/FilterTypeCustomDate';
 import FilterTypeMonth from '../FilterTypeMonth/FilterTypeMonth';
@@ -28,7 +29,7 @@ function Timeline() {
                 break;
 
             case 'event-by-months-timeline':
-                dispatch(setEventByYearFilterType(value));
+                dispatch(setEventByMonthFilterType(filterType));
                 break;
 
             default:

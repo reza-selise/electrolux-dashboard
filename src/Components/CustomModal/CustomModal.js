@@ -46,6 +46,19 @@ function CustomModal() {
                 </Modal>
             );
         case 'event-by-months-timeline':
+            return (
+                <Modal
+                    title={timeline}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={461}
+                    centered
+                    className="timeline-modal"
+                >
+                    <Timeline />
+                </Modal>
+            );
         case 'event-by-category-timeline':
             return (
                 <Modal

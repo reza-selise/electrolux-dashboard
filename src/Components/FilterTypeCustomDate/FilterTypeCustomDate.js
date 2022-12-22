@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import deleteIcon from '../../images/delete.svg';
 import plusIcon from '../../images/plus.svg';
+import { setEventbyMonthTimelineYears } from '../../Redux/Slice/EventByMonth/eventByMonthTimelineYears';
+import { setEventbyMonthTimelineMonth } from '../../Redux/Slice/EventByMonth/eventMyMonthTimelineMonth';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
 import './FilterTypeCustomDate.scss';
@@ -103,8 +105,8 @@ function FilterTypeCustomDate() {
 
                 break;
             case 'event-by-months-timeline':
-                dispatch(setEventbyYearTimelineYears([...new Set(yearsArray)]));
-                dispatch(setEventbyYearTimelineMonth([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
+                dispatch(setEventbyMonthTimelineYears([...new Set(yearsArray)]));
+                dispatch(setEventbyMonthTimelineMonth([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
 
                 break;
 
