@@ -258,12 +258,13 @@ function EventByMonth() {
 
     // data for graph
     const chartjsDataSet = [];
+    const columnColors = ['#041C3F', '#797285', '#79899B', '#D2BA96', '#697B68'];
 
     if (data && data.data) {
         const { years: resData } = data.data;
 
         if (resData) {
-            resData.map((item) => {
+            resData.map((item, index) => {
                 const singleDataSet = {};
                 singleDataSet.label = item.year;
 
@@ -273,7 +274,7 @@ function EventByMonth() {
                         data.push(m.total);
                     });
                     singleDataSet.data = data;
-                    singleDataSet.backgroundColor = '#282C34';
+                    singleDataSet.backgroundColor = columnColors[index];
                 }
                 chartjsDataSet.push(singleDataSet);
             });
