@@ -113,9 +113,10 @@ function el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids){
         1496 => [
             'year' => 2021,
             'month' => 12,
+            "total_sales" => 46
             'filter_name' => filter_value
             'attribute_name' => attribute_value
-            'filter_name_2' => filter_value 
+            'filter_name_2' => filter_value,
         ]
     ]
      * 
@@ -363,21 +364,23 @@ function el_event_by_cooking_course_TABLE_FINAL_DATA($structure_data, $requestDa
                 $data_by_category_and_year[$cat_id]['label'] = $cat_name;
             }
 
-            $previous_count = 0;
 
             if( $requestData['type'] == 'participants' ){
-                
+
+                $previous_count =  0;
 
                 if( isset($data_by_category_and_year[$cat_id]['year_data'][$event_year])) {
-
-                    $previous_count = $data_by_category_and_year[$cat_id]['year_data'][$event_year];
-                }else{
-
+                    $previous_count = intval( $data_by_category_and_year[$cat_id]['year_data'][$event_year]);
                 }
+
+                $this_product_sell_count =  intval($product_data['total_sales']);
+
+                $data_by_category_and_year[$cat_id]['year_data'][$event_year] = $previous_count + $this_product_sell_count;
 
 
                 
             }else{
+                $previous_count = 0;
 
                 if( isset($data_by_category_and_year[$cat_id]['year_data'][$event_year])) {
                     $previous_count = $data_by_category_and_year[$cat_id]['year_data'][$event_year];
