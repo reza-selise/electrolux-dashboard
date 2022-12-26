@@ -55,21 +55,17 @@ function EventByMonth() {
         request_body: JSON.stringify(requestBody),
     };
     const { data, error, isLoading } = useEventByMonthsQuery(payload);
-    console.log('APIdata', data);
 
     // ************** dynamic years **********
     let years = [];
     years = data && data.data.years.map(item => item.year);
+    
     let months = [];
     months = data && data.data.years.map(item => item.months);
-
-    console.log('years', years);
 
     let formatedMonths = [];
 
     if (months) {
-        console.log({ months });
-
         formatedMonths = months[0].map(item => item.month);
     }
 
@@ -115,7 +111,7 @@ function EventByMonth() {
     const tableData = [];
 
     if (data && Object.keys(data).length > 0) {
-        for (let i = 0; i < data && data.data.years && data.data.years.months; i++) {
+        for (let i = 0; i < formatedMonths.length; i++) {
             const item = { key: i, month: formatedMonths[i] };
             years.map((year, index) => {
                 // console.log('Test: ', data && data.data.years[0].months[i].b2b);
