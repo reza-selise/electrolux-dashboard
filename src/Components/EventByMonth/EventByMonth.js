@@ -34,9 +34,16 @@ const { Column } = Table;
 
 function EventByMonth() {
     const [requestData, setRequestData] = useState('events');
+    const eventbyMonthTimelineYears = useSelector(state => state.eventbyMonthTimelineYears.value);
+    const eventbyMonthTimelineMonth = useSelector(state => state.eventbyMonthTimelineMonth.value);
     const [graphTableforMonth, setgGrapOrTableForMonth] = useState('graph');
     const eventByMonthFilterType = useSelector(state => state.eventByMonthFilterType.value);
-   
+
+    const requestBody = eventbyMonthTimelineYears.map(year => ({
+        year: year.toString(),
+        months: eventbyMonthTimelineMonth.toString(),
+    }));
+
     const handleSwitchChange = e => {
         setgGrapOrTableForMonth(e.target.value);
     };
@@ -45,34 +52,28 @@ function EventByMonth() {
     const payload = {
         request_data: requestData,
         filter_type: eventByMonthFilterType,
-        request_body: JSON.stringify([
-            {
-                year: '2022',
-                months: '01,02,03,04,05,06,07,08,09,10,11,12',
-            },
-            {
-                year: '2021',
-                months: '01,02,03,04,05,06,07,08,09,10,11,12',
-            },
-            {
-                year: '2020',
-                months: '01,02,03,04,05,06,07,08,09,10,11,12',
-            },
-        ]),
+        request_body: JSON.stringify(requestBody),
     };
     const { data, error, isLoading } = useEventByMonthsQuery(payload);
-
-    // const yearColumnData =
-    //     data &&
-    //     data.data.years.map((item) => ({ title: item.year, children: ['B2B', 'B2C', 'ELUX'] }));
+    console.log('APIdata', data);
 
     // ************** dynamic years **********
     let years = [];
     years = data && data.data.years.map(item => item.year);
+    let months = [];
+    months = data && data.data.years.map(item => item.months);
 
-    // const monthColumnData = data && data.data.years.map((item) => item.months);
+    console.log('years', years);
 
-    // // data for table
+    let formatedMonths = [];
+
+    if (months) {
+        console.log({ months });
+
+        formatedMonths = months[0].map(item => item.month);
+    }
+
+    //  data for table
     const columns = [
         {
             title: 'Month',
@@ -111,40 +112,11 @@ function EventByMonth() {
             });
         });
 
-    // yearColumnData &&
-    //     yearColumnData.map((data) => {
-    //         columns.push({
-    //             title: data.title,
-    //             children:
-    //                 data.children &&
-    //                 data.children.map((item) => ({
-    //                     title: item,
-    //                     dataIndex: item.toLowerCase(),
-    //                     key: item.toLowerCase(),
-    //                 })),
-    //         });
-    //     });
-
     const tableData = [];
-    console.log('Data: ', data && data);
-    const staticMonths = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-    ];
 
     if (data && Object.keys(data).length > 0) {
-        for (let i = 0; i < 12; i++) {
-            const item = { key: i, month: staticMonths[i] };
+        for (let i = 0; i < data && data.data.years && data.data.years.months; i++) {
+            const item = { key: i, month: formatedMonths[i] };
             years.map((year, index) => {
                 // console.log('Test: ', data && data.data.years[0].months[i].b2b);
                 // console.log('I ', i);
@@ -165,93 +137,6 @@ function EventByMonth() {
             });
         }
     }
-
-    // console.log('Table Data: ', tableData);
-    // console.log('Event Total: ', eventTotals);
-    // console.log('Test Data: ', data);
-    // const getTableColumns = (data) => {
-    //     if (data) {
-    //         const { years: columnsData } = data.data;
-    //         const columnsSet = [
-    //             {
-    //                 title: 'Month',
-    //                 dataIndex: 'month',
-    //                 key: 'month',
-    //                 render: (text) => <p>{text}</p>,
-    //             },
-    //         ];
-
-    //         if (columnsData.length > 0) {
-    //             columnsData.map((item) => {
-    //                 const columnItem = {
-    //                     title: item.year,
-    //                     children: [
-    //                         {
-    //                             title: 'B2B',
-    //                             dataIndex: 'B2B',
-    //                             key: 'B2B',
-    //                         },
-    //                         {
-    //                             title: 'B2C',
-    //                             dataIndex: 'B2C',
-    //                             key: 'B2C',
-    //                         },
-    //                         {
-    //                             title: 'Elux',
-    //                             dataIndex: 'Elux',
-    //                             key: 'Elux',
-    //                         },
-    //                     ],
-    //                 };
-
-    //                 columnsSet.push(columnItem);
-    //             });
-    //         }
-
-    //         return columnsSet;
-    //     }
-    // };
-
-    // const columnDataSet = getTableColumns(data);
-
-    // const getTableSourceData = (data) => {
-    //     if (data) {
-    //         const { years: columnsData } = data.data;
-    //         const sourseData = [];
-
-    //         for (let i = 0; i < columnsData.length; i++) {
-    //             for (let j = 0; j < columnsData[i].months.length; j++) {
-    //                 const sourceData = {
-    //                     key: i + j + 1,
-    //                     month: j,
-    //                     year: columnsData[i],
-    //                     B2B: columnsData[i].months[j].b2b,
-    //                     B2C: columnsData[i].months[j].b2c,
-    //                     Elux: columnsData[i].months[j].elux,
-    //                 };
-
-    //                 sourseData.push(sourceData);
-    //             }
-    //         }
-
-    //         // if (columnsData.length > 0) {
-    //         //     columnsData.map((item, index) => {
-    //         //         const sourceData = {
-    //         //             key: index + 1,
-    //         //             month: 'Jan',
-    //         //             B2B: item.months && item.months.map((i) => i.b2b),
-    //         //             B2C: item.months && item.months.map((i) => i.b2c),
-    //         //             Elux: item.months && item.months.map((i) => i.elux),
-    //         //         };
-
-    //         //         sourseData.push(sourceData);
-    //         //     });
-    //         // }
-    //         return sourseData;
-    //     }
-    // };
-
-    // const tableSrc = getTableSourceData(data);
 
     // data for graph
     const chartjsDataSet = [];
@@ -279,20 +164,7 @@ function EventByMonth() {
     }
 
     const graphData = {
-        labels: [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-        ],
+        labels: formatedMonths,
         datasets: chartjsDataSet && chartjsDataSet,
     };
     const { pleaseWait } = eluxTranslation;
@@ -333,12 +205,10 @@ function EventByMonth() {
                     bordered
                     size="middle"
                     footer={() => (
-                        <Row>
+                        <Row style={{ display: 'flex', justifyContent: 'space-around' }}>
                             <Col
                                 span={1}
                                 style={{
-                                    flexBasis: '10%',
-                                    maxWidth: '10%',
                                     padding: '12px 8px',
                                     textAlign: 'left',
                                 }}
@@ -348,8 +218,6 @@ function EventByMonth() {
                             {Object.keys(eventTotals).map((event, index) => (
                                 <Col
                                     style={{
-                                        flexBasis: '10%',
-                                        maxWidth: '10%',
                                         padding: '12px 8px',
                                         textAlign: 'center',
                                     }}
