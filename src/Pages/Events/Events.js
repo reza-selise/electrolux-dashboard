@@ -2,6 +2,7 @@ import { Col, Row } from 'antd';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import Container from '../../Components/Container/Container';
+import CookingCourseType from '../../Components/CookingCourseType/CookingCourseType';
 import CustomModal from '../../Components/CustomModal/CustomModal';
 import ErrorFallback from '../../Components/ErrorFallback/ErrorFallback';
 import EventByCategory from '../../Components/EventByCategory/EventByCategory';
@@ -43,6 +44,15 @@ function Events() {
                     <Col span={12}>
                         <ErrorBoundary FallbackComponent={ErrorFallback}>
                             <EventByStatus />
+                        </ErrorBoundary>
+                    </Col>
+                    <Col span={12} />
+                </Row>
+                <hr className="horizontal-bar" />
+                <Row gutter={20}>
+                    <Col span={12}>
+                        <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <CookingCourseType />
                         </ErrorBoundary>
                     </Col>
                     <Col span={12} />

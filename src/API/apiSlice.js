@@ -6,9 +6,9 @@ export const eluxAPI = createApi({
     reducerPath: 'eluxAPI',
     baseQuery: fetchBaseQuery({ baseUrl: `${siteURL}/wp-json/` }),
     tagTypes: ['GenericComment'],
-    endpoints: (builder) => ({
+    endpoints: builder => ({
         insetGenericComment: builder.mutation({
-            query: (payload) => ({
+            query: payload => ({
                 url: 'el-dashboard-api/generic-comments',
                 method: 'POST',
                 body: payload,
@@ -20,7 +20,7 @@ export const eluxAPI = createApi({
             providesTags: ['GenericComment'],
         }),
         deleteGenericComment: builder.mutation({
-            query: (payload) => ({
+            query: payload => ({
                 url: 'el-dashboard-api/generic-comments',
                 method: 'DELETE',
                 body: payload,
@@ -28,7 +28,7 @@ export const eluxAPI = createApi({
             invalidatesTags: ['GenericComment'],
         }),
         updateGenericComment: builder.mutation({
-            query: (payload) => ({
+            query: payload => ({
                 url: 'el-dashboard-api/generic-comments',
                 method: 'PUT',
                 body: payload,
@@ -36,20 +36,27 @@ export const eluxAPI = createApi({
             invalidatesTags: ['GenericComment'],
         }),
         eventByYear: builder.query({
-            query: (payload) => ({
+            query: payload => ({
                 url: `elux-dashboard/v1/events-by-year?${new URLSearchParams(payload)}`,
                 method: 'GET',
             }),
         }),
         eventByMoths: builder.query({
-            query: (payload) => ({
+            query: payload => ({
                 url: `elux-dashboard/v1/events-by-year?${new URLSearchParams(payload)}`,
                 method: 'GET',
             }),
         }),
         eventByCategory: builder.query({
-            query: (payload) => ({
+            query: payload => ({
                 url: 'elux-dashboard/v1/events-by-category',
+                method: 'POST',
+                body: payload,
+            }),
+        }),
+        cookingCourseType: builder.query({
+            query: payload => ({
+                url: 'elux-dashboard/v1/events-by-cooking-course-type',
                 method: 'POST',
                 body: payload,
             }),
@@ -64,4 +71,5 @@ export const {
     useUpdateGenericCommentMutation,
     useEventByYearQuery,
     useEventByCategoryQuery,
+    useCookingCourseTypeQuery,
 } = eluxAPI;

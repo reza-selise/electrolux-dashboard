@@ -8,7 +8,7 @@ import {
     Title,
     Tooltip
 } from 'chart.js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
@@ -55,14 +55,36 @@ function EventByYear() {
     const eventbyYearTimelineYears = useSelector(state => state.eventbyYearTimelineYears.value);
     const eventbyYearTimelineMonth = useSelector(state => state.eventbyYearTimelineMonth.value);
     const eventByYearFilterType = useSelector(state => state.eventByYearFilterType.value);
+    const eventbyYearTimelineYearDateRange = useSelector(
+        state => state.eventbyYearTimelineYearDateRange.value
+    );
     const [requestData, setRequestData] = useState('events');
+    const [requestBody, setRequestBody] = useState();
 
     const [grapOrTableEvntYear, setGrapOrTableEvntYear] = useState('graph');
 
-    const requestBody = eventbyYearTimelineYears.map(year => ({
-        year: year.toString(),
-        months: eventbyYearTimelineMonth.toString(),
-    }));
+    useEffect(() => {
+        switch (eventByYearFilterType) {
+            case 'custom_date_range':
+                setRequestBody(eventbyYearTimelineYearDateRange);
+                break;
+            case 'years':
+                setRequestBody(
+                    eventbyYearTimelineYears.map(year => ({
+                        year: year.toString(),
+                        months: eventbyYearTimelineMonth.toString(),
+                    }))
+                );
+                break;
+            default:
+                console.log('event request data not updated');
+        }
+    }, [
+        eventByYearFilterType,
+        eventbyYearTimelineYears,
+        eventbyYearTimelineMonth,
+        eventbyYearTimelineYearDateRange,
+    ]);
 
     const payload = {
         request_data: requestData,

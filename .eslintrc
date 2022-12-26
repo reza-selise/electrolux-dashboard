@@ -1,64 +1,64 @@
 {
-  "extends": [
-    "airbnb",
-    "airbnb/hooks",
-    "eslint:recommended",
-    "prettier",
-    "plugin:jsx-a11y/recommended"
-  ],
-  "plugins": ["prettier", "react", "react-hooks"],
-  "rules": {
-    "react/react-in-jsx-scope": 0,
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "no-console": 0,
-    "indent": [
-      "error",
-      4,
-      {
-        "SwitchCase": 1,
-        "flatTernaryExpressions": true
-      }
+    "extends": [
+        "airbnb",
+        "airbnb/hooks",
+        "eslint:recommended",
+        "prettier",
+        "plugin:jsx-a11y/recommended"
     ],
-    "linebreak-style": ["error", "unix"],
-    "react/prop-types": 0,
-    "jsx-a11y/click-events-have-key-events": 0,
-    "no-param-reassign": "off",
-    "no-shadow": "off",
-    "import/prefer-default-export": "off",
-    "no-restricted-imports": "off",
-    "no-nested-ternary": "off",
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "react/no-array-index-key": "off",
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [".js", ".jsx"]
-      }
-    ],
-    "prettier/prettier": [
-      "error",
-      {
-        "trailingComma": "es5",
-        "singleQuote": true,
-        "printWidth": 100,
-        "tabWidth": 4,
-        "semi": true,
-        "endOfLine": "auto"
-      }
-    ]
-  },
-  "env": {
-    "browser": true,
-    "node": true,
-    "es6": true,
-    "jest": true
-  },
-  "parserOptions": {
-    "ecmaVersion": 10,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
+    "plugins": ["prettier", "react", "react-hooks"],
+    "rules": {
+        "react/react-in-jsx-scope": 0,
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "no-console": 0,
+        "indent": [
+            "off",
+            4,
+            {
+                "SwitchCase": 1,
+                "flatTernaryExpressions": true
+            }
+        ],
+        "linebreak-style": ["error", "unix"],
+        "react/prop-types": 0,
+        "jsx-a11y/click-events-have-key-events": 0,
+        "no-param-reassign": "off",
+        "no-shadow": "off",
+        "import/prefer-default-export": "off",
+        "no-restricted-imports": "off",
+        "no-nested-ternary": "off",
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "react/no-array-index-key": "off",
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [".js", ".jsx"]
+            }
+        ],
+        "prettier/prettier": [
+            "error",
+            {
+                "trailingComma": "es5",
+                "singleQuote": true,
+                "printWidth": 100,
+                "tabWidth": 4,
+                "semi": true,
+                "endOfLine": "auto"
+            }
+        ]
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true,
+        "jest": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 10,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
     }
-  }
 }

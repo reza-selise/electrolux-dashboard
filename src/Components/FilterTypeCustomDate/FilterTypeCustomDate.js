@@ -1,15 +1,13 @@
 import { DatePicker } from 'antd';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import deleteIcon from '../../images/delete.svg';
 import plusIcon from '../../images/plus.svg';
-import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
-import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
+import { setEventbyYearTimelineYearDateRange } from '../../Redux/Slice/EventByYear/eventbyYearTimelineYearDateRange';
 import './FilterTypeCustomDate.scss';
 
 function FilterTypeCustomDate() {
-    const location = useSelector((state) => state.location.value);
+    const location = useSelector(state => state.location.value);
 
     const [dateRanges, setDateRanges] = useState([{ from: null, to: null }]);
     const assetsPath = window.eluxDashboard.assetsUrl;
@@ -19,7 +17,7 @@ function FilterTypeCustomDate() {
         setDateRanges([...dateRanges, { from: null, to: null }]);
     };
 
-    const deleteDateRange = (index) => {
+    const deleteDateRange = index => {
         setDateRanges(dateRanges.filter((_, i) => i !== index));
     };
 
@@ -83,24 +81,22 @@ function FilterTypeCustomDate() {
     //     );
     // };
 
-    const yearsArray = dateRanges.reduce((years, dateRange) => {
-        // Extract the years from the "from" and "to" fields
-        const fromYear = moment(dateRange.from).year();
-        const toYear = moment(dateRange.to).year();
+    // const yearsArray = dateRanges.reduce((years, dateRange) => {
+    //     // Extract the years from the "from" and "to" fields
+    //     const fromYear = moment(dateRange.from).year();
+    //     const toYear = moment(dateRange.to).year();
 
-        // Add the years to the array
-        years.push(fromYear, toYear);
+    //     // Add the years to the array
+    //     years.push(fromYear, toYear);
 
-        return years;
-    }, []);
+    //     return years;
+    // }, []);
 
     // console.log([...new Set(yearsArray)]);
     useEffect(() => {
         switch (location) {
             case 'event-by-year-timeline':
-                dispatch(setEventbyYearTimelineYears([...new Set(yearsArray)]));
-                dispatch(setEventbyYearTimelineMonth([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
-
+                dispatch(setEventbyYearTimelineYearDateRange(dateRanges));
                 break;
 
             default:
@@ -115,13 +111,13 @@ function FilterTypeCustomDate() {
                     <div key={index} className="el-custom-date-picker">
                         <DatePicker
                             placeholder="From"
-                            onChange={(date) => handleFromChange(date, index)}
+                            onChange={date => handleFromChange(date, index)}
                             format="MMM D, YYYY"
                         />
                         <span className="from-to-title">To</span>
                         <DatePicker
                             placeholder="To"
-                            onChange={(date) => handleToChange(date, index)}
+                            onChange={date => handleToChange(date, index)}
                             format="MMM D, YYYY"
                         />
                     </div>

@@ -6,6 +6,7 @@ import eventbyCategoryTimelineYearsReducer from './Slice/EventByCategory/eventby
 import eventByYearFilterTypeReducer from './Slice/EventByYear/eventByYearFilterType';
 import eventbyYearTimelineMonthReducer from './Slice/EventByYear/eventByYearTimelineMonth';
 import eventbyYearTimelineYearsReducer from './Slice/EventByYear/eventByYearTimelineYear';
+import eventbyYearTimelineYearDateRangeReducer from './Slice/EventByYear/eventbyYearTimelineYearDateRange';
 import locationReducer from './Slice/locationSlice';
 import modalReducer from './Slice/modalSlice';
 
@@ -19,6 +20,7 @@ export const store = configureStore({
         eventbyYearTimelineMonth: eventbyYearTimelineMonthReducer,
         eventByYearFilterType: eventByYearFilterTypeReducer,
         eventByCategoryFilterType: eventByCategoryFilterTypeReducer,
+        eventbyYearTimelineYearDateRange: eventbyYearTimelineYearDateRangeReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });
