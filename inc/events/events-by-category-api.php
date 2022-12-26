@@ -80,7 +80,7 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
         // print_r($timeline_type,$timeline_filter);
         /// 1. ---------- Get product IDs
-        $product_ids               = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
+        $product_ids               = get_products_by_timeline_filter( $timeline_type,$timeline_filter,$received_data );
 
         /// 2. ---------- Get Structure data along with post id
         $structure_data         = el_events_by_category_STRUCTURE_DATA($product_ids);
@@ -411,7 +411,8 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
         $product_cats       = get_the_terms( $single_product_id , 'product_cat' );
         $each_product_category_arr = []; // use to store all the category along with post id 
         foreach( $product_cats as $cat){
-            $cat_id     = $cat->term_id;
+            // $cat_id     =  $cat->term_id;
+            $cat_id     =  sanitize_key( $cat->name ); // because we want to count if name is same
             $cat_name   = $cat->name;
 
             // store unique category
