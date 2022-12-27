@@ -43,7 +43,7 @@ export const eluxAPI = createApi({
         }),
         eventByLocation: builder.query({
             query: (payload) => ({
-                url: `elux-dashboard/v1/consultations-by-acquisition-type?${new URLSearchParams(payload)}`,
+                url: `elux-dashboard/v1/events-by-location?${new URLSearchParams(payload)}`,
                 method: 'GET',
             }),
         }),
