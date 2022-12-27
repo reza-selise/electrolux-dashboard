@@ -4,7 +4,7 @@ add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
     register_rest_route($namespace, '/generic-filter-data', array(
         'methods' => 'GET',
-        'callback' => 'get_event_by_locations',
+        'callback' => 'get_generic_filter_data',
         'permission_callback' => '__return_true',
     ));
 });
