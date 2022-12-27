@@ -458,3 +458,95 @@ function get_order_ids_by_range( $start_range, $end_range ){
     return el_get_id_from_response($response);
 
 }
+
+
+// collect filter information 
+function el_get_product_filter_information($single_product_id){
+    
+    $output = [];
+
+    // get customer type
+    $customerType   = get_post_meta( $single_product_id,  'customer_type', true );
+
+    if( $customerType ){
+        $output['customer_type'] = $customerType;
+    }
+    
+    // location
+    $location       = get_post_meta( $single_product_id, 'event_location', true );
+    if( $location ){
+        $output['location'] = $location;
+    }
+
+    // get category 
+
+    $product_cats       = get_the_terms( $single_product_id , 'product_cat' );
+    $each_product_category_arr = []; // use to store all the category along with post id 
+    foreach( $product_cats as $cat){
+
+        // $cat_id     =  $cat->term_id;
+        $cat_id     = $cat->term_id ; // because we want to count if name is same
+        $cat_name   = $cat->name;
+
+        // push each category in a array
+        $each_product_category_arr[$cat_id] = $cat_name;
+
+    }
+    $category_list  = $each_product_category_arr;
+
+    if( $category_list ){
+        $output['category_list'] = $category_list;
+    }
+
+    // Lead
+    $consultant_lead = get_post_meta( $single_product_id, 'consultant_lead', true );
+    if( $consultant_lead ){
+        $output['consultant_lead'] = $consultant_lead;
+    }
+
+    // Sales persons 
+    $sales_person_arr = [];
+    $salesperson_id_1     = get_post_meta( $single_product_id, 'salesperson-1', true );
+    $salesperson_id_2     = get_post_meta( $single_product_id, 'salesperson-2', true );
+    $salesperson_id_3     = get_post_meta( $single_product_id, 'salesperson-3', true );
+
+
+    if(  intval($salesperson_id_1)  ){ 
+        $sales_person_arr[] = $salesperson_id_1;
+    }
+
+    if(  intval($salesperson_id_2)  ){ 
+        $sales_person_arr[] = $salesperson_id_2;
+    }
+
+    if(  intval($salesperson_id_3)  ){ 
+        $sales_person_arr[] = $salesperson_id_3;
+    }
+
+    if( $sales_person_arr ){
+        $output['sales_person_arr'] = $sales_person_arr;
+    }
+
+    //-------------------------------------------------------------
+
+    if( get_post_type( $single_product_id ) == 'shop_order' ){
+
+        $CURRENT_ORDER = wc_get_order($single_product_id);
+        $order_status  = $CURRENT_ORDER->get_status();
+
+        $output['event_status'] = $order_status;
+
+    }else{
+
+        $product_status     = get_post_meta( $single_product_id, 'product_status', true );
+
+        if( $product_status ){
+            $output['event_status'] = $product_status;
+        }
+    
+    }
+
+    return $output;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+    
+
+}

@@ -87,7 +87,7 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
 
         /// 3. ---------- PASS ONLY FILTERED STRUCTURE DATA
-        $filtered_data            = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
+        $filtered_data          = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
 
         
         /// 4. ---------- Get Final output
@@ -430,6 +430,12 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
 
 
 
+        // add filtering info 
+        $filter_arr = el_get_product_filter_information($single_product_id);
+
+        foreach( $filter_arr as $filter_key => $filter_value ){
+            $structure_data[$single_product_id][$filter_key] = $filter_value;
+        }
 
     } // for loop end
 
