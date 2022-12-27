@@ -271,7 +271,8 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData){
                     if( $key == 'sales_person' ||  $key == 'category' ){
 
                         if( 
-                            in_array($request_value_to_match, $saved_value_to_match) 
+                            in_array($request_value_to_match, $saved_value_to_match) ||
+                            isset($saved_value_to_match[$key])
                         ){
                             // do nothing 
                         }else{
