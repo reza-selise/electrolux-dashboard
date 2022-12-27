@@ -142,7 +142,10 @@ final class Electrolux_Dashboard {
      * @return void
      */
     public function admin_scripts() {
-       // var_dump('ahdjgashd'); die();
+
+        wp_enqueue_style( 'elux-font', ELUX_DB_PLUGIN_URL . '/inc/assets/css/elux-font.css', array(), ELUX_DB_VERSION );
+    
+       
         wp_enqueue_script(
             'elux-db-react-script',
             ELUX_DB_PLUGIN_URL . 'public/js/index.js',

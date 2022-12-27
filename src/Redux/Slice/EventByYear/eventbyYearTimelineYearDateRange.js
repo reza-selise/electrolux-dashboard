@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: '',
+    value: [{ start: null, end: null }],
 };
 
 export const eventbyYearTimelineYearDateRangeSlice = createSlice({

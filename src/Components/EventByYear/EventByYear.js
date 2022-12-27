@@ -21,16 +21,11 @@ import './EventByYear.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const options = {
+const BarOptions = {
     plugins: {
         title: {
             display: false,
         },
-        // legend: {
-        //     align: 'start',
-        //     height: '16px',
-        //     width: '16px',
-        // },
         legend: {
             align: 'start',
             labels: {
@@ -48,6 +43,7 @@ export const options = {
             stacked: true,
         },
     },
+    barPercentage: 1,
 };
 const { Column } = Table;
 
@@ -69,6 +65,14 @@ function EventByYear() {
                 setRequestBody(eventbyYearTimelineYearDateRange);
                 break;
             case 'years':
+                setRequestBody(
+                    eventbyYearTimelineYears.map(year => ({
+                        year: year.toString(),
+                        months: eventbyYearTimelineMonth.toString(),
+                    }))
+                );
+                break;
+            case 'months':
                 setRequestBody(
                     eventbyYearTimelineYears.map(year => ({
                         year: year.toString(),
@@ -107,7 +111,6 @@ function EventByYear() {
                         ? data.data.years.map(year => year.elux)
                         : 0,
                 backgroundColor: '#4A2017',
-                barThickness: 32,
             },
             {
                 label: 'B2B',
@@ -116,7 +119,7 @@ function EventByYear() {
                         ? data.data.years.map(year => year.b2b)
                         : 0,
                 backgroundColor: '#937359',
-                barThickness: 32,
+                // barThickness: 32,
             },
             {
                 label: 'B2C',
@@ -125,7 +128,7 @@ function EventByYear() {
                         ? data.data.years.map(year => year.b2c)
                         : 0,
                 backgroundColor: '#D0B993',
-                barThickness: 32,
+                // barThickness: 32,
             },
         ],
     };
@@ -158,7 +161,7 @@ function EventByYear() {
             ) : isLoading ? (
                 pleaseWait
             ) : grapOrTableEvntYear === 'graph' ? (
-                <Bar id="event-by-year-graph" options={options} data={graphData} />
+                <Bar id="event-by-year-graph" options={BarOptions} data={graphData} />
             ) : (
                 <Table
                     dataSource={data.data.years}
