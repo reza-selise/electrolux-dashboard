@@ -263,14 +263,30 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData){
             foreach( $filter_arr as $key => $value ){
 
                 if( isset( $product_data[$key] ) ){
-                    
-                    $saved_value_to_match   = sanitize_key( $product_data[$key] );
+
+
+                    $saved_value_to_match   = $product_data[$key] ;
                     $request_value_to_match = sanitize_key( $value );
 
-                    if( $saved_value_to_match == $request_value_to_match ){
-                        // do nothing        
+                    if( $key == 'sales_person' ||  $key == 'category' ){
+
+                        if( 
+                            in_array($request_value_to_match, $saved_value_to_match) 
+                        ){
+                            // do nothing 
+                        }else{
+                            $is_satisfy = false;
+                        }
+
                     }else{
-                        $is_satisfy = false;
+                        $saved_value_to_match   = sanitize_key( $product_data[$key] );
+                        $request_value_to_match = sanitize_key( $value );
+
+                        if( $saved_value_to_match == $request_value_to_match ){
+                            // do nothing
+                        }else{
+                            $is_satisfy = false;
+                        }
                     }
 
                 }else{
@@ -495,7 +511,7 @@ function el_get_product_filter_information($single_product_id){
     $category_list  = $each_product_category_arr;
 
     if( $category_list ){
-        $output['category_list'] = $category_list;
+        $output['category'] = $category_list;
     }
 
     // Lead
@@ -524,7 +540,7 @@ function el_get_product_filter_information($single_product_id){
     }
 
     if( $sales_person_arr ){
-        $output['sales_person_arr'] = $sales_person_arr;
+        $output['sales_person'] = $sales_person_arr;
     }
 
     //-------------------------------------------------------------
