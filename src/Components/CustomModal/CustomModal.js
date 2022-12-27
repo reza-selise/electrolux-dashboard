@@ -73,6 +73,20 @@ function CustomModal() {
                     <Timeline />
                 </Modal>
             );
+            case 'event-by-cancellation-timeline':
+            return (
+                <Modal
+                    title={timeline}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={461}
+                    centered
+                    className="timeline-modal"
+                >
+                    <Timeline />
+                </Modal>
+            );
         default:
             return (
                 <Modal
