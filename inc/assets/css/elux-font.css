@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'Electrolux Sans';
+    src: url('../fonts/Electrolux-Sans-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+  
+@font-face {
+    font-family: 'Electrolux Sans';
+    src: url('../fonts/Electrolux-Sans-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+  
+@font-face {
+    font-family: 'Electrolux Sans';
+    src: url('../fonts/Electrolux-Sans-Semibold.otf') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Electrolux Sans';
+    src: url('../fonts/Electrolux-Sans-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}

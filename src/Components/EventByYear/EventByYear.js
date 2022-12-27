@@ -8,7 +8,7 @@ import {
     Title,
     Tooltip
 } from 'chart.js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
@@ -21,16 +21,11 @@ import './EventByYear.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export const options = {
+const BarOptions = {
     plugins: {
         title: {
             display: false,
         },
-        // legend: {
-        //     align: 'start',
-        //     height: '16px',
-        //     width: '16px',
-        // },
         legend: {
             align: 'start',
             labels: {
@@ -48,6 +43,7 @@ export const options = {
             stacked: true,
         },
     },
+    barPercentage: 1,
 };
 const { Column } = Table;
 
@@ -55,14 +51,44 @@ function EventByYear() {
     const eventbyYearTimelineYears = useSelector(state => state.eventbyYearTimelineYears.value);
     const eventbyYearTimelineMonth = useSelector(state => state.eventbyYearTimelineMonth.value);
     const eventByYearFilterType = useSelector(state => state.eventByYearFilterType.value);
+    const eventbyYearTimelineYearDateRange = useSelector(
+        state => state.eventbyYearTimelineYearDateRange.value
+    );
     const [requestData, setRequestData] = useState('events');
+    const [requestBody, setRequestBody] = useState();
 
     const [grapOrTableEvntYear, setGrapOrTableEvntYear] = useState('graph');
 
-    const requestBody = eventbyYearTimelineYears.map(year => ({
-        year: year.toString(),
-        months: eventbyYearTimelineMonth.toString(),
-    }));
+    useEffect(() => {
+        switch (eventByYearFilterType) {
+            case 'custom_date_range':
+                setRequestBody(eventbyYearTimelineYearDateRange);
+                break;
+            case 'years':
+                setRequestBody(
+                    eventbyYearTimelineYears.map(year => ({
+                        year: year.toString(),
+                        months: eventbyYearTimelineMonth.toString(),
+                    }))
+                );
+                break;
+            case 'months':
+                setRequestBody(
+                    eventbyYearTimelineYears.map(year => ({
+                        year: year.toString(),
+                        months: eventbyYearTimelineMonth.toString(),
+                    }))
+                );
+                break;
+            default:
+                console.log('event request data not updated');
+        }
+    }, [
+        eventByYearFilterType,
+        eventbyYearTimelineYears,
+        eventbyYearTimelineMonth,
+        eventbyYearTimelineYearDateRange,
+    ]);
 
     const payload = {
         request_data: requestData,
@@ -85,7 +111,6 @@ function EventByYear() {
                         ? data.data.years.map(year => year.elux)
                         : 0,
                 backgroundColor: '#4A2017',
-                barThickness: 32,
             },
             {
                 label: 'B2B',
@@ -94,7 +119,7 @@ function EventByYear() {
                         ? data.data.years.map(year => year.b2b)
                         : 0,
                 backgroundColor: '#937359',
-                barThickness: 32,
+                // barThickness: 32,
             },
             {
                 label: 'B2C',
@@ -103,7 +128,7 @@ function EventByYear() {
                         ? data.data.years.map(year => year.b2c)
                         : 0,
                 backgroundColor: '#D0B993',
-                barThickness: 32,
+                // barThickness: 32,
             },
         ],
     };
@@ -136,7 +161,7 @@ function EventByYear() {
             ) : isLoading ? (
                 pleaseWait
             ) : grapOrTableEvntYear === 'graph' ? (
-                <Bar id="event-by-year-graph" options={options} data={graphData} />
+                <Bar id="event-by-year-graph" options={BarOptions} data={graphData} />
             ) : (
                 <Table
                     dataSource={data.data.years}

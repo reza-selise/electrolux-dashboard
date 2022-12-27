@@ -2,6 +2,7 @@ import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEventbyCategoryTimelineYears } from '../../Redux/Slice/EventByCategory/eventbyCategoryTimelineYears';
+import { setEventbyMonthTimelineYears } from '../../Redux/Slice/EventByMonth/eventByMonthTimelineYears';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
 import './FilterTypeYear.scss';
@@ -24,6 +25,9 @@ function FilterTypeYear() {
             case 'event-by-category-timeline':
                 dispatch(setEventbyCategoryTimelineYears(value));
                 break;
+            case 'event-by-months-timeline':
+                dispatch(setEventbyMonthTimelineYears(value));
+                break;
 
             default:
                 console.log('filter type year default');
@@ -41,6 +45,9 @@ function FilterTypeYear() {
                 break;
             case 'event-by-category-timeline':
                 dispatch(setEventbyCategoryTimelineYears(value));
+                break;
+            case 'event-by-months-timeline':
+                dispatch(setEventbyMonthTimelineYears(value));
                 break;
 
             default:
