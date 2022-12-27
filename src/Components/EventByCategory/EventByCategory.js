@@ -55,7 +55,6 @@ function EventByCategory() {
     const eventCategoryChartRef = useRef();
 
     const handleProductStatusChange = value => {
-        console.log(value);
         setProductStatus(value);
     };
 
@@ -69,7 +68,6 @@ function EventByCategory() {
     };
 
     const { error, data } = useEventByCategoryQuery(payload);
-    console.log('cat', data);
 
     // Graph
     const labels = data && data.data.labels;
@@ -167,7 +165,7 @@ function EventByCategory() {
                 ? 'error'
                 : grapTableEvntCat === 'graph'
                 ? data && <Bar id="eventCategoryChartRef" options={options} data={graphData} />
-                    : data && (
+                : data && (
                       <Table
                           ref={eventCategoryChartRef}
                           columns={columns}

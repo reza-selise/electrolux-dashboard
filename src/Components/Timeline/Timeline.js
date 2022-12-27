@@ -38,7 +38,6 @@ function Timeline() {
     }, [filterType]);
 
     useEffect(() => {
-        console.log('dddd');
         setFilterType('years');
     }, []);
 

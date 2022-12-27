@@ -54,6 +54,13 @@ export const eluxAPI = createApi({
                 body: payload,
             }),
         }),
+        cookingCourseType: builder.query({
+            query: payload => ({
+                url: 'elux-dashboard/v1/events-by-cooking-course-type',
+                method: 'POST',
+                body: payload,
+            }),
+        }),
     }),
 });
 
@@ -65,4 +72,5 @@ export const {
     useEventByYearQuery,
     useEventByMonthsQuery,
     useEventByCategoryQuery,
+    useCookingCourseTypeQuery,
 } = eluxAPI;
