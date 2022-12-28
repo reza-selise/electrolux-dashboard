@@ -9,7 +9,7 @@ import eventByCategoryFilterTypeReducer from './Slice/EventByCategory/eventByCat
 import eventbyCategoryTimelineYearsReducer from './Slice/EventByCategory/eventbyCategoryTimelineYears';
 import eventbyLocationTimelineMonthReducer from './Slice/EventByLocation/eventByLocationTimelineMonth';
 import eventByLocationTimelineYearsReducer from './Slice/EventByLocation/eventByLocationTimelineYear';
-import eventByLocationFilterTypeReducer from './Slice/EventByLocation/eventByYearFilterType';
+import eventByLocationFilterTypeReducer from './Slice/EventByLocation/eventByLocationFilterType';
 import eventByMonthFilterTypeReducer from './Slice/EventByMonth/eventByMonthFilterType';
 import eventbyMonthTimelineYearsReducer from './Slice/EventByMonth/eventByMonthTimelineYears';
 import eventbyMonthTimelineMonthReducer from './Slice/EventByMonth/eventMyMonthTimelineMonth';
@@ -39,7 +39,7 @@ export const store = configureStore({
         cookingCourseMonths: cookingCourseMonthsReducer,
         cookingCourseYearMonths: cookingCourseYearMonthsReducer,
         eventByLocationFilterType: eventByLocationFilterTypeReducer,
-        eventByLocationTimelineMonths: eventbyLocationTimelineMonthReducer,
+        eventbyLocationTimelineMonth: eventbyLocationTimelineMonthReducer,
         eventByLocationTimelineYears: eventByLocationTimelineYearsReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
