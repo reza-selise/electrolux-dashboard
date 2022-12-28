@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
+import { setEventbyLocationTimelineYears } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineYear';
+import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
 import './FilterTypeTimeFrame.scss';
 
 function FilterTypeTimeFrame() {
@@ -83,9 +85,19 @@ function FilterTypeTimeFrame() {
                     dispatch(setEventbyYearTimelineMonth([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
                 }
                 break;
-
+            case 'event-by-location-timeline':
+                if (frame === 'years') {
+                    getYears(time, lastYears);
+                    dispatch(setEventbyLocationTimelineYears(lastYears));
+                    dispatch(setEventbyLocationTimelineMonth(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']));
+                } else {
+                    getMonths(time, years);
+                    dispatch(setEventbyLocationTimelineYears(years));
+                    dispatch(setEventbyLocationTimelineMonth(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']));
+                }
+                break;
             default:
-                console.log('filter type year month default');
+                console.log('filter type year month default', location);
         }
     }, [time, frame]);
     return (

@@ -6,6 +6,7 @@ import deleteIcon from '../../images/delete.svg';
 import plusIcon from '../../images/plus.svg';
 import { setCookingCourseCustomDate } from '../../Redux/Slice/CookingCourseType/CookingCourseCustomDate';
 import { setEventbyYearTimelineYearDateRange } from '../../Redux/Slice/EventByYear/eventbyYearTimelineYearDateRange';
+import { seteventbyLocationimelineYearDateRange } from '../../Redux/Slice/EventByLocation/eventbyLocationTimelineYearDateRange';
 import './FilterTypeCustomDate.scss';
 
 function FilterTypeCustomDate() {
@@ -52,6 +53,9 @@ function FilterTypeCustomDate() {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineYearDateRange(dateRanges));
                 break;
+            case 'event-by-location-timeline':
+                // dispatch(seteventbyLocationimelineYearDateRange(dateRanges));
+                break;
             case 'event-by-months-timeline':
                 // dispatch(setEventbyMonthTimelineYears([...new Set(yearsArray)]));
                 // dispatch(setEventbyMonthTimelineMonth([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
@@ -64,7 +68,7 @@ function FilterTypeCustomDate() {
                 break;
 
             default:
-                console.log('filter type year month default');
+                console.log('filter type year month default', location);
         }
     }, [location, dateRanges]);
 

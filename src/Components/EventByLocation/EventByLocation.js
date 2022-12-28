@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
-import {Table} from 'antd';
+import { Table } from 'antd';
 import {
     BarElement,
     CategoryScale,
@@ -7,18 +7,18 @@ import {
     Legend,
     LinearScale,
     Title,
-    Tooltip
+    Tooltip,
 } from 'chart.js';
-import React,{useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
-import {Bar} from 'react-chartjs-2';
-import {eluxTranslation} from '../../Translation/Translation';
+import { Bar } from 'react-chartjs-2';
+import { eluxTranslation } from '../../Translation/Translation';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
 
-import {useEventByLocationQuery} from '../../API/apiSlice';
+import { useEventByLocationQuery } from '../../API/apiSlice';
 import './EventByLocation.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -89,14 +89,14 @@ function EventByLocation() {
         labels,
         datasets,
     };
-    console.log('data-location-dataset:', datasets);
+    console.log('data-location-dataset:', eventByLocationTimelineYears);
 
     const { pleaseWait } = eluxTranslation;
     return (
         <>
             <div className="header-wrapper">
                 <GraphTableSwitch
-                    identifier={111}
+                    identifier={1}
                     grapOrTable={grapOrTableForLocation}
                     setgGrapOrTable={setgGrapOrTableForLocation}
                     name="event-by-location"
@@ -110,7 +110,7 @@ function EventByLocation() {
                 <LocalFilter
                     requestData={requestDataForLocation}
                     setRequestData={setRequestDataForLocation}
-                    location="event-by-year-timeline"
+                    location="event-by-location-timeline"
                 />
             </div>
 
@@ -122,14 +122,14 @@ function EventByLocation() {
                 <Bar options={BarOptions} data={graphData} />
             ) : (
                 <Table
-                    dataSource={data.data.years}
+                    dataSource={data.data.locations}
                     pagination={false}
                     className="event-by-location-table"
                 >
-                    <Column title="Year" dataIndex="year" key="year" />
-                    <Column title="ELUX" dataIndex="elux" key="elux" />
-                    <Column title="B2B" dataIndex="b2b" key="b2b" />
-                    <Column title="B2C" dataIndex="b2c" key="b2c" />
+                    <Column title="Location" dataIndex="location" key="location" />
+                    {eventByLocationTimelineYears.map(year => (
+                        <Column title={year} dataIndex={year} key={year} />
+                    ))}
                     <Column title="Total" dataIndex="total" key="total" />
                 </Table>
             )}

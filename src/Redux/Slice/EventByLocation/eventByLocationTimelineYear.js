@@ -20,6 +20,6 @@ export const eventByLocationTimelineYearsSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setEventbyYearTimelineYears } = eventByLocationTimelineYearsSlice.actions;
+export const { setEventbyLocationTimelineYears } = eventByLocationTimelineYearsSlice.actions;
 
 export default eventByLocationTimelineYearsSlice.reducer;
