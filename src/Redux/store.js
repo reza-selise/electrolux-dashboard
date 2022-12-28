@@ -1,6 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
-import { eluxAPI } from '../API/apiSlice';
+import {configureStore} from '@reduxjs/toolkit';
+import {setupListeners} from '@reduxjs/toolkit/query';
+import {eluxAPI} from '../API/apiSlice';
+import eventbyLocationTimelineMonthReducer from './Slice/EventByLocation/eventByLocationTimelineMonth';
+import eventByLocationTimelineYearsReducer from './Slice/EventByLocation/eventByLocationTimelineYear';
+import eventByLocationFilterTypeReducer from './Slice/EventByLocation/eventByYearFilterType';
 import eventByCategoryFilterTypeReducer from './Slice/EventByCategory/eventByCategoryFilterType';
 import eventbyCategoryTimelineYearsReducer from './Slice/EventByCategory/eventbyCategoryTimelineYears';
 import eventByMonthFilterTypeReducer from './Slice/EventByMonth/eventByMonthFilterType';
@@ -27,6 +30,9 @@ export const store = configureStore({
         eventByMonthFilterType: eventByMonthFilterTypeReducer,
         eventByCategoryFilterType: eventByCategoryFilterTypeReducer,
         eventbyYearTimelineYearDateRange: eventbyYearTimelineYearDateRangeReducer,
+        eventByLocationFilterType: eventByLocationFilterTypeReducer,
+        eventByLocationTimelineMonths: eventbyLocationTimelineMonthReducer,
+        eventByLocationTimelineYears: eventByLocationTimelineYearsReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });

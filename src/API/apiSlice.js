@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
 const siteURL = window.eluxDashboard.homeUrl;
 
@@ -71,6 +71,7 @@ export const {
     useUpdateGenericCommentMutation,
     useEventByYearQuery,
     useEventByMonthsQuery,
+    useEventByLocationQuery,
     useEventByCategoryQuery,
     useCookingCourseTypeQuery,
 } = eluxAPI;
