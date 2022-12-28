@@ -136,6 +136,7 @@ function EventByCategory() {
             <h2 className="graph-title">Overview of Events Category</h2>
             <div className="graph-overview">
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestData}
                     setRequestData={setRequestData}
                     location="event-by-category-timeline"
