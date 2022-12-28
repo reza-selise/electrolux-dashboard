@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import {Table} from 'antd';
 import {
     BarElement,
     CategoryScale,
@@ -8,13 +8,10 @@ import {
     Title,
     Tooltip
 } from 'chart.js';
-import React, { useState } from 'react';
+import React,{useState} from 'react';
 // eslint-disable-next-line import/no-unresolved
-import { Bar } from 'react-chartjs-2';
-import { useEventByYearQuery } from '../../API/apiSlice';
-import DownloadButton from '../DownloadButton/DownloadButton';
-import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
-import LocalFilter from '../LocalFilter/LocalFilter';
+import {useSelector} from 'react-redux';
+import {useEventByLocationQuery} from '../../API/apiSlice';
 import './EventByLocation.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -38,63 +35,91 @@ export const options = {
 const { Column } = Table;
 
 function EventByLocation() {
-    const [requestData, setRequestData] = useState('events');
+    const eventByLocationFilterType = useSelector(state => state.eventByLocationFilterType.value);
+    const eventByLocationTimelineYears = useSelector(
+        state => state.eventByLocationTimelineYears.value
+    );
+    const eventByLocationTimelineMonths = useSelector(
+        state => state.eventByLocationTimelineMonths.value
+    );
+
+    const [requestDataForLocation, setRequestDataForLocation] = useState('events');
 
     const [grapOrTableForLocation, setgGrapOrTableForLocation] = useState('graph');
     const handleSwitchChange = e => {
         setgGrapOrTableForLocation(e.target.value);
-        console.log(e.target.value);
     };
+    // const requestBody = eventByLocationTimelineYears.map(year => ({
+    //     year: year.toString(),
+    //     months: eventByLocationTimelineMonths.toString(),
+    // }));
+    const requestBody = [
+        {
+            year: '2022',
+            // months: '',
+            months: '01,02,03,04,05,06,07,08,09,10,11,12',
+        },
+    ];
     const payload = {
-        request_data: 'events',
         filter_type: 'years',
-        request_body: JSON.stringify([
-            {
-                year: '2022',
-                months: '09,10,11',
-            },
-        ]),
+        request_data: 'events',
+        locations: '188,191',
+        request_body: JSON.stringify(requestBody),
     };
-    const { data } = useEventByYearQuery(payload);
-    const labels =
-        data && data.data.years.map(year => year.year)
-            ? data.data.years.map(year => year.year)
-            : ['2022'];
-    const graphData = {
-        labels,
-        datasets: [
-            {
-                label: 'ELUX',
-                data:
-                    data && data.data.years.map(year => year.elux)
-                        ? data.data.years.map(year => year.elux)
-                        : 0,
-                backgroundColor: '#4A2017',
-            },
-            {
-                label: 'B2B',
-                data:
-                    data && data.data.years.map(year => year.b2b)
-                        ? data.data.years.map(year => year.b2b)
-                        : 0,
-                backgroundColor: '#937359',
-            },
-            {
-                label: 'B2C',
-                data:
-                    data && data.data.years.map(year => year.b2c)
-                        ? data.data.years.map(year => year.b2c)
-                        : 0,
-                backgroundColor: '#D0B993',
-            },
-        ],
-    };
+    // const { data, error, isLoading } = useEventByLocationQuery(payload);
+    // const data = useEventByLocationQuery(payload);
+    console.log('data-request-body', requestBody);
+    // console.log('data-location', data);
+    // console.log('data-location', data, 'error ', error, 'is-loading', isLoading);
+
+    const wrapWithPromise = () =>
+        new Promise((resolve, reject) => {
+            try {
+                const { data, error, isLoading } = useEventByLocationQuery(payload);
+                resolve({ data, error, isLoading });
+            } catch (e) {
+                reject(e);
+            }
+        });
+
+    wrapWithPromise()
+        .then(result => {
+            // code to handle successful execution
+            console.log('data-location', result);
+        })
+        .catch(error => {
+            // code to handle error
+            console.log('data-location-error', error);
+        });
+
+    // const getLocations = () => ['191', '188', '183', '512', '507'];
+    // const getDataFromLocation = (location, locationYear) =>
+    //     eventByLocationTimelineYears.map(year => locationYear === year && location[year]);
+
+    // const colors = ['#93735a', '#4a2016', '#a6b2a4', '#6b7a66', '#3b4536'];
+    // const labels = getLocations();
+    // const datasets = eventByLocationTimelineYears.map((year, index) => ({
+    //     label: year,
+    //     data: data && data.data.locations.map(location => location),
+    //     backgroundColor: colors[index % colors.length],
+    // }));
+
+    // // console.log('datasets', datasets);
+
+    // const graphData = {
+    //     labels,
+    //     datasets,
+    // };
+
+    // const { pleaseWait } = eluxTranslation;
+
     return (
         <>
-            <div className="header-wrapper">
+            {/* <div className="header-wrapper">
                 <GraphTableSwitch
                     grapOrTable={grapOrTableForLocation}
                     handleSwitchChange={handleSwitchChange}
+                    name="event-by-location"
                 />
                 <DownloadButton />
             </div>
@@ -104,11 +129,14 @@ function EventByLocation() {
                 </h2>
             </div>
             <LocalFilter
-                requestData={requestData}
-                setRequestData={setRequestData}
-                displayClass="d-block"
+                requestData={requestDataForLocation}
+                setRequestData={setRequestDataForLocation}
             />
-            {grapOrTableForLocation === 'graph' ? (
+            {error ? (
+                'error'
+            ) : isLoading ? (
+                pleaseWait
+            ) : grapOrTableForLocation === 'graph' ? (
                 <Bar options={options} data={graphData} />
             ) : (
                 <Table dataSource={data.data.years}>
@@ -118,7 +146,7 @@ function EventByLocation() {
                     <Column title="B2C" dataIndex="b2c" key="b2c" />
                     <Column title="Total" dataIndex="total" key="total" />
                 </Table>
-            )}
+            )} */}
         </>
     );
 }

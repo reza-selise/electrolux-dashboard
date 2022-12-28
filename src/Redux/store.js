@@ -7,6 +7,9 @@ import cookingCourseYearMonthsReducer from './Slice/CookingCourseType/CookingCou
 import cookingCourseYearsReducer from './Slice/CookingCourseType/CookingCourseYears';
 import eventByCategoryFilterTypeReducer from './Slice/EventByCategory/eventByCategoryFilterType';
 import eventbyCategoryTimelineYearsReducer from './Slice/EventByCategory/eventbyCategoryTimelineYears';
+import eventbyLocationTimelineMonthReducer from './Slice/EventByLocation/eventByLocationTimelineMonth';
+import eventByLocationTimelineYearsReducer from './Slice/EventByLocation/eventByLocationTimelineYear';
+import eventByLocationFilterTypeReducer from './Slice/EventByLocation/eventByYearFilterType';
 import eventByMonthFilterTypeReducer from './Slice/EventByMonth/eventByMonthFilterType';
 import eventbyMonthTimelineYearsReducer from './Slice/EventByMonth/eventByMonthTimelineYears';
 import eventbyMonthTimelineMonthReducer from './Slice/EventByMonth/eventMyMonthTimelineMonth';
@@ -35,6 +38,9 @@ export const store = configureStore({
         cookingCourseYears: cookingCourseYearsReducer,
         cookingCourseMonths: cookingCourseMonthsReducer,
         cookingCourseYearMonths: cookingCourseYearMonthsReducer,
+        eventByLocationFilterType: eventByLocationFilterTypeReducer,
+        eventByLocationTimelineMonths: eventbyLocationTimelineMonthReducer,
+        eventByLocationTimelineYears: eventByLocationTimelineYearsReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });
