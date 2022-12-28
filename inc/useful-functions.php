@@ -241,17 +241,21 @@ function get_products_by_timeline_filter( $timeline_type , $timeline_filter, $re
 
 }
 
+/**
+ * This function will use to filter all the data
+ * 
+ * filter_key_values
+ */
 
-
-function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData){
+function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $skip_keys = []){
 
     if( 
-        isset($requestData['filter_key_value']) && 
-        !empty($requestData['filter_key_value']) 
+        isset($requestData['filter_key_values']) && 
+        !empty($requestData['filter_key_values']) 
     ){
         
         // var_dump($requestData);
-        $filter_arr = $requestData['filter_key_value'];
+        $filter_arr = $requestData['filter_key_values'];
         $output = [];
 
         // loop through all the posts
@@ -477,8 +481,8 @@ function get_order_ids_by_range( $start_range, $end_range ){
 }
 
 
-// collect filter information 
-function el_get_product_filter_information($single_product_id){
+// collect filter information which will match with the 
+function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
     
     $output = [];
 
@@ -500,9 +504,8 @@ function el_get_product_filter_information($single_product_id){
     $product_cats       = get_the_terms( $single_product_id , 'product_cat' );
     $each_product_category_arr = []; // use to store all the category along with post id 
     foreach( $product_cats as $cat){
-
-        // $cat_id     =  $cat->term_id;
-        $cat_id     = $cat->term_id ; // because we want to count if name is same
+        
+        $cat_id     = $cat->term_id ; 
         $cat_name   = $cat->name;
 
         // push each category in a array
