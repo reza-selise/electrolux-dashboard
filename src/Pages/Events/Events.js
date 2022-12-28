@@ -49,6 +49,7 @@ function Events() {
                         </ErrorBoundary>
                     </Col>
                 </Row>
+                <hr className="horizontal-bar" />
                 <Row gutter={20}>
                     <Col span={12}>
                         <ErrorBoundary FallbackComponent={ErrorFallback}>

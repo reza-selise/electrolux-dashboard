@@ -151,6 +151,7 @@ function EventByYear() {
                     Overview of Events <span>by year</span>
                 </h2>
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestData}
                     setRequestData={setRequestData}
                     location="event-by-year-timeline"

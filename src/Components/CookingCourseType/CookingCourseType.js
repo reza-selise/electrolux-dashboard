@@ -87,7 +87,7 @@ function CookingCourseType() {
 
     // console.log('cookingCourseCustomDate', cookingCourseCustomDate);
     useEffect(() => {
-        console.log('cookingCourseFilterType', cookingCourseFilterType);
+        
         switch (cookingCourseFilterType) {
             case 'years':
                 setPayload({
@@ -185,6 +185,7 @@ function CookingCourseType() {
             <h2 className="graph-title">Overview of Cooking Course Type</h2>
             <div className="graph-overview">
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestData}
                     setRequestData={setRequestData}
                     location="cooking-course-type-timeline"
