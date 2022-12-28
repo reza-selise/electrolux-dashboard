@@ -104,19 +104,13 @@ function EventByStatus() {
                 year: '2022',
                 months: '01,02,03,04,05,06,07,08,09,10,11,12',
             },
-            {
-                year: '2023',
-                months: '02,11,06',
-            },
-            {
-                year: '2021',
-                months: '02,07,04',
-            },
         ]),
     });
     const { data, error, isLoading } = useEventByStatusQuery(payload);
 
     const eventByStatusFilterType = useSelector(state => state.eventByStatusFilterType.value);
+    const eventByStatusYears = useSelector(state => state.eventByStatusYears.value);
+    const eventByStatusYearMonth = useSelector(state => state.eventByStatusYearMonth.value);
 
     useEffect(() => {
         switch (eventByStatusFilterType) {
@@ -124,20 +118,12 @@ function EventByStatus() {
                 setPayload({
                     request_data: 'events',
                     filter_type: 'years',
-                    request_body: JSON.stringify([
-                        {
-                            year: '2022',
-                            months: '01,02,03,04,05,06,07,08,09,10,11,12',
-                        },
-                        {
-                            year: '2023',
-                            months: '02,11,06',
-                        },
-                        {
-                            year: '2021',
-                            months: '02,07,04',
-                        },
-                    ]),
+                    request_body: JSON.stringify(
+                        eventByStatusYears.map(year => ({
+                            year: year.toString(),
+                            months: eventByStatusYearMonth.toString(),
+                        }))
+                    ),
                 });
                 break;
 
@@ -155,7 +141,7 @@ function EventByStatus() {
                 setPayload();
                 console.log('Cooking course type default payload');
         }
-    }, []);
+    }, [eventByStatusYears, eventByStatusYearMonth, eventByStatusFilterType]);
 
     return (
         <>
