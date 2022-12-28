@@ -1,11 +1,12 @@
 import { Select } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setCookingCourseMonths } from '../../Redux/Slice/CookingCourseType/CookingCourseMonths';
 import { setEventbyMonthTimelineMonth } from '../../Redux/Slice/EventByMonth/eventMyMonthTimelineMonth';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 
 function FilterTypeMonth() {
-    const location = useSelector((state) => state.location.value);
+    const location = useSelector(state => state.location.value);
     const dispatch = useDispatch();
 
     const monthOptions = [
@@ -58,13 +59,16 @@ function FilterTypeMonth() {
             value: 12,
         },
     ];
-    const filterTypeMonthHandle = (value) => {
+    const filterTypeMonthHandle = value => {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineMonth(value));
                 break;
             case 'event-by-months-timeline':
                 dispatch(setEventbyMonthTimelineMonth(value));
+                break;
+            case 'cooking-course-type-timeline':
+                dispatch(setCookingCourseMonths(value));
                 break;
 
             default:

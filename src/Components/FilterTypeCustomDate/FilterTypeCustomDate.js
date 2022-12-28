@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import deleteIcon from '../../images/delete.svg';
 import plusIcon from '../../images/plus.svg';
+import { setCookingCourseCustomDate } from '../../Redux/Slice/CookingCourseType/CookingCourseCustomDate';
+import { setEventbyYearTimelineYearDateRange } from '../../Redux/Slice/EventByYear/eventbyYearTimelineYearDateRange';
 import './FilterTypeCustomDate.scss';
 
 function FilterTypeCustomDate() {
@@ -12,8 +14,6 @@ function FilterTypeCustomDate() {
     const [dateRanges, setDateRanges] = useState([{ start: null, end: null }]);
     const assetsPath = window.eluxDashboard.assetsUrl;
     const dispatch = useDispatch();
-
-    console.log('dateRanges', dateRanges);
 
     const addDateRange = () => {
         setDateRanges([...dateRanges, { start: null, end: null }]);
@@ -24,29 +24,43 @@ function FilterTypeCustomDate() {
     };
 
     const handleFromChange = (date, index) => {
+        // const newDateRanges = [...dateRanges];
+        // newDateRanges[index].start = moment(date).format('MMDDYYYY');
+        // setDateRanges(newDateRanges);
         const newDateRanges = [...dateRanges];
-        newDateRanges[index].start = moment(date).format('MMDDYYYY');
+        newDateRanges[index] = {
+            ...newDateRanges[index],
+            start: moment(date).format('YYYYMMDD'),
+        };
         setDateRanges(newDateRanges);
     };
 
     const handleToChange = (date, index) => {
+        // const newDateRanges = [...dateRanges];
+        // newDateRanges[index].end = moment(date).format('MMDDYYYY');
+        // setDateRanges(newDateRanges);
         const newDateRanges = [...dateRanges];
-        newDateRanges[index].end = moment(date).format('MMDDYYYY');
+        newDateRanges[index] = {
+            ...newDateRanges[index],
+            end: moment(date).format('MMDDMMDD'),
+        };
         setDateRanges(newDateRanges);
     };
 
     useEffect(() => {
         switch (location) {
             case 'event-by-year-timeline':
-                // dispatch(setEventbyYearTimelineYearDateRange(dateRanges));
+                dispatch(setEventbyYearTimelineYearDateRange(dateRanges));
                 break;
             case 'event-by-months-timeline':
                 // dispatch(setEventbyMonthTimelineYears([...new Set(yearsArray)]));
                 // dispatch(setEventbyMonthTimelineMonth([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
                 break;
 
-            case 'event-by-months-timeline':
-                dispatch;
+            case 'cooking-course-type-timeline':
+                dispatch(
+                    setCookingCourseCustomDate(dateRanges.map(({ start, end }) => [start, end]))
+                );
                 break;
 
             default:
