@@ -1,6 +1,7 @@
 import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setCookingCourseFilterType } from '../../Redux/Slice/CookingCourseType/CookingCourseFilterType';
 import { setEventByCategoryFilterType } from '../../Redux/Slice/EventByCategory/eventByCategoryFilterType';
 import { setEventByMonthFilterType } from '../../Redux/Slice/EventByMonth/eventByMonthFilterType';
 import { setEventByYearFilterType } from '../../Redux/Slice/EventByYear/eventByYearFilterType';
@@ -30,6 +31,9 @@ function Timeline() {
 
             case 'event-by-months-timeline':
                 dispatch(setEventByMonthFilterType(filterType));
+                break;
+            case 'cooking-course-type-timeline':
+                dispatch(setCookingCourseFilterType(filterType));
                 break;
 
             default:

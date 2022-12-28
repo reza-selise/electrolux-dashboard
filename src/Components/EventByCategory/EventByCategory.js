@@ -70,22 +70,22 @@ function EventByCategory() {
     const { error, data } = useEventByCategoryQuery(payload);
 
     // Graph
-    const labels = data && data.data.labels;
+    const labels = data && data.data.labels ? data.data.labels : [];
     const colors = ['#A6B2A4', '#6B7A66', '#3B4536', '#031C40', '#7B899B'];
     let graphData = {};
-    if (data !== '') {
+    if (data && data.status === true) {
         try {
             graphData = {
                 labels,
-                datasets:
-                    data &&
-                    data.data.dataset.map((dataset, index) => ({
-                        ...dataset,
-                        backgroundColor: colors[index % colors.length],
-                        barThickness: 24,
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                    })),
+                datasets: data
+                    ? data.data.dataset.map((dataset, index) => ({
+                          ...dataset,
+                          backgroundColor: colors[index % colors.length],
+                          barThickness: 24,
+                          borderDash: [],
+                          borderDashOffset: 0.0,
+                      }))
+                    : [],
             };
         } catch (e) {
             console.log(e);
@@ -94,7 +94,7 @@ function EventByCategory() {
     // Table
     const tableData = [];
     let columns = [];
-    if (data !== '') {
+    if (data && data.status === true) {
         try {
             columns = [
                 {
@@ -161,18 +161,24 @@ function EventByCategory() {
                 />
             </div>
 
-            {error
-                ? 'error'
-                : grapTableEvntCat === 'graph'
-                ? data && <Bar id="eventCategoryChartRef" options={options} data={graphData} />
-                : data && (
-                      <Table
-                          ref={eventCategoryChartRef}
-                          columns={columns}
-                          dataSource={tableData}
-                          pagination={false}
-                      />
-                  )}
+            {error ? (
+                'error'
+            ) : grapTableEvntCat === 'graph' ? (
+                data && data.status === true ? (
+                    <Bar id="eventCategoryChartRef" options={options} data={graphData} />
+                ) : (
+                    ''
+                )
+            ) : data && data.status === true ? (
+                <Table
+                    ref={eventCategoryChartRef}
+                    columns={columns}
+                    dataSource={tableData}
+                    pagination={false}
+                />
+            ) : (
+                ''
+            )}
         </div>
     );
 }

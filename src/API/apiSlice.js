@@ -1,4 +1,4 @@
-import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const siteURL = window.eluxDashboard.homeUrl;
 
@@ -38,6 +38,12 @@ export const eluxAPI = createApi({
         eventByYear: builder.query({
             query: payload => ({
                 url: `elux-dashboard/v1/events-by-year?${new URLSearchParams(payload)}`,
+                method: 'GET',
+            }),
+        }),
+        eventByLocation: builder.query({
+            query: payload => ({
+                url: `elux-dashboard/v1/events-by-location?${new URLSearchParams(payload)}`,
                 method: 'GET',
             }),
         }),
