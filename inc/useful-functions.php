@@ -481,7 +481,7 @@ function get_order_ids_by_range( $start_range, $end_range ){
 }
 
 
-// collect filter information which will match with the 
+// collect filter information which will use to do FILTERING 
 function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
     
     $output = [];
@@ -510,6 +510,18 @@ function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
 
         // push each category in a array
         $each_product_category_arr[$cat_id] = $cat_name;
+        
+        // include other language term  ids [ de_CH , fr_FR, it_IT ]
+        $language_arr = [ 'de_CH' , 'fr_FR', 'it_IT' ];
+        for($i=0; $i<3; $i++ ){
+            $term_id = pll_get_term(15, 'fr_FR');
+
+            if( intval($term_id)){
+                $each_product_category_arr[intval($term_id)] = $cat_name;
+            }
+        }
+        // -- INCLUDING OTHER LANGUAGE CAT CODE DONE
+
 
     }
     $category_list  = $each_product_category_arr;

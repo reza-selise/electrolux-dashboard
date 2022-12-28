@@ -405,6 +405,10 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
 
     } // for loop end
 
+    // $poly = pll_get_term(15, 'fr_FR');
+
+    // var_dump($poly);
+
     // print_r($structure_data);
     return $structure_data;
 }
