@@ -1,6 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { eluxAPI } from '../API/apiSlice';
+import cookingCourseFilterTypeReducer from './Slice/CookingCourseType/CookingCourseFilterType';
+import cookingCourseMonthsReducer from './Slice/CookingCourseType/CookingCourseMonths';
+import cookingCourseYearMonthsReducer from './Slice/CookingCourseType/CookingCourseYearMonths';
+import cookingCourseYearsReducer from './Slice/CookingCourseType/CookingCourseYears';
 import eventByCategoryFilterTypeReducer from './Slice/EventByCategory/eventByCategoryFilterType';
 import eventbyCategoryTimelineYearsReducer from './Slice/EventByCategory/eventbyCategoryTimelineYears';
 import eventByMonthFilterTypeReducer from './Slice/EventByMonth/eventByMonthFilterType';
@@ -21,12 +25,16 @@ export const store = configureStore({
         eventbyYearTimelineYears: eventbyYearTimelineYearsReducer,
         eventbyCategoryTimelineYears: eventbyCategoryTimelineYearsReducer,
         eventbyYearTimelineMonth: eventbyYearTimelineMonthReducer,
-        eventbyMonthTimelineMonth :eventbyMonthTimelineMonthReducer, 
+        eventbyMonthTimelineMonth: eventbyMonthTimelineMonthReducer,
         eventbyMonthTimelineYears: eventbyMonthTimelineYearsReducer,
         eventByYearFilterType: eventByYearFilterTypeReducer,
         eventByMonthFilterType: eventByMonthFilterTypeReducer,
         eventByCategoryFilterType: eventByCategoryFilterTypeReducer,
         eventbyYearTimelineYearDateRange: eventbyYearTimelineYearDateRangeReducer,
+        cookingCourseFilterType: cookingCourseFilterTypeReducer,
+        cookingCourseYears: cookingCourseYearsReducer,
+        cookingCourseMonths: cookingCourseMonthsReducer,
+        cookingCourseYearMonths: cookingCourseYearMonthsReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });
