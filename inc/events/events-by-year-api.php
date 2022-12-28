@@ -14,16 +14,30 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
     function elux_get_events_by_year( $request ) {
 
         $disallowed_event_types = array( 'giftcard', 'voucher' );
-        $allowed_request_data   = array( 'events', 'participants' );
-        $allowed_filter_types   = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
-        $filter_type            = $request->get_params()['filter_type'];
-        $request_data           = $request->get_params()['request_data']; // can be events or participants.
+        $allowed_data_type      = array( 'events', 'participants' );
+        $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
+        $allowed_event_status   = array( 'planned', 'cancelled', 'taken_place' );
+        $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
+
+        $timeline               = $request->get_params()['filter_type'];
+        $data_type              = $request->get_params()['request_data']; // events | participants etc.
+        $event_status           = $request->get_params()['event_status']; // planned | cancelled etc.
+        $customer_type          = $request->get_params()['customer_type']; // b2b | b2c | electrolux_internal | all etc.
+        $locations              = $request->get_params()['locations'];     // 188,191,500 etc.
+        $locations              = explode( ',', $locations );
+
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
-            "type"  => $request_data
+            "type"  => $data_type
         );
 
-        if( ! in_array($filter_type, $allowed_filter_types) || ! in_array($request_data, $allowed_request_data) || ! is_array( $request_body ) || empty( $request_body )){
+        if( 
+            ! in_array( $timeline, $allowed_timeline ) || 
+            ! in_array( $data_type, $allowed_data_type ) || 
+            ! in_array( $event_status, $allowed_event_status ) || 
+            ! in_array( $customer_type, $allowed_customer_type ) || 
+            ! is_array( $request_body ) || 
+            empty( $request_body ) ){
             return rest_ensure_response( array(
                 'status_code' => 403,
                 'message'     => 'failure',
@@ -31,7 +45,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
             ) );
         }
 
-        switch( $filter_type ){
+        switch( $timeline ){
             case 'custom_time_frame':
             case 'months':
             case 'years':
@@ -49,7 +63,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
                     }
 
-                    $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data );
+                    $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations );
                     array_push( $all_yearly_data, $yearly_data );
                 }
 
@@ -60,6 +74,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                 $yearly_order_ids = array();
                 if( is_array( $request_body ) && ! empty( $request_body )){
                     foreach ( $request_body as $single_range ) {
+                        
                         if( empty( $single_range->start ) || empty( $single_range->end ) ){
                             continue;
                         }
@@ -107,7 +122,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                 $all_yearly_data = array();
                 if( is_array( $yearly_order_ids ) && !empty( $yearly_order_ids ) ){
                     foreach( $yearly_order_ids as $year => $yearly_order_ids ){
-                        $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data );
+                        $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations );
                         array_push( $all_yearly_data, $yearly_data );
                     }
                 }
@@ -135,27 +150,54 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
     
 }
 
-function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data ){
+function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations = array() ){
     $yearly_elux                = 0;
     $yearly_b2b                 = 0;
     $yearly_b2c                 = 0;
     $yearly_event_participants  = 0;
+    $yearly_events              = 0;
 
     if( is_array( $yearly_order_ids ) && ! empty( $yearly_order_ids ) ){
         foreach( $yearly_order_ids as $order_id ){
-            $order      = wc_get_order( $order_id );
-            $order_items = $order->get_items();
+
+            /* If, user requested for specific location data
+            *  and the current order is not from that location,
+            *  then skip to the next iteration.
+            *
+            *  Else, proceed as usual.
+            */
+            if( is_array( $locations ) && ! empty( $locations )){
+                // user has requested for specific location.
+                $event_location = ! empty( get_post_meta( $order_id, 'event_location', true ) ) ? get_post_meta( $order_id, 'event_location', true ) : 0;
+                if( ! in_array( $event_location, $locations ) ){
+                    continue;
+                }
+            }
+
+            $order          = wc_get_order( $order_id );
+            $order_items    = $order->get_items();
             
             if( is_array( $order_items ) && !empty( $order_items )){
                 
                 foreach( $order_items as $key => $value ){
                     $product_id = (int) $value->get_product_id();
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
+                    $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
                     
+                    // filter event by event_status
+                    if( $status !== $event_status ){
+                        continue;
+                    }
+
+                    if( ( $type !== $customer_type ) && ( 'all' !== $customer_type ) ){
+                        continue;
+                    }
+
                     $participants_qty           = (int) $value->get_quantity();
                     $yearly_event_participants += $participants_qty;
+                    $yearly_events++;
             
-                    switch( $request_data ){
+                    switch( $data_type ){
                         case 'events':
                             if ( 'b2b' === $type ){
                                 $yearly_b2b++;
@@ -164,7 +206,6 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
                             } elseif ( 'electrolux_internal' === $type ){
                                 $yearly_elux++;
                             }
-            
                             break;
                             
                         case 'participants':
@@ -175,8 +216,8 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
                             } elseif ( 'electrolux_internal' === $type ){
                                 $yearly_elux += $participants_qty;
                             }
-            
                             break;
+
                         default:
                             break;
                     } 
@@ -191,7 +232,7 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $request_data 
         "b2b"   => $yearly_b2b,
         "b2c"   => $yearly_b2c,
     );
-    $yearly_data['total']   = 'events' === $request_data ? count( $yearly_order_ids ) : $yearly_event_participants;
+    $yearly_data['total']   = ( 'events' === $data_type ) ? $yearly_events : $yearly_event_participants;
     
     return $yearly_data;
 }
