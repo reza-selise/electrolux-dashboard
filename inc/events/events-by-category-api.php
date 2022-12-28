@@ -84,12 +84,12 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
         /// 2. ---------- Get Structure data along with post id
         $structure_data         = el_events_by_category_STRUCTURE_DATA($product_ids);
-
+        // print_r($structure_data);
 
         /// 3. ---------- PASS ONLY FILTERED STRUCTURE DATA
         $filtered_data          = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
 
-        
+        // print_r($filtered_data);
         /// 4. ---------- Get Final output
         $final_data             = el_events_by_category_FINAL_DATA($filtered_data, $received_data);
 
@@ -304,11 +304,19 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
             'category' => [ cat_id =>  cat_name , cat_id =>  cat_name ]
             'filter_name' => filter_value
             'attribute_name' => attribute_value
-            'filter_name_2' => filter_value 
+            'filter_name_2' => filter_value ,
+            "filter_key_values" => {
+                key : value to match,
+                key : value to match,
+            }
         ],
         1496 => [
             'year' => 2021,
             'month' => 12,
+            "filter_key_values" => {
+                key : value to match,
+                key : value to match,
+            }
             'filter_name' => filter_value
             'attribute_name' => attribute_value
             'filter_name_2' => filter_value 
@@ -382,19 +390,25 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
 
         }
         $structure_data[$single_product_id]['category'] = $each_product_category_arr;
+        // $structure_data[$single_product_id]['category'] = [];
         // END ------------ CATEGORY ADDING
 
 
 
 
         // add filtering info 
-        $filter_arr = el_get_product_filter_information($single_product_id);
+        $filter_arr = el_GET_PRODUCT_FILTER_VALUES($single_product_id);
 
         foreach( $filter_arr as $filter_key => $filter_value ){
-            $structure_data[$single_product_id][$filter_key] = $filter_value;
+            $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
         }
 
     } // for loop end
 
+    // $poly = pll_get_term(15, 'fr_FR');
+
+    // var_dump($poly);
+
+    // print_r($structure_data);
     return $structure_data;
 }

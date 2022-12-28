@@ -174,7 +174,7 @@ function EventByMonth() {
                     setgGrapOrTable={setgGrapOrTableForMonth}
                     name="event-by-month"
                 />
-                <DownloadButton />
+                <DownloadButton identifier={3}/>
             </div>
             <div className="graph-overview">
                 <h2 className="graph-title">

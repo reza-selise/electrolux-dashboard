@@ -13,48 +13,65 @@ function get_generic_filter_data($request){
     $return_data = array(
         "customer_types" => array(
             [
+                "slug"=> "electrolux_internal",
+                "name" => "Electrolux Internal"
+            ],
+            [
                 "slug"=> "b2b",
                 "name" => "B2B"
             ],
             [
-                "slug"=> "fb_lead",
-                "name" => "FB Lead"
+                "slug"=> "b2c",
+                "name" => "B2C"
+            ]
+        ), 
+        "booking_types"=> array(
+            [
+                "slug"=> "Booked Manually",
+                "name" => "Booked Manually"
             ],
             [
-                "slug"=> "walking",
-                "name" => "Walking"
+                "slug"=> "Walk-in",
+                "name" => "Walk-in"
             ]
-        ),        
-        "leads"=> array(
+        ),      
+        "lead_types"=> array(
             [
                 "slug"=> "fb_leads",
                 "name" => "FB Leads"
-            ],
-            [
-                "slug"=> "walking",
-                "name" => "Walking"
             ]
         ),
-        "sales_emp" => [
-            "Mr. Maruf",
-            "Abul Hasan"
-        ],
         "data_types" => [
-            "abcd",
-            "bcdef"
+            [
+                "slug"=> "events",
+                "name" => "Events"
+            ],
+            [
+                "slug"=> "participants",
+                "name" => "Participants"
+            ]
         ],
         "event_status" => array(
-        [
-            "slug"=>"cancel_by_admin",
-            "name"=>"Cancel by Admin",
-        ],
-        [
-            "slug"=>"cancel_by_customer",
-            "name"=>"Cancel by Customer",
-        ])
+            [
+                "slug"=>"reserved",
+                "name"=>"Reserved",
+            ],
+            [
+                "slug"=>"planned",
+                "name"=>"Planned",
+            ],
+            [
+                "slug"=>"took_place",
+                "name"=>"Took place",
+            ],
+            [
+                "slug"=>"canceled",
+                "name"=>"Canceled",
+            ]
+        )
     );
   
-    // product categories
+    // -------------------- product categories
     $cat_args = array(
         'taxonomy'     => 'product_cat',
         'orderby'      => 'name',
@@ -90,7 +107,7 @@ function get_generic_filter_data($request){
         
     }
     $return_data['categories'] = $categories;
-    //----- locations-----
+    //----------------------------------- locations-----
     $args = array(
         'posts_per_page'   => -1,
         'post_type'        => 'location',
@@ -102,7 +119,6 @@ function get_generic_filter_data($request){
     $the_post_query = new WP_Query( $args );
     $locations = [];
     if ( $the_post_query->have_posts() ) {
-       
         while ( $the_post_query->have_posts() ) {
             $the_post_query->the_post();
             $the_title = get_the_title();
@@ -116,10 +132,37 @@ function get_generic_filter_data($request){
             );
            array_push($locations,$loc_data);
         }
-       
-        /* Restore original Post Data */
         wp_reset_postdata();
     }
     $return_data['locations'] = $locations;
-    return $return_data;
+    //------------------------------------- Users by role----------------------------------------------------------------
+    $usr_args = array(
+        'role__in' => array('elex_instructor','elex_consultant', 'sales','shop_manager'),
+        // 'orderby'        => 'user_nicename',
+        'order'          => 'ASC',
+    );
+
+    $user_query = new WP_User_Query( $args );
+    $users = [];
+    if ( ! empty( $user_query->get_results() ) ) {
+        foreach ( $user_query->get_results() as $user ) {
+            error_log(print_r('users' ,1));
+            error_log(print_r($user ,1));
+           $user_name = $user->data->display_name;
+           $user_id = $user->data->ID;
+           $user_email = $user->data->user_email;
+           $user_role = $user->roles[0];
+          
+           $usr_data = array(
+                "id"=> $user_id,
+                "email"=>  $user_email,
+                "name"=>  $user_name,
+                "role"=>   $user_role,
+            );
+            array_push($users,$usr_data);
+        }
+        wp_reset_postdata();
+    }
+    $return_data['sales_employee'] = $users;
+    return  json_encode($return_data);
 }

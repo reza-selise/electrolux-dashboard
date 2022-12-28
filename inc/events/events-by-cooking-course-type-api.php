@@ -176,7 +176,10 @@ function el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids){
         foreach( $product_cats as $cat){
 
             // we only interest in Cooking class sub category
-            if( intval($cat->parent) == 47 ){
+            if( 
+                intval($cat->parent) == 47 ||  
+                intval($cat->parent) == 26 
+            ){
                 $cat_id     = $cat->term_id;
                 $cat_name   = $cat->name;
                 // push each category in a array
