@@ -164,5 +164,5 @@ function get_generic_filter_data($request){
         wp_reset_postdata();
     }
     $return_data['sales_employee'] = $users;
-    return  $return_data;
+    return  json_encode($return_data);
 }
