@@ -57,22 +57,17 @@ function Events() {
                             <EventByStatus />
                         </ErrorBoundary>
                     </Col>
-                    <Col span={12} />
+                    <Col span={12}>
+                        <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <EventByCancellation />
+                        </ErrorBoundary>
+                    </Col>
                 </Row>
                 <hr className="horizontal-bar" />
                 <Row gutter={20}>
                     <Col span={12}>
                         <ErrorBoundary FallbackComponent={ErrorFallback}>
                             <CookingCourseType />
-                        </ErrorBoundary>
-                    </Col>
-                    <Col span={12} />
-                </Row>
-                <hr className="horizontal-bar" />
-                <Row gutter={20}>
-                    <Col span={12}>
-                        <ErrorBoundary FallbackComponent={ErrorFallback}>
-                            <EventByCancellation />
                         </ErrorBoundary>
                     </Col>
                     <Col span={12} />

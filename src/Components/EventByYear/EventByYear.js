@@ -61,6 +61,11 @@ function EventByYear() {
     const [grapOrTableEvntYear, setGrapOrTableEvntYear] = useState('graph');
 
     useEffect(() => {
+        const years = [];
+        const currentYear = new Date().getFullYear();
+        for (let i = 0; i < 5; i += 1) {
+            years.push(currentYear - i);
+        }
         switch (eventByYearFilterType) {
             case 'custom_date_range':
                 setRequestBody(eventbyYearTimelineYearDateRange);
@@ -75,7 +80,7 @@ function EventByYear() {
                 break;
             case 'months':
                 setRequestBody(
-                    eventbyYearTimelineYears.map(year => ({
+                    years.map(year => ({
                         year: year.toString(),
                         months: eventbyYearTimelineMonth.toString(),
                     }))

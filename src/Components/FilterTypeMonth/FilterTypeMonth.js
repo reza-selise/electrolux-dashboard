@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCookingCourseMonths } from '../../Redux/Slice/CookingCourseType/CookingCourseMonths';
 import { setEventbyMonthTimelineMonth } from '../../Redux/Slice/EventByMonth/eventMyMonthTimelineMonth';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
+import { setEventByStatusMonths } from '../../Redux/Slice/EventByStatus/EventByStatusMonths';
 
 function FilterTypeMonth() {
     const location = useSelector(state => state.location.value);
@@ -69,6 +70,9 @@ function FilterTypeMonth() {
                 break;
             case 'cooking-course-type-timeline':
                 dispatch(setCookingCourseMonths(value));
+                break;
+            case 'event-by-status-timeline':
+                dispatch(setEventByStatusMonths(value));
                 break;
 
             default:

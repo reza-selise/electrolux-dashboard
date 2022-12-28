@@ -111,8 +111,14 @@ function EventByStatus() {
     const eventByStatusFilterType = useSelector(state => state.eventByStatusFilterType.value);
     const eventByStatusYears = useSelector(state => state.eventByStatusYears.value);
     const eventByStatusYearMonth = useSelector(state => state.eventByStatusYearMonth.value);
+    const eventByStatusMonths = useSelector(state => state.eventByStatusMonths.value);
 
     useEffect(() => {
+        const years = [];
+        const currentYear = new Date().getFullYear();
+        for (let i = 0; i < 5; i += 1) {
+            years.push(currentYear - i);
+        }
         switch (eventByStatusFilterType) {
             case 'years':
                 setPayload({
@@ -128,7 +134,16 @@ function EventByStatus() {
                 break;
 
             case 'months':
-                setPayload();
+                setPayload({
+                    request_data: 'events',
+                    filter_type: 'years',
+                    request_body: JSON.stringify(
+                        years.map(year => ({
+                            year: year.toString(),
+                            months: eventByStatusMonths.toString(),
+                        }))
+                    ),
+                });
                 break;
             case 'custom_date_range':
                 setPayload();
