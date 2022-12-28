@@ -6,6 +6,7 @@ import {
     Legend,
     LinearScale,
     Title,
+    // eslint-disable-next-line prettier/prettier
     Tooltip
 } from 'chart.js';
 import React, { useEffect, useState } from 'react';
@@ -87,7 +88,6 @@ function CookingCourseType() {
 
     // console.log('cookingCourseCustomDate', cookingCourseCustomDate);
     useEffect(() => {
-        
         switch (cookingCourseFilterType) {
             case 'years':
                 setPayload({

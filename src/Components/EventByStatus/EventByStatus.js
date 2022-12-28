@@ -1,3 +1,4 @@
+import { Table } from 'antd';
 import {
     BarElement,
     CategoryScale,
@@ -8,8 +9,8 @@ import {
     // eslint-disable-next-line prettier/prettier
     Tooltip
 } from 'chart.js';
-// eslint-disable-next-line import/no-unresolved
 import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 import { useEventByStatusQuery } from '../../API/apiSlice';
@@ -18,6 +19,7 @@ import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+const { Column } = Table;
 
 function Graph({ data }) {
     const BarOptions = {
@@ -80,7 +82,17 @@ function Graph({ data }) {
     return <Bar id="event-by-year-graph" options={BarOptions} data={graphData} />;
 }
 
-const TableView = () => 'table';
+function TableView({ data }) {
+    return (
+        <Table dataSource={data.years} pagination={false} className="event-by-status-table">
+            <Column title="Year" dataIndex="year" key="year" />
+            <Column title="Planned" dataIndex="planned" key="planned" />
+            <Column title="Cancelled" dataIndex="cancelled" key="cancelled" />
+            <Column title="Taken Place" dataIndex="taken_place" key="taken_place" />
+            <Column title="Total" dataIndex="total" key="total" />
+        </Table>
+    );
+}
 
 function EventByStatus() {
     const [grapOrTableEvntStatus, setGrapOrTableEvntStatus] = useState('graph');
@@ -167,7 +179,7 @@ function EventByStatus() {
             ) : grapOrTableEvntStatus === 'graph' ? (
                 <Graph data={data.data} />
             ) : (
-                <TableView />
+                <TableView data={data.data} />
             )}
         </>
     );
