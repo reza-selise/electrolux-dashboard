@@ -248,7 +248,6 @@ function get_products_by_timeline_filter( $timeline_type , $timeline_filter, $re
  */
 
 function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $skip_keys = []){
-
     if( 
         isset($requestData['filter_key_values']) && 
         !empty($requestData['filter_key_values']) 
@@ -263,20 +262,33 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
 
             $is_satisfy = true;
 
+            $each_product_filter_arr = $product_data['filter_key_values'];
+
             // loop through all the filter if not match/fount return false
             foreach( $filter_arr as $key => $value ){
 
-                if( isset( $product_data[$key] ) ){
 
+                if( isset( $each_product_filter_arr[$key] ) ){
 
-                    $saved_value_to_match   = $product_data[$key] ;
+                    $saved_value_to_match   = $each_product_filter_arr[$key] ;
+
                     $request_value_to_match = sanitize_key( $value );
+                   
 
-                    if( $key == 'sales_person' ||  $key == 'category' ){
+
+                    if( $key == 'category' ){
+                        
+                        if( isset($saved_value_to_match[$request_value_to_match]) ){
+                            // do nothing 
+
+                        }else{
+                            $is_satisfy = false;
+                        }
+
+                    }else if( $key == 'sales_person' ){
 
                         if( 
-                            in_array($request_value_to_match, $saved_value_to_match) ||
-                            isset($saved_value_to_match[$request_value_to_match])
+                            in_array( $request_value_to_match, $saved_value_to_match )
                         ){
                             // do nothing 
                         }else{
@@ -284,7 +296,7 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
                         }
 
                     }else{
-                        $saved_value_to_match   = sanitize_key( $product_data[$key] );
+                        $saved_value_to_match   = sanitize_key( $each_product_filter_arr[$key] );
                         $request_value_to_match = sanitize_key( $value );
 
                         if( $saved_value_to_match == $request_value_to_match ){
@@ -308,6 +320,7 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
 
         return $output;
     }else{
+        // return all data if $filter_key_values not found
         return $structure_data;
     }
 

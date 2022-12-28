@@ -89,7 +89,7 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
         /// 3. ---------- PASS ONLY FILTERED STRUCTURE DATA
         $filtered_data          = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
 
-        
+        // print_r($filtered_data);
         /// 4. ---------- Get Final output
         $final_data             = el_events_by_category_FINAL_DATA($filtered_data, $received_data);
 
