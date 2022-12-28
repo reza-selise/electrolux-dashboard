@@ -112,6 +112,7 @@ function EventByStatus() {
     const eventByStatusYears = useSelector(state => state.eventByStatusYears.value);
     const eventByStatusYearMonth = useSelector(state => state.eventByStatusYearMonth.value);
     const eventByStatusMonths = useSelector(state => state.eventByStatusMonths.value);
+    const eventByStatusCustomDate = useSelector(state => state.eventByStatusCustomDate.value);
 
     useEffect(() => {
         const years = [];
@@ -146,7 +147,11 @@ function EventByStatus() {
                 });
                 break;
             case 'custom_date_range':
-                setPayload();
+                setPayload({
+                    request_data: 'events',
+                    filter_type: 'years',
+                    request_body: JSON.stringify(eventByStatusCustomDate),
+                });
                 break;
             case 'custom_time_frame':
                 setPayload();
@@ -156,7 +161,12 @@ function EventByStatus() {
                 setPayload();
                 console.log('Cooking course type default payload');
         }
-    }, [eventByStatusYears, eventByStatusYearMonth, eventByStatusFilterType]);
+    }, [
+        eventByStatusYears,
+        eventByStatusYearMonth,
+        eventByStatusFilterType,
+        eventByStatusCustomDate,
+    ]);
 
     return (
         <>
