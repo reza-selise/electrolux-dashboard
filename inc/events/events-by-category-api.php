@@ -80,14 +80,14 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
         // print_r($timeline_type,$timeline_filter);
         /// 1. ---------- Get product IDs
-        $product_ids               = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
+        $product_ids               = get_products_by_timeline_filter( $timeline_type,$timeline_filter,$received_data );
 
         /// 2. ---------- Get Structure data along with post id
         $structure_data         = el_events_by_category_STRUCTURE_DATA($product_ids);
 
 
         /// 3. ---------- PASS ONLY FILTERED STRUCTURE DATA
-        $filtered_data            = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
+        $filtered_data          = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
 
         
         /// 4. ---------- Get Final output
@@ -116,49 +116,6 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
         
     }
 }
-
-// // this function will use to 
-// function el_events_by_category_FILTER_DATA($structure_data, $requestData){
-
-//     // var_dump($requestData);
-//     $filter_arr = $requestData['filter_key_value'];
-//     $output = [];
-
-//     // loop through all the posts
-//     foreach($structure_data as $product_id => $product_data ){        
-
-//         $is_satisfy = true;
-
-//         // loop through all the filter if not match/fount return false
-//         foreach( $filter_arr as $key => $value ){
-
-//             if( isset( $product_data[$key] ) ){
-                
-//                 $saved_value_to_match   = sanitize_key( $product_data[$key] );
-//                 $request_value_to_match = sanitize_key( $value );
-
-//                 if( $saved_value_to_match == $request_value_to_match ){
-//                     // do nothing        
-//                 }else{
-//                     $is_satisfy = false;
-//                 }
-
-//             }else{
-//                 $is_satisfy = false;
-//             }
-
-//         }
-
-//         if($is_satisfy == true){
-//             $output[$product_id] = $product_data;
-//         }
-
-//     }
-
-
-//     return $output;
-
-// }
 
 
 // this function will output the final data to 
@@ -411,7 +368,8 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
         $product_cats       = get_the_terms( $single_product_id , 'product_cat' );
         $each_product_category_arr = []; // use to store all the category along with post id 
         foreach( $product_cats as $cat){
-            $cat_id     = $cat->term_id;
+            // $cat_id     =  $cat->term_id;
+            $cat_id     =  sanitize_key( $cat->name ); // because we want to count if name is same
             $cat_name   = $cat->name;
 
             // store unique category
@@ -429,6 +387,12 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
 
 
 
+        // add filtering info 
+        $filter_arr = el_get_product_filter_information($single_product_id);
+
+        foreach( $filter_arr as $filter_key => $filter_value ){
+            $structure_data[$single_product_id][$filter_key] = $filter_value;
+        }
 
     } // for loop end
 

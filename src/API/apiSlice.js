@@ -41,21 +41,22 @@ export const eluxAPI = createApi({
                 method: 'GET',
             }),
         }),
-        eventByLocation: builder.query({
+        eventByMonths: builder.query({
             query: payload => ({
-                url: `elux-dashboard/v1/events-by-location?${new URLSearchParams(payload)}`,
-                method: 'GET',
-            }),
-        }),
-        eventByMoths: builder.query({
-            query: payload => ({
-                url: `elux-dashboard/v1/events-by-year?${new URLSearchParams(payload)}`,
+                url: `elux-dashboard/v1/events-by-month?${new URLSearchParams(payload)}`,
                 method: 'GET',
             }),
         }),
         eventByCategory: builder.query({
             query: payload => ({
                 url: 'elux-dashboard/v1/events-by-category',
+                method: 'POST',
+                body: payload,
+            }),
+        }),
+        cookingCourseType: builder.query({
+            query: payload => ({
+                url: 'elux-dashboard/v1/events-by-cooking-course-type',
                 method: 'POST',
                 body: payload,
             }),
@@ -69,6 +70,8 @@ export const {
     useDeleteGenericCommentMutation,
     useUpdateGenericCommentMutation,
     useEventByYearQuery,
+    useEventByMonthsQuery,
     useEventByLocationQuery,
     useEventByCategoryQuery,
+    useCookingCourseTypeQuery,
 } = eluxAPI;

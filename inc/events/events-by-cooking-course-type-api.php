@@ -54,7 +54,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
 
         // print_r($timeline_type,$timeline_filter);
         /// 1. ---------- Get product IDs
-        $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter);
+        $product_ids        = get_products_by_timeline_filter( $timeline_type,$timeline_filter, $received_data );
 
         /// 2. ---------- Get Structure data along with post id
         $structure_data     = el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids);
@@ -66,15 +66,20 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
 
         
         // /// 4. ---------- Get Final output
-        $final_data         = el_events_by_cooking_course_type_FINAL_DATA($filtered_data, $received_data);
+        $graph_data         = el_events_by_cooking_course_type_FINAL_DATA($filtered_data, $received_data);
+
+        $table_data         = el_event_by_cooking_course_TABLE_FINAL_DATA($filtered_data, $received_data);
+
+        // print_r($table_data);
 
 
-
-        if($structure_data && $final_data ){
+        if($structure_data && $graph_data  && $table_data ){
             return rest_ensure_response( array(
                 'status'    => true,
                 'message'   => 'Data fetch successful',
-                'data'      => $final_data,
+                'data'      => $graph_data,
+                'table_data'=> $table_data,
+                'graph_data'=> $graph_data
             ) );
         }else{
             return rest_ensure_response( array(
@@ -108,9 +113,10 @@ function el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids){
         1496 => [
             'year' => 2021,
             'month' => 12,
+            "total_sales" => 46
             'filter_name' => filter_value
             'attribute_name' => attribute_value
-            'filter_name_2' => filter_value 
+            'filter_name_2' => filter_value,
         ]
     ]
      * 
@@ -304,4 +310,146 @@ function el_events_by_cooking_course_type_FINAL_DATA($structure_data, $requestDa
     ];
 
 
+}
+
+
+
+function el_event_by_cooking_course_TABLE_FINAL_DATA($structure_data, $requestData){
+    
+    $labels = []; // store all the years
+
+
+    foreach($structure_data  as $id =>  $item){
+        $year = $item['event_time']['year'];
+        if(!in_array($year, $labels)){
+            $labels[] = $year;
+        }
+    }
+
+
+    /*
+
+        [cat_id] =>{
+            label : category name,
+            year_data : {
+                2022 : 5
+                2021 : 5
+            }
+        }
+
+        [658] =>{
+            label : Fish,
+            total : 6546546
+            year_data : {
+                2022 : 54
+                2021 : 589
+            }
+        }
+
+    */
+
+    // count the data 
+    $data_by_category_and_year = [];
+    
+    foreach($structure_data  as $id =>  $product_data){
+
+
+
+        $category_list  = $product_data['category'];
+        $event_year  = $product_data['event_time']['year'];
+
+        foreach($category_list as $cat_id => $cat_name){
+
+            if( !isset($data_by_category_and_year[$cat_id]) ){
+                $data_by_category_and_year[$cat_id]['label'] = $cat_name;
+            }
+
+
+            if( $requestData['type'] == 'participants' ){
+
+                $previous_count =  0;
+
+                if( isset($data_by_category_and_year[$cat_id]['year_data'][$event_year])) {
+                    $previous_count = intval( $data_by_category_and_year[$cat_id]['year_data'][$event_year]);
+                }
+
+                $this_product_sell_count =  intval($product_data['total_sales']);
+
+                $data_by_category_and_year[$cat_id]['year_data'][$event_year] = $previous_count + $this_product_sell_count;
+
+
+                
+            }else{
+                $previous_count = 0;
+
+                if( isset($data_by_category_and_year[$cat_id]['year_data'][$event_year])) {
+                    $previous_count = $data_by_category_and_year[$cat_id]['year_data'][$event_year];
+                }
+    
+                $data_by_category_and_year[$cat_id]['year_data'][$event_year] = $previous_count + 1;
+            }
+
+
+            
+
+        }
+        
+    }
+
+    // Calculate total 
+    foreach($data_by_category_and_year as $cat_id => $item){
+        $total = 0; 
+
+        $year_data = $data_by_category_and_year[$cat_id]['year_data'];
+
+        foreach($year_data as $year => $year_value ){
+            $total = $total + intval($year_value);
+        }
+
+        $data_by_category_and_year[$cat_id]['total'] = $total;
+
+    }
+
+
+
+
+    $table_rows = [];
+
+    // print_r($data_by_category_and_year);
+    foreach($data_by_category_and_year as $cat_id => $cat_arr ){
+
+
+        $each_table_row = [ $cat_arr['label'] ];
+
+
+        // loop through all the label and append the data RESPECTIVELY (in order)
+        foreach( $labels as $year ){
+
+            
+            // check if year data exist in the array or not 
+            if( isset( $cat_arr['year_data'][$year] ) ){
+                $number_to_push = $cat_arr['year_data'][$year];
+            }else{
+                $number_to_push = 0;
+            }
+
+            $each_table_row[] = $number_to_push;
+
+        }
+        // add last item 
+        $each_table_row[] = $cat_arr['total'];
+
+        $table_rows[] = $each_table_row;
+
+    }
+
+    
+    $labels[] = "Total";
+    array_unshift($labels , "Years");
+
+
+    return [
+        'labels'    => $labels,
+        'rows'      => $table_rows
+    ];
 }
