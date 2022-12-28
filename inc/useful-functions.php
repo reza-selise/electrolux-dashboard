@@ -267,6 +267,10 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
             // loop through all the filter if not match/fount return false
             foreach( $filter_arr as $key => $value ){
 
+                if( in_array($key , $skip_keys) ){
+                    continue;
+                }
+
 
                 if( isset( $each_product_filter_arr[$key] ) ){
 
@@ -277,7 +281,7 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
 
 
                     if( $key == 'category' ){
-                        
+
                         if( isset($saved_value_to_match[$request_value_to_match]) ){
                             // do nothing 
 
