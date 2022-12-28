@@ -41,6 +41,12 @@ export const eluxAPI = createApi({
                 method: 'GET',
             }),
         }),
+        eventByLocation: builder.query({
+            query: payload => ({
+                url: `elux-dashboard/v1/events-by-location?${new URLSearchParams(payload)}`,
+                method: 'GET',
+            }),
+        }),
         eventByMonths: builder.query({
             query: payload => ({
                 url: `elux-dashboard/v1/events-by-month?${new URLSearchParams(payload)}`,
@@ -78,6 +84,7 @@ export const {
     useUpdateGenericCommentMutation,
     useEventByYearQuery,
     useEventByMonthsQuery,
+    useEventByLocationQuery,
     useEventByCategoryQuery,
     useCookingCourseTypeQuery,
     useEventByCancellationQuery
