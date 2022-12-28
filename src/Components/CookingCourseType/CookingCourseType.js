@@ -83,7 +83,9 @@ function CookingCourseType() {
     const cookingCourseYears = useSelector(state => state.cookingCourseYears.value);
     const cookingCourseMonths = useSelector(state => state.cookingCourseMonths.value);
     const cookingCourseYearMonths = useSelector(state => state.cookingCourseYearMonths.value);
-    // console.log('cookingCourseYearMonths', cookingCourseYearMonths);
+    const cookingCourseCustomDate = useSelector(state => state.cookingCourseCustomDate.value);
+
+    // console.log('cookingCourseCustomDate', cookingCourseCustomDate);
     useEffect(() => {
         console.log('cookingCourseFilterType', cookingCourseFilterType);
         switch (cookingCourseFilterType) {
@@ -113,7 +115,7 @@ function CookingCourseType() {
                 setPayload({
                     type: requestData,
                     timeline_type: 'custom_date_range',
-                    timeline_filter: cookingCourseMonths,
+                    timeline_filter: cookingCourseCustomDate,
                     filter_key_value: {
                         product_status: productStatus,
                     },
@@ -146,6 +148,7 @@ function CookingCourseType() {
         cookingCourseMonths,
         productStatus,
         cookingCourseYearMonths,
+        cookingCourseCustomDate,
     ]);
 
     const { data, isLoading } = useCookingCourseTypeQuery(payload);
