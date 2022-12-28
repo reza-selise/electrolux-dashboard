@@ -44,47 +44,44 @@ export const options = {
 };
 
 function MyTable({ data }) {
-    const dataSource = [
-        {
-            key: '1',
-            year: "Canceled by customer",
-            year2019: 15,
-            year2018: 3,
-            year2017: 35,
-            year2016: 35,
-            total: 123,
-        },
-       
-    ];
+    const dataSource = [];
 
+    data.labels.forEach((label, outerIndex) => {
+        const row = {
+            key: outerIndex,
+            year: label,
+        };
+        let total = 0
+        data.datasets.forEach((data, index) => {
+            row[`year${data.label}`] = data.data[outerIndex];
+            total = total + parseInt(data.data[outerIndex])
+        });
+        dataSource.push({...row,total:total});
+
+       
+    });
     const columns = [
         {
             title: 'Year',
             dataIndex: 'year',
             key: 'year',
         },
-
-        {
-            title: '2019',
-            dataIndex: 'year2019',
-            key: 'year2019',
-        },
-        {
-            title: '2018',
-            dataIndex: 'year2018',
-            key: 'year2018',
-        },
-        {
-            title: '2017',
-            dataIndex: 'year2017',
-            key: 'year2017',
-        },
-        {
-            title: 'Total',
-            dataIndex: 'total',
-            key: 'total',
-        },
     ];
+
+    data.datasets.forEach((item, index) => {
+        const column = {
+            title: item.label,
+            dataIndex: `year${item.label}`,
+            key: index,
+        };
+        columns.push(column);
+    });
+
+    columns.push({
+        title: 'Total',
+        dataIndex: 'total',
+        key: 'total',
+    });
 
     return <Table dataSource={dataSource} columns={columns} />;
 }
