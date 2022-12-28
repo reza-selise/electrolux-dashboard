@@ -62,7 +62,7 @@ function MyTable({ data }) {
     });
     const columns = [
         {
-            title: 'Year',
+            title: 'Reason For Cancellation',
             dataIndex: 'year',
             key: 'year',
         },
