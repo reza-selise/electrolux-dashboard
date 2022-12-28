@@ -12,11 +12,6 @@ import React,{useState} from 'react';
 // eslint-disable-next-line import/no-unresolved
 import {useSelector} from 'react-redux';
 import {useEventByLocationQuery} from '../../API/apiSlice';
-import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
-import { Bar } from 'react-chartjs-2';
-import LocalFilter from '../LocalFilter/LocalFilter';
-import { eluxTranslation } from '../../Translation/Translation';
-import DownloadButton from '../DownloadButton/DownloadButton';
 import './EventByLocation.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -58,18 +53,45 @@ function EventByLocation() {
     //     year: year.toString(),
     //     months: eventByLocationTimelineMonths.toString(),
     // }));
-    const requestBody = eventByLocationTimelineYears.map(year => ({
-        year: year.toString(),
-        months: '02,05,06',
-    }));
+    const requestBody = [
+        {
+            year: '2022',
+            // months: '',
+            months: '01,02,03,04,05,06,07,08,09,10,11,12',
+        },
+    ];
     const payload = {
         filter_type: 'years',
         request_data: 'events',
         locations: '188,191',
         request_body: JSON.stringify(requestBody),
     };
-    const { data, error, isLoading } = useEventByLocationQuery(payload);
+    // const { data, error, isLoading } = useEventByLocationQuery(payload);
+    // const data = useEventByLocationQuery(payload);
     console.log('data-request-body', requestBody);
+    // console.log('data-location', data);
+    // console.log('data-location', data, 'error ', error, 'is-loading', isLoading);
+
+    const wrapWithPromise = () =>
+        new Promise((resolve, reject) => {
+            try {
+                const { data, error, isLoading } = useEventByLocationQuery(payload);
+                resolve({ data, error, isLoading });
+            } catch (e) {
+                reject(e);
+            }
+        });
+
+    wrapWithPromise()
+        .then(result => {
+            // code to handle successful execution
+            console.log('data-location', result);
+        })
+        .catch(error => {
+            // code to handle error
+            console.log('data-location-error', error);
+        });
+
     // const getLocations = () => ['191', '188', '183', '512', '507'];
     // const getDataFromLocation = (location, locationYear) =>
     //     eventByLocationTimelineYears.map(year => locationYear === year && location[year]);
@@ -82,8 +104,7 @@ function EventByLocation() {
     //     backgroundColor: colors[index % colors.length],
     // }));
 
-    // console.log('datasets', datasets);
-    console.log('data-location', data, 'error ', error, 'is-loading', isLoading);
+    // // console.log('datasets', datasets);
 
     // const graphData = {
     //     labels,
