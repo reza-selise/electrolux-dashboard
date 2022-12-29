@@ -530,7 +530,7 @@ function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
         
         // include other language term  ids [ de_CH , fr_FR, it_IT ]
         $language_arr = [ 'de_CH' , 'fr_FR', 'it_IT' ];
-        for($i=0; $i<3; $i++ ){
+        for($i=0; $i< count($language_arr); $i++ ){
             $term_id = pll_get_term($cat_id, $language_arr[$i]);
 
             if( intval($term_id)){

@@ -153,7 +153,7 @@ function el_events_by_salesperson_STRUCTURE_DATA($product_ids){
 
         $event_time_string  = (string) get_post_meta( $single_product_id, 'date', true );
 
-        $structure_data[$single_product_id]['name'] = $salesperson_name;
+        // $structure_data[$single_product_id]['name'] = $salesperson_name;
         
 
         if( is_string($event_time_string) && trim($event_time_string) && strlen($event_time_string) === 8 ){
