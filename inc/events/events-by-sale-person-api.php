@@ -194,6 +194,15 @@ function el_events_by_salesperson_STRUCTURE_DATA($product_ids){
         $structure_data[$single_product_id]['category'] = $each_product_category_arr;
         // END ------------ CATEGORY ADDING
 
+
+        // add filtering info 
+        $filter_arr = el_GET_PRODUCT_FILTER_VALUES($single_product_id);
+
+        foreach( $filter_arr as $filter_key => $filter_value ){
+            $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
+        }
+
+
     } // for loop end
 
     // print_r($structure_data);
