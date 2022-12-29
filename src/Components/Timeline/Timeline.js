@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCookingCourseFilterType } from '../../Redux/Slice/CookingCourseType/CookingCourseFilterType';
 import { setEventByCategoryFilterType } from '../../Redux/Slice/EventByCategory/eventByCategoryFilterType';
 import { setEventByMonthFilterType } from '../../Redux/Slice/EventByMonth/eventByMonthFilterType';
+import { setEventByStatusFilterType } from '../../Redux/Slice/EventByStatus/EventByStatusFilterType';
 import { setEventByYearFilterType } from '../../Redux/Slice/EventByYear/eventByYearFilterType';
 import { setEventByLocationFilterType } from '../../Redux/Slice/EventByLocation/eventByLocationFilterType';
 import FilterTypeCustomDate from '../FilterTypeCustomDate/FilterTypeCustomDate';
@@ -38,6 +39,9 @@ function Timeline() {
                 break;
             case 'cooking-course-type-timeline':
                 dispatch(setCookingCourseFilterType(filterType));
+                break;
+            case 'event-by-status-timeline':
+                dispatch(setEventByStatusFilterType(filterType));
                 break;
 
             default:

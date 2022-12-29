@@ -77,6 +77,8 @@ if( ! function_exists( 'elux_get_events_by_cancellation' ) ){
             
         }
 
+        // print_r($structure_data);
+
 
         //// 3. ---------- Apply global filter Filter data
         $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
@@ -164,11 +166,17 @@ function el_ORDERS_by_cancellation_STRUCTURE_DATA($product_ids){
                 }
                 $structure_data[$single_product_id]['category'] = $each_product_category_arr;
 
+                // Collect filter information 
+                $filter_arr = el_GET_PRODUCT_FILTER_VALUES($current_order_product_id);
+
+                foreach( $filter_arr as $filter_key => $filter_value ){
+                    $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
+                }
+
+
             }
 
             $structure_data[$single_product_id]['canceled_by'] = $canceled_by;
-
-            
 
             // END storing category 
             
@@ -218,8 +226,6 @@ function el_events_by_cancellation_STRUCTURE_DATA($product_ids){
         // START --------- Event status (Taken place, planed, cancelled)
         $product_status     =  sanitize_key( get_post_meta( $single_product_id, 'product_status', true ) );
         
-
-        
         
         if( $product_status == 'canceled' ){
 
@@ -263,23 +269,29 @@ function el_events_by_cancellation_STRUCTURE_DATA($product_ids){
             // START ---  For Cooking course type ADDING
             $each_product_category_arr = [];
 
-            $parent_category_id =  47;  // Cooking Class Parent category id 
             
             $product_cats       = get_the_terms( $single_product_id , 'product_cat' );
 
             foreach( $product_cats as $cat){
 
-                // we only interest in Cooking class sub category
-                if( intval($cat->parent) == 47 ){
-                    $cat_id     = $cat->term_id;
-                    $cat_name   = $cat->name;
-                    // push each category in a array
-                    $each_product_category_arr[$cat_id] = $cat_name;
-                }
+                $cat_id     = $cat->term_id;
+                $cat_name   = $cat->name;
+                // push each category in a array
+                $each_product_category_arr[$cat_id] = $cat_name;
 
             }
             $structure_data[$single_product_id]['category'] = $each_product_category_arr;
             // END ------------ CATEGORY ADDING
+
+            // Collect filter information 
+            $filter_arr = el_GET_PRODUCT_FILTER_VALUES($single_product_id);
+
+            foreach( $filter_arr as $filter_key => $filter_value ){
+                $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
+            }
+
+            // Filter information adding done
+
 
         }// if its  a cancelled event
 

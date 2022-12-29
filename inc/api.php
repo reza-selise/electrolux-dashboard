@@ -9,6 +9,7 @@ class Elux_DB_API {
 	public function init() {
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-by-year-api.php';
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-by-month-api.php';
+		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-by-status-api.php';
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-by-location-api.php';
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/generic-comments-api.php';
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/section-comment-api.php';

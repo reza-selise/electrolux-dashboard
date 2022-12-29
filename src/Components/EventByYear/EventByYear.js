@@ -6,6 +6,7 @@ import {
     Legend,
     LinearScale,
     Title,
+    // eslint-disable-next-line prettier/prettier
     Tooltip
 } from 'chart.js';
 import React, { useEffect, useState } from 'react';
@@ -60,6 +61,11 @@ function EventByYear() {
     const [grapOrTableEvntYear, setGrapOrTableEvntYear] = useState('graph');
 
     useEffect(() => {
+        const years = [];
+        const currentYear = new Date().getFullYear();
+        for (let i = 0; i < 5; i += 1) {
+            years.push(currentYear - i);
+        }
         switch (eventByYearFilterType) {
             case 'custom_date_range':
                 setRequestBody(eventbyYearTimelineYearDateRange);
@@ -74,7 +80,7 @@ function EventByYear() {
                 break;
             case 'months':
                 setRequestBody(
-                    eventbyYearTimelineYears.map(year => ({
+                    years.map(year => ({
                         year: year.toString(),
                         months: eventbyYearTimelineMonth.toString(),
                     }))
@@ -151,6 +157,7 @@ function EventByYear() {
                     Overview of Events <span>by year</span>
                 </h2>
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestData}
                     setRequestData={setRequestData}
                     location="event-by-year-timeline"

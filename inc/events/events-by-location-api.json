@@ -1,5 +1,28 @@
 
 // request from frontend
+// for global filter
+
+{
+    "filter_type": "months",
+    "request_data": "events",
+    "locations": "45900",
+    "customer_types" : "electrolux_internal,b2b,b2c",
+    "booking_types" : "Walk-in,Booked Manually",
+    "event_status": "reserved,planned,took_place",
+    "categories": "10,12,87",
+    "sales_employee": "8,8,55",
+    "request_body": [
+        {
+            "year": "2012",
+            "months": "01"
+        },
+         {
+            "year": "2021",
+            "months": "01"
+        }
+    ]
+   
+}
 
 {
     "filter_type": "months",

@@ -59,10 +59,10 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
         /// 2. ---------- Get Structure data along with post id
         $structure_data     = el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids);
 
-
+        // print_r($structure_data);
 
         /// 3. ---------- Filter data
-        $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
+        $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data,['category']);
 
         
         // /// 4. ---------- Get Final output
@@ -176,7 +176,10 @@ function el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids){
         foreach( $product_cats as $cat){
 
             // we only interest in Cooking class sub category
-            if( intval($cat->parent) == 47 ){
+            if( 
+                intval($cat->parent) == 47 ||  
+                intval($cat->parent) == 26 
+            ){
                 $cat_id     = $cat->term_id;
                 $cat_name   = $cat->name;
                 // push each category in a array
@@ -186,6 +189,15 @@ function el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids){
         }
         $structure_data[$single_product_id]['category'] = $each_product_category_arr;
         // END ------------ CATEGORY ADDING
+
+        // add filtering info 
+        $filter_arr = el_GET_PRODUCT_FILTER_VALUES($single_product_id);
+
+        foreach( $filter_arr as $filter_key => $filter_value ){
+            $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
+        }
+
+
 
     } // for loop end
 
