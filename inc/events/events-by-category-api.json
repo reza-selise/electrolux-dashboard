@@ -4,8 +4,9 @@
 
     "timeline_type" : "months|years|custom_date_range",
 
-    "filter_key_value" : {
-        "product_status" : "Planned"
+    "filter_key_values" : {
+        "product_status" : "Planned",
+        "category"  : "26"
     },
 
     "year_months" : ["01","02","03","04","05"], // only use in query while timeline_type=years

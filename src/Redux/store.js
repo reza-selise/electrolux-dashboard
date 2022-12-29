@@ -19,6 +19,11 @@ import eventByLocationTimelineYearsReducer from './Slice/EventByLocation/eventBy
 import eventByMonthFilterTypeReducer from './Slice/EventByMonth/eventByMonthFilterType';
 import eventbyMonthTimelineYearsReducer from './Slice/EventByMonth/eventByMonthTimelineYears';
 import eventbyMonthTimelineMonthReducer from './Slice/EventByMonth/eventMyMonthTimelineMonth';
+import eventByStatusCustomDateReducer from './Slice/EventByStatus/EventByStatusCustomDate';
+import eventByStatusFilterTypeReducer from './Slice/EventByStatus/EventByStatusFilterType';
+import eventByStatusMonthsReducer from './Slice/EventByStatus/EventByStatusMonths';
+import eventByStatusYearMonthReducer from './Slice/EventByStatus/EventByStatusYearMonth';
+import eventByStatusYearsReducer from './Slice/EventByStatus/EventByStatusYears';
 import eventByYearFilterTypeReducer from './Slice/EventByYear/eventByYearFilterType';
 import eventbyYearTimelineMonthReducer from './Slice/EventByYear/eventByYearTimelineMonth';
 import eventbyYearTimelineYearsReducer from './Slice/EventByYear/eventByYearTimelineYear';
@@ -53,6 +58,11 @@ export const store = configureStore({
         eventByCancellationMonths:eventByCancellationMonthsReducer,
         eventByCancellationYearMonths:eventByCancellationYearMonthsReducer,
         eventByCancellationCustomDate:eventByCancellationCustomDateReducer,
+        eventByStatusFilterType: eventByStatusFilterTypeReducer,
+        eventByStatusYearMonth: eventByStatusYearMonthReducer,
+        eventByStatusYears: eventByStatusYearsReducer,
+        eventByStatusMonths: eventByStatusMonthsReducer,
+        eventByStatusCustomDate: eventByStatusCustomDateReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });

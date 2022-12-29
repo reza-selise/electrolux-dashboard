@@ -60,6 +60,12 @@ export const eluxAPI = createApi({
                 body: payload,
             }),
         }),
+        eventByStatus: builder.query({
+            query: payload => ({
+                url: `elux-dashboard/v1/events-by-status?${new URLSearchParams(payload)}`,
+                method: 'GET',
+            }),
+        }),
         cookingCourseType: builder.query({
             query: payload => ({
                 url: 'elux-dashboard/v1/events-by-cooking-course-type',
@@ -71,7 +77,7 @@ export const eluxAPI = createApi({
             query: payload => ({
                 url: `elux-dashboard/v1/events-by-cancellation`,
                 method: 'POST',
-                body:payload,
+                body: payload,
             }),
         }),
     }),
@@ -87,5 +93,6 @@ export const {
     useEventByLocationQuery,
     useEventByCategoryQuery,
     useCookingCourseTypeQuery,
-    useEventByCancellationQuery
+    useEventByStatusQuery,
+    useEventByCancellationQuery,
 } = eluxAPI;

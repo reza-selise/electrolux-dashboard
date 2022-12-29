@@ -59,7 +59,7 @@ function EventByMonth() {
     // ************** dynamic years **********
     let years = [];
     years = data && data.data.years.map(item => item.year);
-    
+
     let months = [];
     months = data && data.data.years.map(item => item.months);
 
@@ -181,6 +181,7 @@ function EventByMonth() {
                     Overview of Events <span>by month</span>
                 </h2>
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestData}
                     setRequestData={setRequestData}
                     location="event-by-months-timeline"
