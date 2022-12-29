@@ -97,13 +97,15 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
 
         if($structure_data && $final_data ){
             return rest_ensure_response( array(
+                'status_code' => 200,
                 'status'    => true,
                 'message'   => 'Data fetch successful',
                 'data'      => $final_data,
             ) );
         }else{
             
-            return rest_ensure_response( array(
+            return rest_ensure_response( array( 
+                'status_code' => 400,
                 'status'        => false,                
                 'message'   => 'No data found.',
                 'dev_message'   => '$structure_data & $final_data receive failed to receive',

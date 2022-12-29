@@ -45,6 +45,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
 
         if( $timeline_type == false || $timeline_filter == false  ){
             return rest_ensure_response([
+                'status_code' => 400,
                 'status' =>false,
                 'data'  => [],
                 'message' => "No valid input found, timeline_type, timeline_filter"
@@ -75,6 +76,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
 
         if($structure_data && $graph_data  && $table_data ){
             return rest_ensure_response( array(
+                'status_code' => 200,
                 'status'    => true,
                 'message'   => 'Data fetch successful',
                 'data'      => $graph_data,
@@ -83,6 +85,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
             ) );
         }else{
             return rest_ensure_response( array(
+                'status_code' => 400,
                 'status'        => false,                
                 'message'   => 'No data found.',
                 'dev_message'   => '$structure_data & $final_data receive failed to receive',
