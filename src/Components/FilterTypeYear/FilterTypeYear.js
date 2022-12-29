@@ -1,12 +1,14 @@
 import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setCookingCourseYearMonths } from '../../Redux/Slice/CookingCourseType/CookingCourseYearMonths';
 import { setCookingCourseYears } from '../../Redux/Slice/CookingCourseType/CookingCourseYears';
 import { setEventbyCategoryTimelineYears } from '../../Redux/Slice/EventByCategory/eventbyCategoryTimelineYears';
 import { setEventbyMonthTimelineYears } from '../../Redux/Slice/EventByMonth/eventByMonthTimelineYears';
+import { seteventByStatusYearMonth } from '../../Redux/Slice/EventByStatus/EventByStatusYearMonth';
+import { setEventByStatusYears } from '../../Redux/Slice/EventByStatus/EventByStatusYears';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
-import { setCookingCourseYearMonths } from '../../Redux/Slice/CookingCourseType/CookingCourseYearMonths';
 import './FilterTypeYear.scss';
 
 function FilterTypeYear() {
@@ -39,6 +41,9 @@ function FilterTypeYear() {
                 case 'cooking-course-type-timeline':
                     dispatch(setCookingCourseYears(years));
                     break;
+                case 'event-by-status-timeline':
+                    dispatch(setEventByStatusYears(years));
+                    break;
 
                 default:
                     console.log('filter type year default');
@@ -56,6 +61,9 @@ function FilterTypeYear() {
                     break;
                 case 'cooking-course-type-timeline':
                     dispatch(setCookingCourseYears(value));
+                    break;
+                case 'event-by-status-timeline':
+                    dispatch(setEventByStatusYears(value));
                     break;
 
                 default:
@@ -85,6 +93,9 @@ function FilterTypeYear() {
                 break;
             case 'cooking-course-type-timeline':
                 dispatch(setCookingCourseYearMonths(value));
+                break;
+            case 'event-by-status-timeline':
+                dispatch(seteventByStatusYearMonth(value));
                 break;
 
             default:

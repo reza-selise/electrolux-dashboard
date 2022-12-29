@@ -146,8 +146,6 @@ function get_generic_filter_data($request){
     $users = [];
     if ( ! empty( $user_query->get_results() ) ) {
         foreach ( $user_query->get_results() as $user ) {
-            error_log(print_r('users' ,1));
-            error_log(print_r($user ,1));
            $user_name = $user->data->display_name;
            $user_id = $user->data->ID;
            $user_email = $user->data->user_email;

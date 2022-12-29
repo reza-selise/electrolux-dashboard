@@ -1,4 +1,5 @@
 import { DatePicker } from 'antd';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +7,7 @@ import deleteIcon from '../../images/delete.svg';
 import plusIcon from '../../images/plus.svg';
 import { setCookingCourseCustomDate } from '../../Redux/Slice/CookingCourseType/CookingCourseCustomDate';
 import { setEventbyYearTimelineYearDateRange } from '../../Redux/Slice/EventByYear/eventbyYearTimelineYearDateRange';
+import { setEventByStatusCustomDate } from '../../Redux/Slice/EventByStatus/EventByStatusCustomDate';
 import './FilterTypeCustomDate.scss';
 
 function FilterTypeCustomDate() {
@@ -61,6 +63,9 @@ function FilterTypeCustomDate() {
                 dispatch(
                     setCookingCourseCustomDate(dateRanges.map(({ start, end }) => [start, end]))
                 );
+                break;
+            case 'event-by-status-timeline':
+                dispatch(setEventByStatusCustomDate(dateRanges));
                 break;
 
             default:

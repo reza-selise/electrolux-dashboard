@@ -59,7 +59,7 @@ function EventByMonth() {
     // ************** dynamic years **********
     let years = [];
     years = data && data.data.years.map(item => item.year);
-    
+
     let months = [];
     months = data && data.data.years.map(item => item.months);
 
@@ -174,13 +174,14 @@ function EventByMonth() {
                     setgGrapOrTable={setgGrapOrTableForMonth}
                     name="event-by-month"
                 />
-                <DownloadButton />
+                <DownloadButton identifier={3}/>
             </div>
             <div className="graph-overview">
                 <h2 className="graph-title">
                     Overview of Events <span>by month</span>
                 </h2>
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestData}
                     setRequestData={setRequestData}
                     location="event-by-months-timeline"
