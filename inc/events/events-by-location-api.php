@@ -11,6 +11,12 @@ add_action( 'rest_api_init', function () {
 });
 
 function get_event_by_locations($request){
+    $event_status           = $request->get_params()['event_status']; // planned | cancelled etc. [event_status on product meta]
+    $customer_type          = $request->get_params()['customer_type']; // b2b | b2c | electrolux_internal | all etc. [customer_type on product meta]
+    $booking_type           = $request->get_params()['booking_type']; // Manual Booking | Walk-in [consultation_booking_type on order meta]
+    $sales_employee         = $request->get_params()['sales_employee']; // user id [event_consultant on order meta]
+    $event_categories       = $request->get_params()['categories'];  // category ids [product category on product]
+
     $request_data =  $request->get_params()['request_data']; // events,participants 
     $filter_type =  $request->get_params()['filter_type'];
     $request_body =  $request->get_params()['request_body'];
@@ -28,10 +34,8 @@ function get_event_by_locations($request){
     $my_years = array();
     foreach($gallery_locations_arr as $gallery_location){
         $my_data = array(
-            "location"  => $gallery_location,
-            "total" => 0,//get_order_count($gallery_location,$filter_type,$start_date,$end_date),
-    
-        
+            "location"  => get_the_title($gallery_location),
+            "total" => 0,//get_order_count($gallery_location,$filter_type,$start_date,$end_date),        
         );
         if(!empty($request_body)){
             // by months and year
@@ -58,7 +62,7 @@ function get_event_by_locations($request){
         
                     if(!empty($yearly_order_ids2) && 'events'== $request_data){
                         $my_data[$single_year['year']] =  count($yearly_order_ids2); // push to main array
-                
+                       
                     }
                     
                     elseif(!empty($yearly_order_ids2) && 'participants'== $request_data){
@@ -66,7 +70,9 @@ function get_event_by_locations($request){
                     }
                     else{
                         $my_data[$single_year['year']] = 0;
-                    }                    
+                    }   
+                    // location wise total count
+                    $my_data['total'] += $my_data[$single_year['year']];                 
                 }
             }
             // by custom date range
@@ -78,9 +84,7 @@ function get_event_by_locations($request){
                         if( empty( $single_range['start'] ) || empty( $single_range['end'] ) ){
                             continue;
                         }
-                        error_log(print_r('single range',1));
-                        error_log(print_r($single_range,1));
-                        
+                       
                         $start_date = $single_range['start'] . ' 00:00:00' ;
                         $end_date   = $single_range['end'] . ' 23:59:59' ;
                         
@@ -117,6 +121,10 @@ function get_event_by_locations($request){
 
                                 
                             }
+
+                            // location wise total count
+                            $my_data['total'] +=  $my_data[$start_year]; 
+
                         } elseif ( $start_year !== $end_year ) {    // selected range is not within same year
                             for( $i = $start_year; $i <= $end_year; $i++ ) {
                                 if ( $i === $start_year ){
@@ -155,7 +163,10 @@ function get_event_by_locations($request){
                                         $my_data[$i] = event_person_count($yearly_order_ids[$i]);
                                     }
                                 }
+                                 // location wise total count
+                                $my_data['total'] +=  $my_data[$i];
                             }
+                           
                         }
                     }
                     $my_data['location'] = $gallery_location;
