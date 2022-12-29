@@ -498,7 +498,7 @@ function get_order_ids_by_range( $start_range, $end_range ){
 }
 
 
-// collect filter information which will use to do FILTERING 
+// collect filter information which will use to do GLOBAL FILTERING by : el_FILTER_PRODUCTS_from_structure_data () this function 
 function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
     
     $output = [];
@@ -530,8 +530,8 @@ function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
         
         // include other language term  ids [ de_CH , fr_FR, it_IT ]
         $language_arr = [ 'de_CH' , 'fr_FR', 'it_IT' ];
-        for($i=0; $i<3; $i++ ){
-            $term_id = pll_get_term(15, 'fr_FR');
+        for($i=0; $i< count($language_arr); $i++ ){
+            $term_id = pll_get_term($cat_id, $language_arr[$i]);
 
             if( intval($term_id)){
                 $each_product_category_arr[intval($term_id)] = $cat_name;

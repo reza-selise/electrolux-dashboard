@@ -9,6 +9,9 @@ import { seteventByStatusYearMonth } from '../../Redux/Slice/EventByStatus/Event
 import { setEventByStatusYears } from '../../Redux/Slice/EventByStatus/EventByStatusYears';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
+import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
+import { setEventByLocationTimelineYears } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineYears';
+
 import './FilterTypeYear.scss';
 
 function FilterTypeYear() {
@@ -32,6 +35,9 @@ function FilterTypeYear() {
                 case 'event-by-year-timeline':
                     dispatch(setEventbyYearTimelineYears(years));
                     break;
+                case 'event-by-location-timeline':
+                    dispatch(setEventByLocationTimelineYears(years));
+                    break;
                 case 'event-by-category-timeline':
                     dispatch(setEventbyCategoryTimelineYears(years));
                     break;
@@ -46,12 +52,16 @@ function FilterTypeYear() {
                     break;
 
                 default:
-                    console.log('filter type year default');
+                    console.log('filter type year default', location);
             }
         } else {
             switch (location) {
                 case 'event-by-year-timeline':
                     dispatch(setEventbyYearTimelineYears(value));
+                    break;
+                case 'event-by-location-timeline':
+                    console.log('before dispacth', value);
+                    dispatch(setEventByLocationTimelineYears(value));
                     break;
                 case 'event-by-category-timeline':
                     dispatch(setEventbyCategoryTimelineYears(value));
@@ -67,7 +77,7 @@ function FilterTypeYear() {
                     break;
 
                 default:
-                    console.log('filter type year default');
+                    console.log('filter type year default', location);
             }
         }
     };
@@ -84,6 +94,9 @@ function FilterTypeYear() {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineMonth(value));
+                break;
+            case 'event-by-location-timeline':
+                dispatch(setEventbyLocationTimelineMonth(value));
                 break;
             case 'event-by-category-timeline':
                 dispatch(setEventbyCategoryTimelineYears(value));

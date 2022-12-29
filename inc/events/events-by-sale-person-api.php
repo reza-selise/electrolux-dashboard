@@ -92,27 +92,27 @@ function el_events_by_salesperson_STRUCTURE_DATA($product_ids){
      * 
      * return 
      * example output
-    [
-        1500 => [
-            'year' => 2022,
-            'month' => 01,
-            
-            'person_ids'=[], // important 
-            
-            'category' => [ cat_id =>  cat_name , cat_id =>  cat_name ]
-            'filter_name' => filter_value
+      *  [
+      *       1500 => [
+      *           'year' => 2022,
+       *          'month' => 01,
+        *         
+        *        'person_ids'=[], // important 
+     *            
+       *          'category' => [ cat_id =>  cat_name , cat_id =>  cat_name ]
+      *           'filter_name' => filter_value
 
-            'attribute_name' => attribute_value
-            'filter_name_2' => filter_value 
-        ],
-        1496 => [
-            'year' => 2021,
-            'month' => 12,
-            'filter_name' => filter_value
-            'attribute_name' => attribute_value
-            'filter_name_2' => filter_value 
-        ]
-    ]
+       *          'attribute_name' => attribute_value
+        *         'filter_name_2' => filter_value 
+       *      ],
+        *     1496 => [
+      *          'year' => 2021,
+       *          'month' => 12,
+       *          'filter_name' => filter_value
+         *        'attribute_name' => attribute_value
+        *         'filter_name_2' => filter_value 
+        *     ]
+      *   ]
      * 
      * 
      */
@@ -153,7 +153,7 @@ function el_events_by_salesperson_STRUCTURE_DATA($product_ids){
 
         $event_time_string  = (string) get_post_meta( $single_product_id, 'date', true );
 
-        $structure_data[$single_product_id]['name'] = $salesperson_name;
+        // $structure_data[$single_product_id]['name'] = $salesperson_name;
         
 
         if( is_string($event_time_string) && trim($event_time_string) && strlen($event_time_string) === 8 ){
@@ -193,6 +193,15 @@ function el_events_by_salesperson_STRUCTURE_DATA($product_ids){
         }
         $structure_data[$single_product_id]['category'] = $each_product_category_arr;
         // END ------------ CATEGORY ADDING
+
+
+        // add filtering info 
+        $filter_arr = el_GET_PRODUCT_FILTER_VALUES($single_product_id);
+
+        foreach( $filter_arr as $filter_key => $filter_value ){
+            $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
+        }
+
 
     } // for loop end
 

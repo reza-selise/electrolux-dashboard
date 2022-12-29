@@ -87,7 +87,7 @@ if( ! function_exists( 'elux_get_events_by_category' ) ){
         // print_r($structure_data);
 
         /// 3. ---------- PASS ONLY FILTERED STRUCTURE DATA
-        $filtered_data          = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data);
+        $filtered_data          = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data, ['category'] );
 
         // print_r($filtered_data);
         /// 4. ---------- Get Final output
@@ -302,7 +302,7 @@ function el_events_by_category_STRUCTURE_DATA($product_ids){
             'year' => 2022,
             'month' => 01,
             'category' => [ cat_id =>  cat_name , cat_id =>  cat_name ]
-            'filter_name' => filter_value
+            
             'attribute_name' => attribute_value
             'filter_name_2' => filter_value ,
             "filter_key_values" => {
