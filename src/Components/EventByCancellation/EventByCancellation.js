@@ -16,7 +16,6 @@ import { useEventByCancellationQuery } from '../../API/apiSlice';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
-import './EventByCancellation.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 export const options = {
@@ -52,14 +51,12 @@ function MyTable({ data }) {
             key: outerIndex,
             year: label,
         };
-        let total = 0
+        let total = 0;
         data.datasets.forEach((data, index) => {
             row[`year${data.label}`] = data.data[outerIndex];
-            total = total + parseInt(data.data[outerIndex])
+            total = total + parseInt(data.data[outerIndex]);
         });
-        dataSource.push({...row,total:total});
-
-       
+        dataSource.push({ ...row, total: total });
     });
     const columns = [
         {
@@ -92,13 +89,18 @@ function EventByCancellation() {
     const [grapTableEventCancellation, setGrapTableEventCancellation] = useState('graph');
     const [productStatus, setProductStatus] = useState('Took Place');
     const [payload, setPayload] = useState();
-    const eventByCancellationFilterType = useSelector(state => state.eventByCancellationFilterType.value);
+    const eventByCancellationFilterType = useSelector(
+        state => state.eventByCancellationFilterType.value
+    );
     const eventByCancellationYears = useSelector(state => state.eventByCancellationYears.value);
     const eventByCancellationMonths = useSelector(state => state.eventByCancellationMonths.value);
-    const eventByCancellationYearMonths = useSelector(state => state.eventByCancellationYearMonths.value);
-    const eventByCancellationCustomDate = useSelector(state => state.eventByCancellationCustomDate.value);
+    const eventByCancellationYearMonths = useSelector(
+        state => state.eventByCancellationYearMonths.value
+    );
+    const eventByCancellationCustomDate = useSelector(
+        state => state.eventByCancellationCustomDate.value
+    );
     // const [graphData, setGraphData] = useState();
-
 
     useEffect(() => {
         console.log('eventByCancellationFilterType', eventByCancellationFilterType);
@@ -202,9 +204,11 @@ function EventByCancellation() {
                 />
                 <DownloadButton identifier={8} />
             </div>
-            <h2 className="graph-title">Overview of Event Cancellation</h2>
-            <div className="graph-overview cancellation_graph">
+
+            <div className="graph-overview">
+                <h2 className="graph-title">Overview of Event Cancellation</h2>
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestData}
                     setRequestData={setRequestData}
                     location="event-by-cancellation-timeline"

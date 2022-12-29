@@ -27,6 +27,13 @@ export const options = {
         title: {
             display: false,
         },
+        legend: {
+            align: 'start',
+            labels: {
+                boxWidth: 16,
+                boxHeight: 16,
+            },
+        },
     },
     responsive: true,
 };
@@ -174,19 +181,23 @@ function EventByMonth() {
                     setgGrapOrTable={setgGrapOrTableForMonth}
                     name="event-by-month"
                 />
-                <DownloadButton identifier={3}/>
+                <DownloadButton identifier={3} />
             </div>
-            <div className="graph-overview">
+
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                 <h2 className="graph-title">
                     Overview of Events <span>by month</span>
                 </h2>
-                <LocalFilter
-                    showBoth="true"
-                    requestData={requestData}
-                    setRequestData={setRequestData}
-                    location="event-by-months-timeline"
-                />
+                <div style={{display:"flex",columnGap:'10px'}} className="graph-overview">
+                    <LocalFilter
+                        showBoth="true"
+                        requestData={requestData}
+                        setRequestData={setRequestData}
+                        location="event-by-months-timeline"
+                    />
+                </div>
             </div>
+
             {error ? (
                 'error'
             ) : isLoading ? (
