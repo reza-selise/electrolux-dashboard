@@ -267,6 +267,7 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
             // loop through all the filter if not match/fount return false
             foreach( $filter_arr as $key => $value ){
 
+                // SKIP if match with the key 
                 if( in_array($key , $skip_keys) ){
                     continue;
                 }
@@ -276,28 +277,35 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
 
                     $saved_value_to_match   = $each_product_filter_arr[$key] ;
 
-                    $request_value_to_match = sanitize_key( $value );
-                   
-
-
+                    
+                    
+                    
                     if( $key == 'category' ){
+                        $received_category_to_match =  $value ;
 
-                        if( isset($saved_value_to_match[$request_value_to_match]) ){
-                            // do nothing 
-
-                        }else{
-                            $is_satisfy = false;
+                        foreach($received_category_to_match as $category_id){
+                            $category_id = intval( $category_id );
+                            if( isset($saved_value_to_match[$category_id]) ){
+                                // do nothing
+                            }else{
+                                $is_satisfy = false;
+                            }
                         }
+
 
                     }else if( $key == 'sales_person' ){
+                        $received_person_ids = ( $value );
 
-                        if( 
-                            in_array( $request_value_to_match, $saved_value_to_match )
-                        ){
-                            // do nothing 
-                        }else{
-                            $is_satisfy = false;
+                        foreach( $received_person_ids as $person_id ){
+                            $person_id = intval($person_id);
+
+                            if( in_array( $person_id, $saved_value_to_match ) ){
+                                // do nothing 
+                            }else{
+                                $is_satisfy = false;
+                            }
                         }
+
 
                     }else{
                         $saved_value_to_match   = sanitize_key( $each_product_filter_arr[$key] );
@@ -530,7 +538,7 @@ function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
         
         // include other language term  ids [ de_CH , fr_FR, it_IT ]
         $language_arr = [ 'de_CH' , 'fr_FR', 'it_IT' ];
-        for($i=0; $i<3; $i++ ){
+        for($i=0; $i< count($language_arr); $i++ ){
             $term_id = pll_get_term($cat_id, $language_arr[$i]);
 
             if( intval($term_id)){
