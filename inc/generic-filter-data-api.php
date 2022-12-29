@@ -137,13 +137,27 @@ function get_generic_filter_data($request){
     $return_data['locations'] = $locations;
     //------------------------------------- Users by role----------------------------------------------------------------
     $usr_args = array(
-        'role__in' => array('elex_instructor','elex_consultant', 'sales','shop_manager'),
-        // 'orderby'        => 'user_nicename',
+        'role__in' => array('administrator','elex_instructor','elex_consultant', 'sales'),
+        // 'role__in' => array('sales'),
         'order'          => 'ASC',
     );
 
     $user_query = new WP_User_Query( $args );
-    $users = [];
+    $sales_users = [];
+    $fb_leads = [];
+    $culinary_ambassadors = [
+        "role_name"=> "Culinary Ambassadors",
+        "users" => [],
+    ];
+    $consultants = [
+        "role_name"=> "Consultants",
+        "users" => [],
+    ];
+    $admins = [
+        "role_name"=> "Admins",
+        "users" => [],
+    ];
+
     if ( ! empty( $user_query->get_results() ) ) {
         foreach ( $user_query->get_results() as $user ) {
            $user_name = $user->data->display_name;
@@ -151,16 +165,39 @@ function get_generic_filter_data($request){
            $user_email = $user->data->user_email;
            $user_role = $user->roles[0];
           
+           
            $usr_data = array(
                 "id"=> $user_id,
                 "email"=>  $user_email,
                 "name"=>  $user_name,
                 "role"=>   $user_role,
             );
-            array_push($users,$usr_data);
+            // sales
+            if($user_role == 'sales'){
+                array_push($sales_users,$usr_data);
+            }
+            elseif($user_role == 'elex_instructor'){
+                array_push($culinary_ambassadors["users"], $usr_data);
+            }
+            elseif($user_role == 'elex_consultant'){
+                array_push($consultants["users"], $usr_data);
+            }
+            elseif($user_role == 'administrator'){
+                array_push($admins["users"], $usr_data);
+            }
         }
         wp_reset_postdata();
     }
-    $return_data['sales_employee'] = $users;
+    $fb_leads = [
+        $culinary_ambassadors,
+        $consultants,
+        $admins
+    ];
+
+    $return_data['fb_leads'] =  $fb_leads;
+    $return_data['sales_employee'] = $sales_users;
+
+   
+    // return  $return_data;
     return  json_encode($return_data);
 }
