@@ -278,12 +278,10 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
                     $saved_value_to_match   = $each_product_filter_arr[$key] ;
 
                     
-                    
-                    
-                    if( $key == 'category' ){
-                        $received_category_to_match =  $value ;
+                    if( $key == 'categories' ){
+                        $received_category_arr =  $value ;
 
-                        foreach($received_category_to_match as $category_id){
+                        foreach($received_category_arr as $category_id){
                             $category_id = intval( $category_id );
                             if( isset($saved_value_to_match[$category_id]) ){
                                 // do nothing
@@ -292,8 +290,17 @@ function el_FILTER_PRODUCTS_from_structure_data($structure_data, $requestData, $
                             }
                         }
 
+                    }else if( $key == 'locations' ){
+                        $received_location_arr = $value;
+                        $saved_value_to_match   = intval(  $each_product_filter_arr[$key] );
 
-                    }else if( $key == 'sales_person' ){
+                        if( in_array( $saved_value_to_match , $received_location_arr ) ){
+                            // do noting 
+                        }else{
+                            $is_satisfy = false;
+                        }
+
+                    }else if( $key == 'sales_employee' ){
                         $received_person_ids = ( $value );
 
                         foreach( $received_person_ids as $person_id ){
@@ -515,13 +522,13 @@ function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
     $customerType   = get_post_meta( $single_product_id,  'customer_type', true );
 
     if( $customerType ){
-        $output['customer_type'] = $customerType;
+        $output['customer_types'] = $customerType;
     }
     
     // location
     $location       = get_post_meta( $single_product_id, 'event_location', true );
     if( $location ){
-        $output['location'] = $location;
+        $output['locations'] = $location;
     }
 
     // get category 
@@ -552,7 +559,7 @@ function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
     $category_list  = $each_product_category_arr;
 
     if( $category_list ){
-        $output['category'] = $category_list;
+        $output['categories'] = $category_list;
     }
 
     // Lead
@@ -581,7 +588,7 @@ function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
     }
 
     if( $sales_person_arr ){
-        $output['sales_person'] = $sales_person_arr;
+        $output['sales_employee'] = $sales_person_arr;
     }
 
     //-------------------------------------------------------------
