@@ -167,7 +167,7 @@ function el_ORDERS_by_cancellation_STRUCTURE_DATA($product_ids){
                 $structure_data[$single_product_id]['category'] = $each_product_category_arr;
 
                 // Collect filter information 
-                $filter_arr = el_GET_PRODUCT_FILTER_VALUES($single_product_id);
+                $filter_arr = el_GET_PRODUCT_FILTER_VALUES($current_order_product_id);
 
                 foreach( $filter_arr as $filter_key => $filter_value ){
                     $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
