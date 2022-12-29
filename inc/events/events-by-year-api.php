@@ -23,7 +23,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
         $data_type              = $request->get_params()['request_data']; // events | participants etc.
         $event_status           = $request->get_params()['event_status']; // planned | cancelled etc.
         $customer_type          = $request->get_params()['customer_type']; // b2b | b2c | electrolux_internal | all etc.
-        $locations              = $request->get_params()['locations'];     // 188,191,500 etc.
+        $locations              = ! empty($request->get_params()['locations']) ? $request->get_params()['locations'] : '';     // 188,191,500 etc.
         $locations              = explode( ',', $locations );
 
         $request_body           = json_decode($request->get_params()['request_body']);
