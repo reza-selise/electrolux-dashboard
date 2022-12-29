@@ -100,6 +100,8 @@ function EventByYear() {
         request_data: requestData,
         filter_type: eventByYearFilterType,
         request_body: JSON.stringify(requestBody),
+        customer_type: 'all',
+        event_status: 'planned',
     };
     const { data, error, isLoading } = useEventByYearQuery(payload);
     const labels =

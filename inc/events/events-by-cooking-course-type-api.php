@@ -45,6 +45,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
 
         if( $timeline_type == false || $timeline_filter == false  ){
             return rest_ensure_response([
+                'status_code' => 400,
                 'status' =>false,
                 'data'  => [],
                 'message' => "No valid input found, timeline_type, timeline_filter"
@@ -62,7 +63,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
         // print_r($structure_data);
 
         /// 3. ---------- Filter data
-        $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data,['category']);
+        $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data,['categories']);
 
         
         // /// 4. ---------- Get Final output
@@ -75,6 +76,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
 
         if($structure_data && $graph_data  && $table_data ){
             return rest_ensure_response( array(
+                'status_code' => 200,
                 'status'    => true,
                 'message'   => 'Data fetch successful',
                 'data'      => $graph_data,
@@ -83,6 +85,7 @@ if( ! function_exists( 'elux_get_events_by_cooking_course_type' ) ){
             ) );
         }else{
             return rest_ensure_response( array(
+                'status_code' => 400,
                 'status'        => false,                
                 'message'   => 'No data found.',
                 'dev_message'   => '$structure_data & $final_data receive failed to receive',
@@ -178,7 +181,8 @@ function el_events_by_cooking_course_type_STRUCTURE_DATA($product_ids){
             // we only interest in Cooking class sub category
             if( 
                 intval($cat->parent) == 47 ||  
-                intval($cat->parent) == 26 
+                intval($cat->parent) == 49 ||
+                intval($cat->parent) == 51 
             ){
                 $cat_id     = $cat->term_id;
                 $cat_name   = $cat->name;

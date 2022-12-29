@@ -45,7 +45,7 @@ function FilterTypeCustomDate() {
         const newDateRanges = [...dateRanges];
         newDateRanges[index] = {
             ...newDateRanges[index],
-            end: moment(date).format('MMDDMMDD'),
+            end: moment(date).format('YYYYMMDD'),
         };
         setDateRanges(newDateRanges);
     };
@@ -54,6 +54,9 @@ function FilterTypeCustomDate() {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineYearDateRange(dateRanges));
+                break;
+            case 'event-by-location-timeline':
+                // dispatch(seteventbyLocationimelineYearDateRange(dateRanges));
                 break;
             case 'event-by-months-timeline':
                 // dispatch(setEventbyMonthTimelineYears([...new Set(yearsArray)]));
@@ -74,7 +77,7 @@ function FilterTypeCustomDate() {
                 break;
 
             default:
-                console.log('filter type year month default');
+                console.log('filter type year month default', location);
         }
     }, [location, dateRanges]);
 

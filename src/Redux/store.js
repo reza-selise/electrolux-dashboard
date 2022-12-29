@@ -15,7 +15,7 @@ import eventByCategoryFilterTypeReducer from './Slice/EventByCategory/eventByCat
 import eventbyCategoryTimelineYearsReducer from './Slice/EventByCategory/eventbyCategoryTimelineYears';
 import eventByLocationFilterTypeReducer from './Slice/EventByLocation/eventByLocationFilterType';
 import eventbyLocationTimelineMonthReducer from './Slice/EventByLocation/eventByLocationTimelineMonth';
-import eventByLocationTimelineYearsReducer from './Slice/EventByLocation/eventByLocationTimelineYear';
+import eventByLocationTimelineYearsReducer from './Slice/EventByLocation/eventByLocationTimelineYears';
 import eventByMonthFilterTypeReducer from './Slice/EventByMonth/eventByMonthFilterType';
 import eventbyMonthTimelineYearsReducer from './Slice/EventByMonth/eventByMonthTimelineYears';
 import eventbyMonthTimelineMonthReducer from './Slice/EventByMonth/eventMyMonthTimelineMonth';

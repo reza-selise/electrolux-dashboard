@@ -149,7 +149,7 @@ function EventByStatus() {
             case 'custom_date_range':
                 setPayload({
                     request_data: 'events',
-                    filter_type: 'years',
+                    filter_type: 'custom_date_range',
                     request_body: JSON.stringify(eventByStatusCustomDate),
                 });
                 break;

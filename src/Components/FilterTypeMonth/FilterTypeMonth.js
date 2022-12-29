@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCookingCourseMonths } from '../../Redux/Slice/CookingCourseType/CookingCourseMonths';
 import { setEventByCancellationMonths } from '../../Redux/Slice/EventByCancellation/EventByCancellationMonths';
+import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
 import { setEventbyMonthTimelineMonth } from '../../Redux/Slice/EventByMonth/eventMyMonthTimelineMonth';
 import { setEventByStatusMonths } from '../../Redux/Slice/EventByStatus/EventByStatusMonths';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
@@ -65,6 +66,9 @@ function FilterTypeMonth() {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineMonth(value));
+                break;
+            case 'event-by-location-timeline':
+                dispatch(setEventbyLocationTimelineMonth(value));
                 break;
             case 'event-by-months-timeline':
                 dispatch(setEventbyMonthTimelineMonth(value));
