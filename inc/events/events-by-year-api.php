@@ -63,7 +63,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
                     }
 
-                    $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations );
+                    $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories );
                     array_push( $all_yearly_data, $yearly_data );
                 }
 
@@ -122,7 +122,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                 $all_yearly_data = array();
                 if( is_array( $yearly_order_ids ) && !empty( $yearly_order_ids ) ){
                     foreach( $yearly_order_ids as $year => $yearly_order_ids ){
-                        $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations );
+                        $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories );
                         array_push( $all_yearly_data, $yearly_data );
                     }
                 }
@@ -150,45 +150,33 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
     
 }
 
-function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations = array() ){
+function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations = array(), $categories = array() ){
     $yearly_elux                = 0;
     $yearly_b2b                 = 0;
     $yearly_b2c                 = 0;
     $yearly_event_participants  = 0;
     $yearly_events              = 0;
 
+    // filter order id's by location.
+    $yearly_order_ids = elux_prepare_single_year_data_filter_location( $yearly_order_ids, $locations );
+
     if( is_array( $yearly_order_ids ) && ! empty( $yearly_order_ids ) ){
         foreach( $yearly_order_ids as $order_id ){
-
-            /* If, user requested for specific location data
-            *  and the current order is not from that location,
-            *  then skip to the next iteration.
-            *
-            *  Else, proceed as usual.
-            */
-            if( is_array( $locations ) && ! empty( $locations )){
-                // user has requested for specific location.
-                $event_location = ! empty( get_post_meta( $order_id, 'event_location', true ) ) ? get_post_meta( $order_id, 'event_location', true ) : 0;
-                if( ! in_array( $event_location, $locations ) ){
-                    continue;
-                }
-            }
-
             $order          = wc_get_order( $order_id );
             $order_items    = $order->get_items();
             
             if( is_array( $order_items ) && !empty( $order_items )){
-                
                 foreach( $order_items as $key => $value ){
                     $product_id = (int) $value->get_product_id();
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                     $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
                     
-                    // filter event by event_status
+                    // filter event by event_status.
                     if( $status !== $event_status ){
                         continue;
                     }
 
+                    // filter event by customer type.
                     if( ( $type !== $customer_type ) && ( 'all' !== $customer_type ) ){
                         continue;
                     }
@@ -235,4 +223,25 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
     $yearly_data['total']   = ( 'events' === $data_type ) ? $yearly_events : $yearly_event_participants;
     
     return $yearly_data;
+}
+
+function elux_prepare_single_year_data_filter_location( $yearly_order_ids, $locations = array() ){
+    /* If, user requested for specific location data
+    *  and the current order is not from that location,
+    *  then skip to the next iteration.
+    *
+    *  Else, proceed as usual.
+    */
+    if( is_array( $locations ) && ! empty( $locations ) ){
+        $valid_order_ids = array_filter( $yearly_order_ids, function( $order_id ) use( $locations ) {
+            $event_location = ! empty( get_post_meta( $order_id, 'event_location', true ) ) ? get_post_meta( $order_id, 'event_location', true ) : 0;
+            if( ! in_array( $event_location, $locations ) ){
+                return false;
+            }
+            return true;
+        });
+        return $valid_order_ids;
+    }
+
+    return $yearly_order_ids;
 }

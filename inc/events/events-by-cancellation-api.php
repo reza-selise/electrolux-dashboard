@@ -95,11 +95,13 @@ if( ! function_exists( 'elux_get_events_by_cancellation' ) ){
         if($structure_data && $final_data ){
             return rest_ensure_response( array(
                 'status'    => true,
+                'status_code' => 200,
                 'message'   => 'Data fetch successful',
                 'data'      => $final_data,
             ) );
         }else{
             return rest_ensure_response( array(
+                'status'    => 400,
                 'status'        => false,                
                 'message'   => 'No data found.',
                 'dev_message'   => '$structure_data & $final_data receive failed to receive',
