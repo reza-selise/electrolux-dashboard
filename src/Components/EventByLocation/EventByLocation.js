@@ -108,6 +108,7 @@ function EventByLocation() {
                     Overview of Events per location <span>by year</span>
                 </h2>
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestDataForLocation}
                     setRequestData={setRequestDataForLocation}
                     location="event-by-location-timeline"
