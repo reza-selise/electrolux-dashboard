@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import deleteIcon from '../../images/delete.svg';
 import plusIcon from '../../images/plus.svg';
 import { setCookingCourseCustomDate } from '../../Redux/Slice/CookingCourseType/CookingCourseCustomDate';
-import { setEventbyYearTimelineYearDateRange } from '../../Redux/Slice/EventByYear/eventbyYearTimelineYearDateRange';
 import { setEventByStatusCustomDate } from '../../Redux/Slice/EventByStatus/EventByStatusCustomDate';
+import { setEventbyYearTimelineYearDateRange } from '../../Redux/Slice/EventByYear/eventbyYearTimelineYearDateRange';
 import './FilterTypeCustomDate.scss';
 
 function FilterTypeCustomDate() {
@@ -44,7 +44,7 @@ function FilterTypeCustomDate() {
         const newDateRanges = [...dateRanges];
         newDateRanges[index] = {
             ...newDateRanges[index],
-            end: moment(date).format('MMDDMMDD'),
+            end: moment(date).format('YYYYMMDD'),
         };
         setDateRanges(newDateRanges);
     };
