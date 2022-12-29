@@ -23,8 +23,9 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
         $data_type              = $request->get_params()['request_data'];   // events | participants etc.
         $event_status           = $request->get_params()['event_status'];   // planned | cancelled etc.
         $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
-        $categories             = $request->get_params()['categories'];     // 15 | 47 | 104
-        $locations              = $request->get_params()['locations'];      // 188,191,500 etc.
+        $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
+        $categories             = explode( ',', $categories );
+        $locations              = ! empty( $request->get_params()['locations'] ) ? $request->get_params()['locations'] : '';      // 188,191,500 etc.
         $locations              = explode( ',', $locations );
 
         $request_body           = json_decode($request->get_params()['request_body']);
@@ -159,7 +160,9 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
     $yearly_events              = 0;
 
     // filter order id's by location.
-    $yearly_order_ids = elux_prepare_single_year_data_filter_location( $yearly_order_ids, $locations );
+    $yearly_order_ids   = elux_prepare_single_year_data_filter_location( $yearly_order_ids, $locations );
+
+    $categories         = elux_prepare_category_ids( $categories );
 
     if( is_array( $yearly_order_ids ) && ! empty( $yearly_order_ids ) ){
         foreach( $yearly_order_ids as $order_id ){
@@ -171,7 +174,16 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
                     $product_id = (int) $value->get_product_id();
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                     $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
-                    
+                    $product_cat= get_the_terms( $product_id , 'product_cat' );
+
+                    // filter event by category.
+                    if( !empty( $categories ) ){
+                        // check if any one of the product categories exist in the $categories array.
+                        if( empty( array_intersect( $product_cat, $categories ) ) ){
+                            continue;
+                        }
+                    }
+
                     // filter event by event_status.
                     if( $status !== $event_status ){
                         continue;
@@ -245,4 +257,27 @@ function elux_prepare_single_year_data_filter_location( $yearly_order_ids, $loca
     }
 
     return $yearly_order_ids;
+}
+
+function elux_prepare_category_ids( $categories = array() ) {
+
+    if( is_array( $categories ) && !empty( $categories )) {
+        //15,47,104
+        $all_categories     = [];
+        $languages          = array( 'de_CH' , 'fr_FR', 'it_IT' );
+        $total_languages    = count( $languages );
+
+        foreach( $categories as $category_id ){
+            for( $i = 0; $i < $total_languages; $i++ ){
+                $term_id = pll_get_term( $category_id, $languages[$i] );
+    
+                if( intval( $term_id ) && ! in_array( $term_id, $all_categories )){
+                    array_push( $all_categories, $term_id );
+                }
+            }
+        }
+        return $all_categories;
+    }
+
+    return $categories;
 }
