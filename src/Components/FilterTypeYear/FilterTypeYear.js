@@ -1,14 +1,14 @@
-import { Select } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCookingCourseYears } from '../../Redux/Slice/CookingCourseType/CookingCourseYears';
-import { setEventbyCategoryTimelineYears } from '../../Redux/Slice/EventByCategory/eventbyCategoryTimelineYears';
-import { setEventbyLocationTimelineYears } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineYear';
-import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
-import { setEventbyMonthTimelineYears } from '../../Redux/Slice/EventByMonth/eventByMonthTimelineYears';
-import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
-import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
-import { setCookingCourseYearMonths } from '../../Redux/Slice/CookingCourseType/CookingCourseYearMonths';
+import {Select} from 'antd';
+import React,{useEffect,useState} from 'react';
+import {useDispatch,useSelector} from 'react-redux';
+import {setCookingCourseYearMonths} from '../../Redux/Slice/CookingCourseType/CookingCourseYearMonths';
+import {setCookingCourseYears} from '../../Redux/Slice/CookingCourseType/CookingCourseYears';
+import {setEventbyCategoryTimelineYears} from '../../Redux/Slice/EventByCategory/eventbyCategoryTimelineYears';
+import {setEventbyLocationTimelineMonth} from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
+import {setEventByLocationTimelineYears} from '../../Redux/Slice/EventByLocation/eventByLocationTimelineYears';
+import {setEventbyMonthTimelineYears} from '../../Redux/Slice/EventByMonth/eventByMonthTimelineYears';
+import {setEventbyYearTimelineMonth} from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
+import {setEventbyYearTimelineYears} from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
 import './FilterTypeYear.scss';
 
 function FilterTypeYear() {
@@ -33,7 +33,7 @@ function FilterTypeYear() {
                     dispatch(setEventbyYearTimelineYears(years));
                     break;
                 case 'event-by-location-timeline':
-                    dispatch(setEventbyLocationTimelineYears(years));
+                    dispatch(setEventByLocationTimelineYears(years));
                     break;
                 case 'event-by-category-timeline':
                     dispatch(setEventbyCategoryTimelineYears(years));
@@ -54,7 +54,8 @@ function FilterTypeYear() {
                     dispatch(setEventbyYearTimelineYears(value));
                     break;
                 case 'event-by-location-timeline':
-                    dispatch(setEventbyLocationTimelineYears(years));
+                    console.log('before dispacth', value);
+                    dispatch(setEventByLocationTimelineYears(value));
                     break;
                 case 'event-by-category-timeline':
                     dispatch(setEventbyCategoryTimelineYears(value));

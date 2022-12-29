@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
-import { setEventbyLocationTimelineYears } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineYear';
+import { setEventByLocationTimelineYears } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineYears';
 import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
 import './FilterTypeTimeFrame.scss';
 
@@ -88,7 +88,7 @@ function FilterTypeTimeFrame() {
             case 'event-by-location-timeline':
                 if (frame === 'years') {
                     getYears(time, lastYears);
-                    dispatch(setEventbyLocationTimelineYears(lastYears));
+                    dispatch(setEventByLocationTimelineYears(lastYears));
                     dispatch(setEventbyLocationTimelineMonth(['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']));
                 } else {
                     getMonths(time, years);
