@@ -92,27 +92,27 @@ function el_events_by_salesperson_STRUCTURE_DATA($product_ids){
      * 
      * return 
      * example output
-    [
-        1500 => [
-            'year' => 2022,
-            'month' => 01,
-            
-            'person_ids'=[], // important 
-            
-            'category' => [ cat_id =>  cat_name , cat_id =>  cat_name ]
-            'filter_name' => filter_value
+      *  [
+      *       1500 => [
+      *           'year' => 2022,
+       *          'month' => 01,
+        *         
+        *        'person_ids'=[], // important 
+     *            
+       *          'category' => [ cat_id =>  cat_name , cat_id =>  cat_name ]
+      *           'filter_name' => filter_value
 
-            'attribute_name' => attribute_value
-            'filter_name_2' => filter_value 
-        ],
-        1496 => [
-            'year' => 2021,
-            'month' => 12,
-            'filter_name' => filter_value
-            'attribute_name' => attribute_value
-            'filter_name_2' => filter_value 
-        ]
-    ]
+       *          'attribute_name' => attribute_value
+        *         'filter_name_2' => filter_value 
+       *      ],
+        *     1496 => [
+      *          'year' => 2021,
+       *          'month' => 12,
+       *          'filter_name' => filter_value
+         *        'attribute_name' => attribute_value
+        *         'filter_name_2' => filter_value 
+        *     ]
+      *   ]
      * 
      * 
      */

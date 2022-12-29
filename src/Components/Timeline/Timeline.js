@@ -6,6 +6,7 @@ import { setEventByCategoryFilterType } from '../../Redux/Slice/EventByCategory/
 import { setEventByMonthFilterType } from '../../Redux/Slice/EventByMonth/eventByMonthFilterType';
 import { setEventByStatusFilterType } from '../../Redux/Slice/EventByStatus/EventByStatusFilterType';
 import { setEventByYearFilterType } from '../../Redux/Slice/EventByYear/eventByYearFilterType';
+import { setEventByLocationFilterType } from '../../Redux/Slice/EventByLocation/eventByLocationFilterType';
 import FilterTypeCustomDate from '../FilterTypeCustomDate/FilterTypeCustomDate';
 import FilterTypeMonth from '../FilterTypeMonth/FilterTypeMonth';
 import FilterTypeTimeFrame from '../FilterTypeTImeFrame/FilterTypeTimeFrame';
@@ -26,6 +27,9 @@ function Timeline() {
             case 'event-by-year-timeline':
                 dispatch(setEventByYearFilterType(filterType));
                 break;
+            case 'event-by-location-timeline':
+                dispatch(setEventByLocationFilterType(filterType));
+                break;
             case 'event-by-category-timeline':
                 dispatch(setEventByCategoryFilterType(filterType));
                 break;
@@ -41,7 +45,7 @@ function Timeline() {
                 break;
 
             default:
-                console.log('filter type default');
+                console.log('filter type default', location);
         }
     }, [filterType]);
 
