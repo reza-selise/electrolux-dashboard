@@ -8,7 +8,7 @@ import {
     Title,
     Tooltip
 } from 'chart.js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
@@ -91,7 +91,7 @@ function EventByCancellation() {
     const [requestData, setRequestData] = useState('events');
     const [grapTableEventCancellation, setGrapTableEventCancellation] = useState('graph');
     const [productStatus, setProductStatus] = useState('Took Place');
-    // const [payload, setPayload] = useState();
+    const [payload, setPayload] = useState();
     const eventByCancellationFilterType = useSelector(state => state.eventByCancellationFilterType.value);
     const eventByCancellationYears = useSelector(state => state.eventByCancellationYears.value);
     const eventByCancellationMonths = useSelector(state => state.eventByCancellationMonths.value);
@@ -100,76 +100,76 @@ function EventByCancellation() {
     // const [graphData, setGraphData] = useState();
 
 
-    // useEffect(() => {
-    //     console.log('eventByCancellationFilterType', eventByCancellationFilterType);
-    //     switch (eventByCancellationFilterType) {
-    //         case 'years':
-    //             setPayload({
-    //                 type: requestData,
-    //                 timeline_type: 'years',
-    //                 timeline_filter: eventByCancellationYears,
-    //                 filter_key_value: {
-    //                     product_status: productStatus,
-    //                 },
-    //                 year_months: eventByCancellationYearMonths,
-    //             });
-    //             break;
+    useEffect(() => {
+        console.log('eventByCancellationFilterType', eventByCancellationFilterType);
+        switch (eventByCancellationFilterType) {
+            case 'years':
+                setPayload({
+                    type: requestData,
+                    timeline_type: 'years',
+                    timeline_filter: eventByCancellationYears,
+                    filter_key_value: {
+                        product_status: productStatus,
+                    },
+                    year_months: eventByCancellationYearMonths,
+                });
+                break;
 
-    //         case 'months':
-    //             setPayload({
-    //                 type: requestData,
-    //                 timeline_type: 'months',
-    //                 timeline_filter: eventByCancellationMonths,
-    //                 filter_key_value: {
-    //                     product_status: productStatus,
-    //                 },
-    //             });
-    //             break;
-    //         case 'custom_date_range':
-    //             setPayload({
-    //                 type: requestData,
-    //                 timeline_type: 'custom_date_range',
-    //                 timeline_filter: eventByCancellationCustomDate,
-    //                 filter_key_value: {
-    //                     product_status: productStatus,
-    //                 },
-    //             });
-    //             break;
-    //         case 'custom_time_frame':
-    //             setPayload({
-    //                 type: requestData,
-    //                 timeline_type: 'custom_time_frame',
-    //                 timeline_filter: eventByCancellationMonths,
-    //                 filter_key_value: {
-    //                     product_status: productStatus,
-    //                 },
-    //             });
-    //             break;
+            case 'months':
+                setPayload({
+                    type: requestData,
+                    timeline_type: 'months',
+                    timeline_filter: eventByCancellationMonths,
+                    filter_key_value: {
+                        product_status: productStatus,
+                    },
+                });
+                break;
+            case 'custom_date_range':
+                setPayload({
+                    type: requestData,
+                    timeline_type: 'custom_date_range',
+                    timeline_filter: eventByCancellationCustomDate,
+                    filter_key_value: {
+                        product_status: productStatus,
+                    },
+                });
+                break;
+            case 'custom_time_frame':
+                setPayload({
+                    type: requestData,
+                    timeline_type: 'custom_time_frame',
+                    timeline_filter: eventByCancellationMonths,
+                    filter_key_value: {
+                        product_status: productStatus,
+                    },
+                });
+                break;
 
-    //         default:
-    //             setPayload({
-    //                 type: 'events',
-    //                 timeline_type: 'years',
-    //                 timeline_filter: ['2022', '2021', '2020', '2019', '2018'],
-    //                 filter_key_value: {},
-    //             });
-    //             console.log('Cooking course type default payload');
-    //     }
-    // }, [
-    //     requestData,
-    //     eventByCancellationFilterType,
-    //     eventByCancellationYears,
-    //     eventByCancellationMonths,
-    //     productStatus,
-    //     eventByCancellationYearMonths,
-    //     eventByCancellationCustomDate,
-    // ]);
-    const payload = {
-        type: requestData,
-        timeline_type: 'years',
-        timeline_filter: ['2022', '2024', '2021', '2020'],
-        filter_key_value: {},
-    };
+            default:
+                setPayload({
+                    type: 'events',
+                    timeline_type: 'years',
+                    timeline_filter: ['2022', '2024', '2021', '2020'],
+                    filter_key_value: {},
+                });
+                console.log('Event By Cancellation default payload');
+        }
+    }, [
+        requestData,
+        eventByCancellationFilterType,
+        eventByCancellationYears,
+        eventByCancellationMonths,
+        productStatus,
+        eventByCancellationYearMonths,
+        eventByCancellationCustomDate,
+    ]);
+    // const payload = {
+    //     type: requestData,
+    //     timeline_type: 'years',
+    //     timeline_filter: ['2022', '2024', '2021', '2020'],
+    //     filter_key_value: {},
+    // };
     const { data, isLoading } = useEventByCancellationQuery(payload);
     console.log(data, 'data of event cancel');
 

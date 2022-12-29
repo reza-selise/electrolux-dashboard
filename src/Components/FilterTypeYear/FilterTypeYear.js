@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCookingCourseYearMonths } from '../../Redux/Slice/CookingCourseType/CookingCourseYearMonths';
 import { setCookingCourseYears } from '../../Redux/Slice/CookingCourseType/CookingCourseYears';
+import { setEventByCancellationYearMonths } from '../../Redux/Slice/EventByCancellation/EventByCancellationYearMonths';
+import { setEventByCancellationYears } from '../../Redux/Slice/EventByCancellation/EventByCancellationYears';
 import { setEventbyCategoryTimelineYears } from '../../Redux/Slice/EventByCategory/eventbyCategoryTimelineYears';
 import { setEventbyMonthTimelineYears } from '../../Redux/Slice/EventByMonth/eventByMonthTimelineYears';
 import { seteventByStatusYearMonth } from '../../Redux/Slice/EventByStatus/EventByStatusYearMonth';
@@ -41,6 +43,10 @@ function FilterTypeYear() {
                 case 'cooking-course-type-timeline':
                     dispatch(setCookingCourseYears(years));
                     break;
+                case 'event-by-cancellation-timeline':
+                    dispatch(setEventByCancellationYears(years));
+                    break;
+
                 case 'event-by-status-timeline':
                     dispatch(setEventByStatusYears(years));
                     break;
@@ -64,6 +70,9 @@ function FilterTypeYear() {
                     break;
                 case 'event-by-status-timeline':
                     dispatch(setEventByStatusYears(value));
+                    break;
+                case 'event-by-cancellation-timeline':
+                    dispatch(setEventByCancellationYears(value));
                     break;
 
                 default:
@@ -96,6 +105,9 @@ function FilterTypeYear() {
                 break;
             case 'event-by-status-timeline':
                 dispatch(seteventByStatusYearMonth(value));
+                break;
+            case 'event-by-cancellation-timeline':
+                dispatch(setEventByCancellationYearMonths(value));
                 break;
 
             default:

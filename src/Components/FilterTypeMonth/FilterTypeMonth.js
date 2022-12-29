@@ -2,9 +2,10 @@ import { Select } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCookingCourseMonths } from '../../Redux/Slice/CookingCourseType/CookingCourseMonths';
+import { setEventByCancellationMonths } from '../../Redux/Slice/EventByCancellation/EventByCancellationMonths';
 import { setEventbyMonthTimelineMonth } from '../../Redux/Slice/EventByMonth/eventMyMonthTimelineMonth';
-import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventByStatusMonths } from '../../Redux/Slice/EventByStatus/EventByStatusMonths';
+import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 
 function FilterTypeMonth() {
     const location = useSelector(state => state.location.value);
@@ -73,6 +74,9 @@ function FilterTypeMonth() {
                 break;
             case 'event-by-status-timeline':
                 dispatch(setEventByStatusMonths(value));
+                break;
+            case 'event-by-cancellation-timeline':
+                dispatch(setEventByCancellationMonths(value));
                 break;
 
             default:
