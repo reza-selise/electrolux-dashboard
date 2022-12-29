@@ -5,6 +5,7 @@ import { setCookingCourseMonths } from '../../Redux/Slice/CookingCourseType/Cook
 import { setEventbyMonthTimelineMonth } from '../../Redux/Slice/EventByMonth/eventMyMonthTimelineMonth';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventByStatusMonths } from '../../Redux/Slice/EventByStatus/EventByStatusMonths';
+import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
 
 function FilterTypeMonth() {
     const location = useSelector(state => state.location.value);
@@ -64,6 +65,9 @@ function FilterTypeMonth() {
         switch (location) {
             case 'event-by-year-timeline':
                 dispatch(setEventbyYearTimelineMonth(value));
+                break;
+            case 'event-by-location-timeline':
+                dispatch(setEventbyLocationTimelineMonth(value));
                 break;
             case 'event-by-months-timeline':
                 dispatch(setEventbyMonthTimelineMonth(value));
