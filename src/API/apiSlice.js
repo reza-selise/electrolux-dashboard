@@ -80,6 +80,13 @@ export const eluxAPI = createApi({
                 body: payload,
             }),
         }),
+        eventPerSalesPerson: builder.query({
+            query: payload => ({
+                url: `elux-dashboard/v1/events-by-sale-person`,
+                method: 'POST',
+                body: payload,
+            }),
+        }),
     }),
 });
 
@@ -95,4 +102,5 @@ export const {
     useCookingCourseTypeQuery,
     useEventByStatusQuery,
     useEventByCancellationQuery,
+    useEventPerSalesPersonQuery,
 } = eluxAPI;

@@ -79,7 +79,12 @@ function CookingCourseType() {
     const [requestData, setRequestData] = useState('events');
     const [grapTableCookingCourse, setGrapTableCookingCourse] = useState('graph');
     const [productStatus, setProductStatus] = useState('Took Place');
-    const [payload, setPayload] = useState();
+    const [payload, setPayload] = useState({
+        type: 'events',
+        timeline_type: 'years',
+        timeline_filter: ['2022', '2021', '2020', '2019', '2018'],
+        filter_key_value: {},
+    });
     const cookingCourseFilterType = useSelector(state => state.cookingCourseFilterType.value);
     const cookingCourseYears = useSelector(state => state.cookingCourseYears.value);
     const cookingCourseMonths = useSelector(state => state.cookingCourseMonths.value);

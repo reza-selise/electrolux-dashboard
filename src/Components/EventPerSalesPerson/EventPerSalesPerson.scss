@@ -1,0 +1,45 @@
+.event-per-sales-person{
+    .event-per-sales-person-table{
+        width: 100%;
+        border-collapse: collapse;
+        thead{
+            tr{
+                
+                background: #DFE7EA;
+                height: 42px;
+                th{
+                    border-bottom: 1px solid #252969;
+                    &:first-child{
+                        text-align: left;
+                        padding-left: 8px;
+                    }
+                    &:not(:last-child){
+                        border-right: 1px solid #ADB9C3;
+                    }
+                }
+            }
+        }
+        tbody{
+            border: 1px solid #ADB9C3;
+            td{
+                border-bottom: 1px solid #252969;
+                text-align: center;
+                height: 33px;
+    
+                &:first-child{
+                    text-align: left;
+                    padding-left: 8px;
+                }
+                &:not(:last-child){
+                    border-right: 1px solid #ADB9C3;
+                }
+                &:last-child{
+                    background: #DFE7EA;
+                }
+            }
+        }
+    }
+    .graph-title{
+        margin: 0;
+    }
+}

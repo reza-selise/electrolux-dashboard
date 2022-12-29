@@ -11,6 +11,7 @@ import EventByLocation from '../../Components/EventByLocation/EventByLocation';
 import EventByMonth from '../../Components/EventByMonth/EventByMonth';
 import EventByStatus from '../../Components/EventByStatus/EventByStatus';
 import EventByYear from '../../Components/EventByYear/EventByYear';
+import EventPerSalesPerson from '../../Components/EventPerSalesPerson/EventPerSalesPerson';
 import GlobalFilterButton from '../../Components/GlobalFilterButton/GlobalFilterButton';
 import { eluxTranslation } from '../../Translation/Translation';
 import './Events.scss';
@@ -70,7 +71,11 @@ function Events() {
                             <CookingCourseType />
                         </ErrorBoundary>
                     </Col>
-                    <Col span={12} />
+                    <Col span={12}>
+                        <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            <EventPerSalesPerson />
+                        </ErrorBoundary>
+                    </Col>
                 </Row>
             </Container>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
