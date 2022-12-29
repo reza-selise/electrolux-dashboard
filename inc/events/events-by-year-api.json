@@ -37,6 +37,7 @@
     "event_status": "planned/cancelled/took_place",
     "customer_type": "b2b/b2c/electrolux_internal/all",
     "locations": "188,191,500",
+    "categories": "15,47,104",
     "request_body": [
         {
             "year": "2021",
