@@ -14,16 +14,31 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
     function elux_get_events_by_month( $request ) {
         
         $disallowed_event_types = array( 'giftcard', 'voucher' );
-        $allowed_request_data   = array( 'events', 'participants' );
-        $allowed_filter_types   = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
-        $filter_type            = $request->get_params()['filter_type'];
-        $request_data           = $request->get_params()['request_data']; // can be events or participants.
+        $allowed_data_type      = array( 'events', 'participants' );
+        $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
+        $allowed_event_status   = array( 'planned', 'cancelled', 'taken_place' );
+        $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
+        
+        $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
+        $locations              = ! empty( $request->get_params()['locations'] ) ? $request->get_params()['locations'] : '';      // 188,191,500 etc.
+        $locations              = explode( ',', $locations );
+        $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
+        $categories             = explode( ',', $categories );
+        $data_type              = $request->get_params()['request_data']; // can be events or participants.
+        $event_status           = $request->get_params()['event_status'];   // planned | cancelled etc.
+        $timeline               = $request->get_params()['filter_type'];
+        
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
-            "type"  => $request_data
+            "type"  => $data_type
         );
 
-        if( ! in_array($filter_type, $allowed_filter_types) || ! in_array($request_data, $allowed_request_data) || ! is_array( $request_body ) || empty( $request_body )){
+        if( ! in_array( $timeline, $allowed_timeline ) || 
+            ! in_array( $data_type, $allowed_data_type ) || 
+            ! in_array( $event_status, $allowed_event_status ) || 
+            ! in_array( $customer_type, $allowed_customer_type ) || 
+            ! is_array( $request_body ) || 
+            empty( $request_body ) ){
             return rest_ensure_response( array(
                 'status_code' => 403,
                 'message'     => 'failure',
@@ -31,7 +46,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
             ) );
         }
 
-        switch( $filter_type ){
+        switch( $timeline ){
             case 'custom_time_frame':
             case 'months':
             case 'years':
@@ -48,7 +63,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
                         $end_date           = $year . '-' . $month . '-31 23:59:59' ;
                         $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
-                        $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $request_data );
+                        $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories );
                         $single_year_data["months"][] = $monthly_data;
                     }
                     array_push( $all_yearly_data, $single_year_data );
@@ -125,7 +140,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                         }
 
                         foreach ( $monthly_order_ids as $month => $ids ) {
-                            $monthly_data       = elux_prepare_single_month_data( $month, $ids, $request_data );
+                            $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories );
                             $single_year_data["months"][] = $monthly_data;
                         }
                         array_push( $all_yearly_data, $single_year_data );
@@ -155,60 +170,86 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
     
 }
 
-function elux_prepare_single_month_data( $month, $monthly_order_ids, $request_data ){
+function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories ){
     $monthly_elux                = 0;
     $monthly_b2b                 = 0;
     $monthly_b2c                 = 0;
     $monthly_event_participants  = 0;
+    $monthly_events              = 0;
 
-    foreach( $monthly_order_ids as $order_id ){
-        $order      = wc_get_order( $order_id );
-        $order_items = $order->get_items();
+    // filter order id's by location.
+    $monthly_order_ids   = elux_prepare_order_ids_by_location_filter( $monthly_order_ids, $locations );
+
+    $categories          = elux_prepare_category_ids_with_localization( $categories );
+
+    if( is_array( $monthly_order_ids ) && ! empty( $monthly_order_ids ) ){
+        foreach( $monthly_order_ids as $order_id ){
+            $order      = wc_get_order( $order_id );
+            $order_items = $order->get_items();
+            
+            if( is_array( $order_items ) && !empty( $order_items )){
+                foreach( $order_items as $key => $value ){
+                    $product_id = (int) $value->get_product_id();
+                    $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
+                    $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
+                    $product_cat= get_the_terms( $product_id , 'product_cat' );
+
+                    // filter event by category.
+                    // check if any one of the product categories exist in the $categories array.
+                    if( !empty( $categories ) && empty( array_intersect( $product_cat, $categories ) )){
+                        continue;
+                    }
+
+                    // filter event by event_status.
+                    if( $status !== $event_status ){
+                        continue;
+                    }
+
+                    // filter event by customer type.
+                    if( ( $type !== $customer_type ) && ( 'all' !== $customer_type ) ){
+                        continue;
+                    }
+
+                    $participants_qty           = (int) $value->get_quantity();
+                    $monthly_event_participants += $participants_qty;
+                    $monthly_events++;
         
-        if( is_array( $order_items ) && !empty( $order_items )){
-            
-            foreach( $order_items as $key => $value ){
-                $product_id = (int) $value->get_product_id();
-                $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
-            
-                $participants_qty           = (int) $value->get_quantity();
-                $monthly_event_participants += $participants_qty;
-    
-                switch( $request_data ){
-                    case 'events':
-                        if ( 'b2b' === $type ){
-                            $monthly_b2b++;
-                        } elseif ( 'b2c' === $type ){
-                            $monthly_b2c++;
-                        } elseif ( 'electrolux_internal' === $type ){
-                            $monthly_elux++;
-                        }
-    
-                        break;
-                    case 'participants':
-                        if ( 'b2b' === $type ){
-                            $monthly_b2b += $participants_qty;
-                        } elseif ( 'b2c' === $type ){
-                            $monthly_b2c += $participants_qty;
-                        } elseif ( 'electrolux_internal' === $type ){
-                            $monthly_elux += $participants_qty;
-                        }
-    
-                        break;
-                    default:
-                        break;
+                    switch( $data_type ){
+                        case 'events':
+                            if ( 'b2b' === $type ){
+                                $monthly_b2b++;
+                            } elseif ( 'b2c' === $type ){
+                                $monthly_b2c++;
+                            } elseif ( 'electrolux_internal' === $type ){
+                                $monthly_elux++;
+                            }
+        
+                            break;
+                        case 'participants':
+                            if ( 'b2b' === $type ){
+                                $monthly_b2b += $participants_qty;
+                            } elseif ( 'b2c' === $type ){
+                                $monthly_b2c += $participants_qty;
+                            } elseif ( 'electrolux_internal' === $type ){
+                                $monthly_elux += $participants_qty;
+                            }
+        
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
     }
 
     $monthly_data = array(
-        "month"  => $month,
+        "month" => $month,
         "elux"  => $monthly_elux,
         "b2b"   => $monthly_b2b,
         "b2c"   => $monthly_b2c,
     );
-    $monthly_data['total']   = 'events' === $request_data ? count( $monthly_order_ids ) : $monthly_event_participants;
+    $monthly_data['total']   = ( 'events' === $data_type ) ? $monthly_events : $monthly_event_participants;
     
     return $monthly_data;
 }

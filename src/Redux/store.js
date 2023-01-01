@@ -6,6 +6,11 @@ import cookingCourseFilterTypeReducer from './Slice/CookingCourseType/CookingCou
 import cookingCourseMonthsReducer from './Slice/CookingCourseType/CookingCourseMonths';
 import cookingCourseYearMonthsReducer from './Slice/CookingCourseType/CookingCourseYearMonths';
 import cookingCourseYearsReducer from './Slice/CookingCourseType/CookingCourseYears';
+import eventByCancellationCustomDateReducer from './Slice/EventByCancellation/EventByCancellationCustomDate';
+import eventByCancellationFilterTypeReducer from './Slice/EventByCancellation/EventByCancellationFilterType';
+import eventByCancellationMonthsReducer from './Slice/EventByCancellation/EventByCancellationMonths';
+import eventByCancellationYearMonthsReducer from './Slice/EventByCancellation/EventByCancellationYearMonths';
+import eventByCancellationYearsReducer from './Slice/EventByCancellation/EventByCancellationYears';
 import eventByCategoryFilterTypeReducer from './Slice/EventByCategory/eventByCategoryFilterType';
 import eventbyCategoryTimelineYearsReducer from './Slice/EventByCategory/eventbyCategoryTimelineYears';
 import eventByLocationFilterTypeReducer from './Slice/EventByLocation/eventByLocationFilterType';
@@ -48,6 +53,11 @@ export const store = configureStore({
         eventByLocationFilterType: eventByLocationFilterTypeReducer,
         eventbyLocationTimelineMonth: eventbyLocationTimelineMonthReducer,
         eventByLocationTimelineYears: eventByLocationTimelineYearsReducer,
+        eventByCancellationFilterType:eventByCancellationFilterTypeReducer,
+        eventByCancellationYears:eventByCancellationYearsReducer,
+        eventByCancellationMonths:eventByCancellationMonthsReducer,
+        eventByCancellationYearMonths:eventByCancellationYearMonthsReducer,
+        eventByCancellationCustomDate:eventByCancellationCustomDateReducer,
         eventByStatusFilterType: eventByStatusFilterTypeReducer,
         eventByStatusYearMonth: eventByStatusYearMonthReducer,
         eventByStatusYears: eventByStatusYearsReducer,

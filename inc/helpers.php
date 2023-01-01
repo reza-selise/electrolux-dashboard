@@ -27,3 +27,57 @@ if( !function_exists( 'elux_filter_valid_events' ) ){
         }
     }
 }
+
+
+if( ! function_exists( 'elux_prepare_order_ids_by_location_filter' ) ){
+
+    function elux_prepare_order_ids_by_location_filter( $order_ids, $locations = array() ){
+        /* If, user requested for specific location data
+        *  and the current order is not from that location,
+        *  then skip to the next iteration.
+        *
+        *  Else, proceed as usual.
+        */
+        if( is_array( $locations ) && ! empty( $locations ) ){
+            $valid_order_ids = array_filter( $order_ids, function( $order_id ) use( $locations ) {
+                $event_location = ! empty( get_post_meta( $order_id, 'event_location', true ) ) ? get_post_meta( $order_id, 'event_location', true ) : 0;
+                if( ! in_array( $event_location, $locations ) ){
+                    return false;
+                }
+                return true;
+            });
+            $order_ids = $valid_order_ids;
+        }
+    
+        return $order_ids;
+    }
+    
+}
+
+if( ! function_exists( 'elux_prepare_category_ids_with_localization' ) ){
+
+    function elux_prepare_category_ids_with_localization( $categories = array() ) {
+
+        if( is_array( $categories ) && !empty( $categories )) {
+            //15,47,104
+            $all_categories     = [];
+            $languages          = array( 'de_CH' , 'fr_FR', 'it_IT' );
+            $total_languages    = count( $languages );
+    
+            foreach( $categories as $category_id ){
+                for( $i = 0; $i < $total_languages; $i++ ){
+                    $term_id = pll_get_term( $category_id, $languages[$i] );
+        
+                    if( intval( $term_id ) && ! in_array( $term_id, $all_categories )){
+                        array_push( $all_categories, $term_id );
+                    }
+                }
+            }
+            $categories = $all_categories;
+        }
+    
+        return $categories;
+    }
+    
+}
+
