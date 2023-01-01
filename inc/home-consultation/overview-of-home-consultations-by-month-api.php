@@ -203,58 +203,8 @@ function el_get_home_consultations_by_month_FINAL_DATA($structure_data, $request
     ];
 
     // get dataset by year
-    $dataset_by_year    = [];
+    $dataset_by_year    = el_get_home_consultations_dataset_by_year($structure_data);
 
-    // var_dump( "Total data found > ". count($structure_data));
-
-    // Loop through all the products and store the cat id 
-    foreach( $structure_data as $single_product_id =>  $each_product_data  ){
-
-        if( isset($each_product_data['year']) ){
-
-            $saved_year = sanitize_key($each_product_data['year'] );
-            $saved_month = sanitize_key($each_product_data['month']);
-
-            
-
-
-            foreach( $labels_by_month as $loop_month_number => $loop_month_name ){
-
-
-                if( 
-                    isset($dataset_by_year[$saved_year][$loop_month_number])
-
-                ){
-
-                    if( $loop_month_number == $saved_month ){
-                        $previous_count = $dataset_by_year[$saved_year][$loop_month_number] ;
-                        $dataset_by_year[$saved_year][$loop_month_number] = $previous_count + 1 ;
-                    }
-
-                    
-                }else{
-                    
-                    if( $loop_month_number == $saved_month ){
-
-                        $dataset_by_year[$saved_year][$loop_month_number] =  1 ;
-
-                    }else{
-                        $dataset_by_year[$saved_year][$loop_month_number] = 0;
-                    } 
-
-
-
-                }
-
-
-            }
-        }
-    }// main structure_data loop end 
-
-
-    // print_r(($structure_data));
-    // print_r(count($structure_data));
-    // print_r($dataset_by_year);
 
     $final_datasets = [];
     foreach($dataset_by_year as $year => $months_arr_with_count ){
@@ -426,6 +376,73 @@ function el_get_home_consultations_by_month_TABLE_FINAL_DATA($structure_data, $r
 
 
 
+function el_get_home_consultations_dataset_by_year($structure_data){
+    $labels_by_month = [
+        "01" => "Jan",
+        "02" => "Feb",
+        "03" => "Mar",
+        "04" => "Apr",
+        "05" => "May",
+        "06" => "Jun",
+        "07" => "Jul",
+        "08" => "Aug",
+        "09" => "Sep",
+        "10" => "Oct",
+        "11" => "Nov",
+        "12" => "Dec",
+    ];
+    // get dataset by year
+    $dataset_by_year    = [];
+
+    // var_dump( "Total data found > ". count($structure_data));
+
+    // Loop through all the products and store the cat id 
+    foreach( $structure_data as $single_product_id =>  $each_product_data  ){
+
+        if( isset($each_product_data['year']) ){
+
+            $saved_year = sanitize_key($each_product_data['year'] );
+            $saved_month = sanitize_key($each_product_data['month']);
+
+            
+
+
+            foreach( $labels_by_month as $loop_month_number => $loop_month_name ){
+
+
+                if( 
+                    isset($dataset_by_year[$saved_year][$loop_month_number])
+
+                ){
+
+                    if( $loop_month_number == $saved_month ){
+                        $previous_count = $dataset_by_year[$saved_year][$loop_month_number] ;
+                        $dataset_by_year[$saved_year][$loop_month_number] = $previous_count + 1 ;
+                    }
+
+                    
+                }else{
+                    
+                    if( $loop_month_number == $saved_month ){
+
+                        $dataset_by_year[$saved_year][$loop_month_number] =  1 ;
+
+                    }else{
+                        $dataset_by_year[$saved_year][$loop_month_number] = 0;
+                    } 
+
+
+
+                }
+
+
+            }
+        }
+    }// main structure_data loop end 
+
+    return $dataset_by_year;
+
+}
 
 
 /**
