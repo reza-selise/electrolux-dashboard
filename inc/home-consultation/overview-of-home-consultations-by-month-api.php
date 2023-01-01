@@ -61,9 +61,8 @@ if( ! function_exists( 'elux_get_home_consultations_by_month_data' ) ){
  
         /// 2. ---------- Get Structure data along with post id
         $structure_data     = el_get_home_consultations_by_month_STRUCTURE_DATA($product_ids);
-        print_r($structure_data);
 
-        // print_r($structure_data);
+        // print_r( count( $structure_data));
 
         /// 3. ---------- Filter data
         $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data,['categories']);
@@ -72,15 +71,14 @@ if( ! function_exists( 'elux_get_home_consultations_by_month_data' ) ){
         // 4. ---------- Get Final output
         $graph_data         = el_get_home_consultations_by_month_FINAL_DATA($structure_data, $received_data);
         
-        print_r($graph_data);
 
 
-        if($structure_data && $graph_data  && $table_data ){
+        if($structure_data && $graph_data   ){
             return rest_ensure_response( array(
                 'status_code' => 200,
                 'status'    => true,
                 'message'   => 'Data fetch successful',
-                'data'      => $graph_data,
+                // 'data'      => $graph_data,
                 // 'table_data'=> $table_data,
                 'graph_data'=> $graph_data
             ) );
@@ -147,8 +145,7 @@ function el_get_home_consultations_by_month_STRUCTURE_DATA($product_ids){
 
         // only interested in "Home Consultation" ORDERS
         if(  
-            sanitize_key( $order_service_type ) == sanitize_key( 'home-consultation' )   || 
-            count($event_time_string) > 5
+            sanitize_key( $order_service_type ) == sanitize_key( 'home-consultation' )
         ){
 
 
@@ -157,11 +154,11 @@ function el_get_home_consultations_by_month_STRUCTURE_DATA($product_ids){
             $event_month    =   substr($event_time_string,5,2)  ;
             $event_date     =   substr($event_time_string,8,2)  ;
 
-            $structure_data[$single_product_id]['event_time'] = [
-                'date' => $event_date,
-                'month' => $event_month,
-                'year' => $event_year,
-            ];
+            // $structure_data[$single_product_id]['event_time'] = [
+            //     'date' => $event_date,
+            //     'month' => $event_month,
+            //     'year' => $event_year,
+            // ];
             $structure_data[$single_product_id]['day']      = $event_date;
             $structure_data[$single_product_id]['month']    = $event_month;
             $structure_data[$single_product_id]['year']     = $event_year;
@@ -208,39 +205,55 @@ function el_get_home_consultations_by_month_FINAL_DATA($structure_data, $request
     // get dataset by year
     $dataset_by_year    = [];
 
+    // var_dump( "Total data found > ". count($structure_data));
+
     // Loop through all the products and store the cat id 
     foreach( $structure_data as $single_product_id =>  $each_product_data  ){
 
         if( isset($each_product_data['year']) ){
 
-            $year = sanitize_key( $each_product_data['year'] );
-            $saved_month_number = sanitize_key($each_product_data['month']);
+            $saved_year = sanitize_key($each_product_data['year'] );
+            $saved_month = sanitize_key($each_product_data['month']);
+
             
-            // loop through all the month
-            foreach( $labels_by_month as $month_number => $month_name ){
 
-                $loop_month_number = sanitize_key( $month_number );
 
-                
-                if( $loop_month_number == $saved_month_number ){
+            foreach( $labels_by_month as $loop_month_number => $loop_month_name ){
 
-                    if( isset($dataset_by_year[$year][$loop_month_number]) ){
 
-                        $previous_count = $dataset_by_year[$year][$loop_month_number];
-                        $dataset_by_year[$year][$loop_month_number] = $previous_count + 1 ;
+                if( 
+                    isset($dataset_by_year[$saved_year][$loop_month_number])
 
-                    }else{
-                        $dataset_by_year[$year][$loop_month_number] = 1 ;
+                ){
+
+                    if( $loop_month_number == $saved_month ){
+                        $previous_count = $dataset_by_year[$saved_year][$loop_month_number] ;
+                        $dataset_by_year[$saved_year][$loop_month_number] = $previous_count + 1 ;
                     }
 
+                    
                 }else{
-                    $dataset_by_year[$year][$loop_month_number] = 0 ;
+                    
+                    if( $loop_month_number == $saved_month ){
+
+                        $dataset_by_year[$saved_year][$loop_month_number] =  1 ;
+
+                    }else{
+                        $dataset_by_year[$saved_year][$loop_month_number] = 0;
+                    } 
+
+
+
                 }
+
 
             }
         }
     }// main structure_data loop end 
 
+
+    // print_r(($structure_data));
+    // print_r(count($structure_data));
     // print_r($dataset_by_year);
 
     $final_datasets = [];
