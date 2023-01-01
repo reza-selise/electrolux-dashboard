@@ -19,15 +19,15 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
         $allowed_event_status   = array( 'planned', 'cancelled', 'taken_place' );
         $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
 
-        $timeline               = $request->get_params()['filter_type'];
-        $data_type              = $request->get_params()['request_data'];   // events | participants etc.
-        $event_status           = $request->get_params()['event_status'];   // planned | cancelled etc.
         $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
         $locations              = ! empty( $request->get_params()['locations'] ) ? $request->get_params()['locations'] : '';      // 188,191,500 etc.
         $locations              = explode( ',', $locations );
         $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
         $categories             = explode( ',', $categories );
-
+        $data_type              = $request->get_params()['request_data'];   // events | participants etc.
+        $event_status           = $request->get_params()['event_status'];   // planned | cancelled etc.
+        $timeline               = $request->get_params()['filter_type'];
+        
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
             "type"  => $data_type
