@@ -22,6 +22,32 @@ function CustomDrawer({ onClose, open }) {
                         label: item,
                     }))}
                 />
+                 <Select
+                    mode="tags"
+                    placeholder="Location"
+                    value={selectedItems}
+                    onChange={setSelectedItems}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={filteredOptions.map(item => ({
+                        value: item,
+                        label: item,
+                    }))}
+                />
+                 <Select
+                    mode="tags"
+                    placeholder="Main Category"
+                    value={selectedItems}
+                    onChange={setSelectedItems}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={filteredOptions.map(item => ({
+                        value: item,
+                        label: item,
+                    }))}
+                />
             </div>
         </Drawer>
     );
