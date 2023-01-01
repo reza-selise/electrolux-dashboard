@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import deleteIcon from '../../images/delete.svg';
 import plusIcon from '../../images/plus.svg';
 import { setCookingCourseCustomDate } from '../../Redux/Slice/CookingCourseType/CookingCourseCustomDate';
+import { setEventByCancellationCustomDate } from '../../Redux/Slice/EventByCancellation/EventByCancellationCustomDate';
 import { setEventByStatusCustomDate } from '../../Redux/Slice/EventByStatus/EventByStatusCustomDate';
 import { setEventbyYearTimelineYearDateRange } from '../../Redux/Slice/EventByYear/eventbyYearTimelineYearDateRange';
 import './FilterTypeCustomDate.scss';
@@ -69,6 +70,10 @@ function FilterTypeCustomDate() {
                 break;
             case 'event-by-status-timeline':
                 dispatch(setEventByStatusCustomDate(dateRanges));
+                break;
+
+            case 'event-by-cancellation-timeline':
+                dispatch(setEventByCancellationCustomDate(dateRanges));
                 break;
 
             default:

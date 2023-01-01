@@ -8,14 +8,14 @@ import {
     Title,
     Tooltip
 } from 'chart.js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { Bar } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
 import { useEventByCancellationQuery } from '../../API/apiSlice';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
-import './EventByCancellation.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 export const options = {
@@ -51,14 +51,12 @@ function MyTable({ data }) {
             key: outerIndex,
             year: label,
         };
-        let total = 0
+        let total = 0;
         data.datasets.forEach((data, index) => {
             row[`year${data.label}`] = data.data[outerIndex];
-            total = total + parseInt(data.data[outerIndex])
+            total = total + parseInt(data.data[outerIndex]);
         });
-        dataSource.push({...row,total:total});
-
-       
+        dataSource.push({ ...row, total: total });
     });
     const columns = [
         {
@@ -88,16 +86,92 @@ function MyTable({ data }) {
 
 function EventByCancellation() {
     const [requestData, setRequestData] = useState('events');
-    const [grapTableCookingCourse, setGrapTableCookingCourse] = useState('graph');
+    const [grapTableEventCancellation, setGrapTableEventCancellation] = useState('graph');
     const [productStatus, setProductStatus] = useState('Took Place');
+    const [payload, setPayload] = useState();
+    const eventByCancellationFilterType = useSelector(
+        state => state.eventByCancellationFilterType.value
+    );
+    const eventByCancellationYears = useSelector(state => state.eventByCancellationYears.value);
+    const eventByCancellationMonths = useSelector(state => state.eventByCancellationMonths.value);
+    const eventByCancellationYearMonths = useSelector(
+        state => state.eventByCancellationYearMonths.value
+    );
+    const eventByCancellationCustomDate = useSelector(
+        state => state.eventByCancellationCustomDate.value
+    );
     // const [graphData, setGraphData] = useState();
 
-    const payload = {
-        type: requestData,
-        timeline_type: 'years',
-        timeline_filter: ['2022', '2024', '2021', '2020'],
-        filter_key_value: {},
-    };
+    useEffect(() => {
+        console.log('eventByCancellationFilterType', eventByCancellationFilterType);
+        switch (eventByCancellationFilterType) {
+            case 'years':
+                setPayload({
+                    type: requestData,
+                    timeline_type: 'years',
+                    timeline_filter: eventByCancellationYears,
+                    filter_key_value: {
+                        product_status: productStatus,
+                    },
+                    year_months: eventByCancellationYearMonths,
+                });
+                break;
+
+            case 'months':
+                setPayload({
+                    type: requestData,
+                    timeline_type: 'months',
+                    timeline_filter: eventByCancellationMonths,
+                    filter_key_value: {
+                        product_status: productStatus,
+                    },
+                });
+                break;
+            case 'custom_date_range':
+                setPayload({
+                    type: requestData,
+                    timeline_type: 'custom_date_range',
+                    timeline_filter: eventByCancellationCustomDate,
+                    filter_key_value: {
+                        product_status: productStatus,
+                    },
+                });
+                break;
+            case 'custom_time_frame':
+                setPayload({
+                    type: requestData,
+                    timeline_type: 'custom_time_frame',
+                    timeline_filter: eventByCancellationMonths,
+                    filter_key_value: {
+                        product_status: productStatus,
+                    },
+                });
+                break;
+
+            default:
+                setPayload({
+                    type: 'events',
+                    timeline_type: 'years',
+                    timeline_filter: ['2022', '2024', '2021', '2020'],
+                    filter_key_value: {},
+                });
+                console.log('Event By Cancellation default payload');
+        }
+    }, [
+        requestData,
+        eventByCancellationFilterType,
+        eventByCancellationYears,
+        eventByCancellationMonths,
+        productStatus,
+        eventByCancellationYearMonths,
+        eventByCancellationCustomDate,
+    ]);
+    // const payload = {
+    //     type: requestData,
+    //     timeline_type: 'years',
+    //     timeline_filter: ['2022', '2024', '2021', '2020'],
+    //     filter_key_value: {},
+    // };
     const { data, isLoading } = useEventByCancellationQuery(payload);
     console.log(data, 'data of event cancel');
 
@@ -124,22 +198,24 @@ function EventByCancellation() {
         <div>
             <div className="header-wrapper">
                 <GraphTableSwitch
-                    grapOrTable={grapTableCookingCourse}
-                    setgGrapOrTable={setGrapTableCookingCourse}
+                    grapOrTable={grapTableEventCancellation}
+                    setgGrapOrTable={setGrapTableEventCancellation}
                     name="event-by-cancellation"
                 />
                 <DownloadButton identifier={8} />
             </div>
-            <h2 className="graph-title">Overview of Event Cancellation</h2>
-            <div className="graph-overview cancellation_graph">
+
+            <div className="graph-overview">
+                <h2 className="graph-title">Overview of Event Cancellation</h2>
                 <LocalFilter
+                    showBoth="true"
                     requestData={requestData}
                     setRequestData={setRequestData}
                     location="event-by-cancellation-timeline"
                 />
             </div>
 
-            {grapTableCookingCourse === 'graph' ? (
+            {grapTableEventCancellation === 'graph' ? (
                 isLoading === false ? (
                     <Bar options={options} data={graphData} />
                 ) : (

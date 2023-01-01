@@ -2,6 +2,7 @@ import { Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCookingCourseFilterType } from '../../Redux/Slice/CookingCourseType/CookingCourseFilterType';
+import { setEventByCancellationFilterType } from '../../Redux/Slice/EventByCancellation/EventByCancellationFilterType';
 import { setEventByCategoryFilterType } from '../../Redux/Slice/EventByCategory/eventByCategoryFilterType';
 import { setEventByMonthFilterType } from '../../Redux/Slice/EventByMonth/eventByMonthFilterType';
 import { setEventByStatusFilterType } from '../../Redux/Slice/EventByStatus/EventByStatusFilterType';
@@ -42,6 +43,10 @@ function Timeline() {
                 break;
             case 'event-by-status-timeline':
                 dispatch(setEventByStatusFilterType(filterType));
+                break;
+
+            case 'event-by-cancellation-timeline':
+                dispatch(setEventByCancellationFilterType(filterType));
                 break;
 
             default:

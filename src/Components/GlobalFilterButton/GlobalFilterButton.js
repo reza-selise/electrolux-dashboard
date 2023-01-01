@@ -1,5 +1,6 @@
 import { Drawer } from 'antd';
 import React, { useState } from 'react';
+import '../../../inc/assets/css/elux-font.css';
 import commentIcon from '../../images/comment.svg';
 import FilterIcon from '../../images/filter.svg';
 import { eluxTranslation } from '../../Translation/Translation';
@@ -29,7 +30,7 @@ function GlobalFilterButton() {
                     {filters}
                 </button>
             </div>
-            <Drawer title="Basic Drawer" placement="right" onClose={onClose} open={open}>
+            <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
                 <p>Some contents...</p>
                 <p>Some contents...</p>
                 <p>Some contents...</p>
