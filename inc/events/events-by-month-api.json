@@ -89,8 +89,12 @@
 
 // for months
 {
-    "request_data": "events/participants",
     "filter_type": "months",
+    "request_data": "events/participants",
+    "event_status": "planned/cancelled/took_place",
+    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "locations": "188,191,500",
+    "categories": "15,47,104",
     "request_body": [
         {
             "year": "2022",
@@ -117,7 +121,11 @@
 
 // for years
 {
-    "request_data": "events",
+    "request_data": "events/participants",
+    "event_status": "planned/cancelled/took_place",
+    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "locations": "188,191,500",
+    "categories": "15,47,104",
     "filter_type": "years",
     "request_body": [
         {
@@ -138,6 +146,10 @@
 // for custom date range
 {
     "request_data": "events/participants",
+    "event_status": "planned/cancelled/took_place",
+    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "locations": "188,191,500",
+    "categories": "15,47,104",
     "filter_type": "custom_date_range",
     "request_body": [
         {
@@ -159,6 +171,10 @@
 {
     "filter_type": "custom_time_frame",
     "request_data": "events/participants",
+    "event_status": "planned/cancelled/took_place",
+    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "locations": "188,191,500",
+    "categories": "15,47,104",
     "request_body": [
         {
             "year": "2021",

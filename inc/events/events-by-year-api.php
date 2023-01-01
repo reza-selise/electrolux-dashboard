@@ -160,9 +160,9 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
     $yearly_events              = 0;
 
     // filter order id's by location.
-    $yearly_order_ids   = elux_prepare_single_year_data_filter_location( $yearly_order_ids, $locations );
+    $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
 
-    $categories         = elux_prepare_category_ids( $categories );
+    $categories         = elux_prepare_category_ids_with_localization( $categories );
 
     if( is_array( $yearly_order_ids ) && ! empty( $yearly_order_ids ) ){
         foreach( $yearly_order_ids as $order_id ){
@@ -177,11 +177,9 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
                     $product_cat= get_the_terms( $product_id , 'product_cat' );
 
                     // filter event by category.
-                    if( !empty( $categories ) ){
-                        // check if any one of the product categories exist in the $categories array.
-                        if( empty( array_intersect( $product_cat, $categories ) ) ){
-                            continue;
-                        }
+                    // check if any one of the product categories exist in the $categories array.
+                    if( !empty( $categories ) && empty( array_intersect( $product_cat, $categories ) )){
+                        continue;
                     }
 
                     // filter event by event_status.
@@ -236,48 +234,4 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
     $yearly_data['total']   = ( 'events' === $data_type ) ? $yearly_events : $yearly_event_participants;
     
     return $yearly_data;
-}
-
-function elux_prepare_single_year_data_filter_location( $yearly_order_ids, $locations = array() ){
-    /* If, user requested for specific location data
-    *  and the current order is not from that location,
-    *  then skip to the next iteration.
-    *
-    *  Else, proceed as usual.
-    */
-    if( is_array( $locations ) && ! empty( $locations ) ){
-        $valid_order_ids = array_filter( $yearly_order_ids, function( $order_id ) use( $locations ) {
-            $event_location = ! empty( get_post_meta( $order_id, 'event_location', true ) ) ? get_post_meta( $order_id, 'event_location', true ) : 0;
-            if( ! in_array( $event_location, $locations ) ){
-                return false;
-            }
-            return true;
-        });
-        return $valid_order_ids;
-    }
-
-    return $yearly_order_ids;
-}
-
-function elux_prepare_category_ids( $categories = array() ) {
-
-    if( is_array( $categories ) && !empty( $categories )) {
-        //15,47,104
-        $all_categories     = [];
-        $languages          = array( 'de_CH' , 'fr_FR', 'it_IT' );
-        $total_languages    = count( $languages );
-
-        foreach( $categories as $category_id ){
-            for( $i = 0; $i < $total_languages; $i++ ){
-                $term_id = pll_get_term( $category_id, $languages[$i] );
-    
-                if( intval( $term_id ) && ! in_array( $term_id, $all_categories )){
-                    array_push( $all_categories, $term_id );
-                }
-            }
-        }
-        return $all_categories;
-    }
-
-    return $categories;
 }
