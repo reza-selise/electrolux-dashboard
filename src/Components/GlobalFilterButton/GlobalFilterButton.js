@@ -1,9 +1,9 @@
-import { Drawer } from 'antd';
 import React, { useState } from 'react';
 import '../../../inc/assets/css/elux-font.css';
 import commentIcon from '../../images/comment.svg';
 import FilterIcon from '../../images/filter.svg';
 import { eluxTranslation } from '../../Translation/Translation';
+import CustomDrawer from '../CustomDrawer/CustomDrawer';
 import ModalButton from '../ModalButton/ModalButton';
 import './GlobalFilterButton.scss';
 
@@ -30,11 +30,7 @@ function GlobalFilterButton() {
                     {filters}
                 </button>
             </div>
-            <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-            </Drawer>
+            <CustomDrawer open={open} onClose={onClose} />
         </>
     );
 }

@@ -28,6 +28,7 @@ import eventByYearFilterTypeReducer from './Slice/EventByYear/eventByYearFilterT
 import eventbyYearTimelineMonthReducer from './Slice/EventByYear/eventByYearTimelineMonth';
 import eventbyYearTimelineYearsReducer from './Slice/EventByYear/eventByYearTimelineYear';
 import eventbyYearTimelineYearDateRangeReducer from './Slice/EventByYear/eventbyYearTimelineYearDateRange';
+import eventPerSalesPersonFilterTypeReducer from './Slice/EventPerSalesPerson/EventPerSalesPersonFilterType';
 import locationReducer from './Slice/locationSlice';
 import modalReducer from './Slice/modalSlice';
 
@@ -53,16 +54,17 @@ export const store = configureStore({
         eventByLocationFilterType: eventByLocationFilterTypeReducer,
         eventbyLocationTimelineMonth: eventbyLocationTimelineMonthReducer,
         eventByLocationTimelineYears: eventByLocationTimelineYearsReducer,
-        eventByCancellationFilterType:eventByCancellationFilterTypeReducer,
-        eventByCancellationYears:eventByCancellationYearsReducer,
-        eventByCancellationMonths:eventByCancellationMonthsReducer,
-        eventByCancellationYearMonths:eventByCancellationYearMonthsReducer,
-        eventByCancellationCustomDate:eventByCancellationCustomDateReducer,
+        eventByCancellationFilterType: eventByCancellationFilterTypeReducer,
+        eventByCancellationYears: eventByCancellationYearsReducer,
+        eventByCancellationMonths: eventByCancellationMonthsReducer,
+        eventByCancellationYearMonths: eventByCancellationYearMonthsReducer,
+        eventByCancellationCustomDate: eventByCancellationCustomDateReducer,
         eventByStatusFilterType: eventByStatusFilterTypeReducer,
         eventByStatusYearMonth: eventByStatusYearMonthReducer,
         eventByStatusYears: eventByStatusYearsReducer,
         eventByStatusMonths: eventByStatusMonthsReducer,
         eventByStatusCustomDate: eventByStatusCustomDateReducer,
+        eventPerSalesPersonFilterType: eventPerSalesPersonFilterTypeReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });
