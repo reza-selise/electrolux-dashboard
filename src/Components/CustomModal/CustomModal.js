@@ -1,8 +1,8 @@
-import {Modal} from 'antd';
+import { Modal } from 'antd';
 import React from 'react';
-import {useDispatch,useSelector} from 'react-redux';
-import {setModal} from '../../Redux/Slice/modalSlice';
-import {eluxTranslation} from '../../Translation/Translation';
+import { useDispatch, useSelector } from 'react-redux';
+import { setModal } from '../../Redux/Slice/modalSlice';
+import { eluxTranslation } from '../../Translation/Translation';
 import GlobalComment from '../GlobalComment/GlobalComment';
 import Timeline from '../Timeline/Timeline';
 import './CustomModal.scss';
@@ -116,6 +116,20 @@ function CustomModal() {
                 </Modal>
             );
         case 'event-by-status-timeline':
+            return (
+                <Modal
+                    title={timeline}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={461}
+                    centered
+                    className="timeline-modal"
+                >
+                    <Timeline />
+                </Modal>
+            );
+        case 'event-per-sales-person-timeline':
             return (
                 <Modal
                     title={timeline}

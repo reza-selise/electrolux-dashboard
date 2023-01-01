@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCookingCourseFilterType } from '../../Redux/Slice/CookingCourseType/CookingCourseFilterType';
 import { setEventByCancellationFilterType } from '../../Redux/Slice/EventByCancellation/EventByCancellationFilterType';
 import { setEventByCategoryFilterType } from '../../Redux/Slice/EventByCategory/eventByCategoryFilterType';
+import { setEventByLocationFilterType } from '../../Redux/Slice/EventByLocation/eventByLocationFilterType';
 import { setEventByMonthFilterType } from '../../Redux/Slice/EventByMonth/eventByMonthFilterType';
 import { setEventByStatusFilterType } from '../../Redux/Slice/EventByStatus/EventByStatusFilterType';
 import { setEventByYearFilterType } from '../../Redux/Slice/EventByYear/eventByYearFilterType';
-import { setEventByLocationFilterType } from '../../Redux/Slice/EventByLocation/eventByLocationFilterType';
+import { setEventPerSalesPersonFilterType } from '../../Redux/Slice/EventPerSalesPerson/EventPerSalesPersonFilterType';
 import FilterTypeCustomDate from '../FilterTypeCustomDate/FilterTypeCustomDate';
 import FilterTypeMonth from '../FilterTypeMonth/FilterTypeMonth';
 import FilterTypeTimeFrame from '../FilterTypeTImeFrame/FilterTypeTimeFrame';
@@ -47,6 +48,9 @@ function Timeline() {
 
             case 'event-by-cancellation-timeline':
                 dispatch(setEventByCancellationFilterType(filterType));
+                break;
+            case 'event-per-sales-person-timeline':
+                dispatch(setEventPerSalesPersonFilterType(filterType));
                 break;
 
             default:
