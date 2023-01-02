@@ -220,210 +220,227 @@
             "name": "Zürich"
         }
     ],
+    "fb_leads": [
+        {
+            "role_name": "Culinary Ambassadors",
+            "users": [
+                {
+                    "id": "57",
+                    "email": "alexa.hauser@electrolux.com",
+                    "name": "Alexa Hauser",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "59",
+                    "email": "celine.meuri@electrolux.com",
+                    "name": "Celine Meuri",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "60",
+                    "email": "iris.sokoll@electrolux.com",
+                    "name": "Iris Sokoll",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "54",
+                    "email": "lara.schuler@electrolux.com",
+                    "name": "Lara schuler",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "58",
+                    "email": "nicole.koller@electrolux.com",
+                    "name": "Nicole Koller",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "62",
+                    "email": "rita.kreiliger@electrolux.com",
+                    "name": "Rita Kreiliger",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "40",
+                    "email": "sandra.mockli@electrolux.com",
+                    "name": "Sandra Möckli",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "56",
+                    "email": "seiko.mori@electrolux.com",
+                    "name": "Seiko Mori",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "63",
+                    "email": "susanne.schoop@electrolux.com",
+                    "name": "Susanne Schoop",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "61",
+                    "email": "thomas.zurcher@electrolux.com",
+                    "name": "Thomas Zürcher",
+                    "role": "elex_instructor"
+                },
+                {
+                    "id": "55",
+                    "email": "veronique.de-bernardis@electrolux.com",
+                    "name": "Veronique De Bernardis",
+                    "role": "elex_instructor"
+                }
+            ]
+        },
+        {
+            "role_name": "Consultants",
+            "users": [
+                {
+                    "id": "29",
+                    "email": "andrea.rehmann@electrolux.com",
+                    "name": "Andrea Rehmann",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "20",
+                    "email": "catherine.giroud@electrolux.com",
+                    "name": "Catherine Giroud",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "25",
+                    "email": "corina.flutsch@electrolux.com",
+                    "name": "Corina Flütsch",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "83",
+                    "email": "cyrill.stuber@electrolux.com",
+                    "name": "Cyrill Stuber",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "22",
+                    "email": "esther.kaufmann@electrolux.com",
+                    "name": "Esther Kaufmann",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "28",
+                    "email": "fabian.gisler@electrolux.com",
+                    "name": "Fabian Gisler",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "26",
+                    "email": "martina.kung@electrolux.com",
+                    "name": "Martina Küng",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "27",
+                    "email": "patricia.berrut@electrolux.com",
+                    "name": "Patricia Berrut",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "16",
+                    "email": "patrick.brenner@electrolux.com",
+                    "name": "Patrick Brenner",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "30",
+                    "email": "renate.murner@electrolux.com",
+                    "name": "Renate Mürner",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "21",
+                    "email": "sascha.luthi@electrolux.com",
+                    "name": "Sascha Lüthi",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "23",
+                    "email": "simone.rohrer@electrolux.com",
+                    "name": "Simone Rohrer",
+                    "role": "elex_consultant"
+                },
+                {
+                    "id": "24",
+                    "email": "steve.borlat@electrolux.com",
+                    "name": "Steve Borlat",
+                    "role": "elex_consultant"
+                }
+            ]
+        },
+        {
+            "role_name": "Admins",
+            "users": [
+                {
+                    "id": "37",
+                    "email": "adrian.bill@electrolux.com",
+                    "name": "Adrian Bill",
+                    "role": "administrator"
+                },
+                {
+                    "id": "82",
+                    "email": "delia.arnold@electrolux.com",
+                    "name": "Delia Arnold",
+                    "role": "administrator"
+                },
+                {
+                    "id": "1",
+                    "email": "ms@selise.ch",
+                    "name": "elx_admin",
+                    "role": "administrator"
+                },
+                {
+                    "id": "9",
+                    "email": "joana.charles@electrolux.com",
+                    "name": "Joana Charles",
+                    "role": "administrator"
+                },
+                {
+                    "id": "36",
+                    "email": "marco.dietrich@electrolux.com",
+                    "name": "Marco Dietrich",
+                    "role": "administrator"
+                },
+                {
+                    "id": "35",
+                    "email": "oeznur.sonkur@electrolux.com",
+                    "name": "Öznur Sonkur",
+                    "role": "administrator"
+                },
+                {
+                    "id": "39",
+                    "email": "olivia.greco@electrolux.com",
+                    "name": "Olivia Greco",
+                    "role": "administrator"
+                },
+                {
+                    "id": "38",
+                    "email": "patricia.thenisch@electrolux.com",
+                    "name": "Patricia Thenisch",
+                    "role": "administrator"
+                },
+                {
+                    "id": "66",
+                    "email": "zahedul.islam@selise.ch",
+                    "name": "Selise Admin",
+                    "role": "administrator"
+                }
+            ]
+        }
+    ],
     "sales_employee": [
         {
             "id": "72",
             "email": "jo@electrolux.com",
             "name": "Adrian Bill",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "37",
-            "email": "adrian.bill@electrolux.com",
-            "name": "Adrian Bill",
-            "role": "administrator"
-        },
-        {
-            "id": "57",
-            "email": "alexa.hauser@electrolux.com",
-            "name": "Alexa Hauser",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "29",
-            "email": "andrea.rehmann@electrolux.com",
-            "name": "Andrea Rehmann",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "20",
-            "email": "catherine.giroud@electrolux.com",
-            "name": "Catherine Giroud",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "59",
-            "email": "celine.meuri@electrolux.com",
-            "name": "Celine Meuri",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "25",
-            "email": "corina.flutsch@electrolux.com",
-            "name": "Corina Flütsch",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "83",
-            "email": "cyrill.stuber@electrolux.com",
-            "name": "Cyrill Stuber",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "82",
-            "email": "delia.arnold@electrolux.com",
-            "name": "Delia Arnold",
-            "role": "administrator"
-        },
-        {
-            "id": "1",
-            "email": "ms@selise.ch",
-            "name": "elx_admin",
-            "role": "administrator"
-        },
-        {
-            "id": "22",
-            "email": "esther.kaufmann@electrolux.com",
-            "name": "Esther Kaufmann",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "28",
-            "email": "fabian.gisler@electrolux.com",
-            "name": "Fabian Gisler",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "60",
-            "email": "iris.sokoll@electrolux.com",
-            "name": "Iris Sokoll",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "9",
-            "email": "joana.charles@electrolux.com",
-            "name": "Joana Charles",
-            "role": "administrator"
-        },
-        {
-            "id": "54",
-            "email": "lara.schuler@electrolux.com",
-            "name": "Lara schuler",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "36",
-            "email": "marco.dietrich@electrolux.com",
-            "name": "Marco Dietrich",
-            "role": "administrator"
-        },
-        {
-            "id": "26",
-            "email": "martina.kung@electrolux.com",
-            "name": "Martina Küng",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "58",
-            "email": "nicole.koller@electrolux.com",
-            "name": "Nicole Koller",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "35",
-            "email": "oeznur.sonkur@electrolux.com",
-            "name": "Öznur Sonkur",
-            "role": "administrator"
-        },
-        {
-            "id": "39",
-            "email": "olivia.greco@electrolux.com",
-            "name": "Olivia Greco",
-            "role": "administrator"
-        },
-        {
-            "id": "27",
-            "email": "patricia.berrut@electrolux.com",
-            "name": "Patricia Berrut",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "38",
-            "email": "patricia.thenisch@electrolux.com",
-            "name": "Patricia Thenisch",
-            "role": "administrator"
-        },
-        {
-            "id": "16",
-            "email": "patrick.brenner@electrolux.com",
-            "name": "Patrick Brenner",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "30",
-            "email": "renate.murner@electrolux.com",
-            "name": "Renate Mürner",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "62",
-            "email": "rita.kreiliger@electrolux.com",
-            "name": "Rita Kreiliger",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "40",
-            "email": "sandra.mockli@electrolux.com",
-            "name": "Sandra Möckli",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "21",
-            "email": "sascha.luthi@electrolux.com",
-            "name": "Sascha Lüthi",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "56",
-            "email": "seiko.mori@electrolux.com",
-            "name": "Seiko Mori",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "66",
-            "email": "zahedul.islam@selise.ch",
-            "name": "Selise Admin",
-            "role": "administrator"
-        },
-        {
-            "id": "23",
-            "email": "simone.rohrer@electrolux.com",
-            "name": "Simone Rohrer",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "24",
-            "email": "steve.borlat@electrolux.com",
-            "name": "Steve Borlat",
-            "role": "elex_consultant"
-        },
-        {
-            "id": "63",
-            "email": "susanne.schoop@electrolux.com",
-            "name": "Susanne Schoop",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "61",
-            "email": "thomas.zurcher@electrolux.com",
-            "name": "Thomas Zürcher",
-            "role": "elex_instructor"
-        },
-        {
-            "id": "55",
-            "email": "veronique.de-bernardis@electrolux.com",
-            "name": "Veronique De Bernardis",
-            "role": "elex_instructor"
+            "role": "sales"
         }
     ]
 }
