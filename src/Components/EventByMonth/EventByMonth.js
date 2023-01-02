@@ -60,12 +60,17 @@ function EventByMonth() {
         request_data: requestData,
         filter_type: eventByMonthFilterType,
         request_body: JSON.stringify(requestBody),
+        event_status: "planned",
+        customer_type: "all",
+       
     };
     const { data, error, isLoading } = useEventByMonthsQuery(payload);
+    console.log("data Shuvo", data,);
 
     // ************** dynamic years **********
     let years = [];
     years = data && data.data.years.map(item => item.year);
+   
 
     let months = [];
     months = data && data.data.years.map(item => item.months);
