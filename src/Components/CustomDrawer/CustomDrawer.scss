@@ -1,6 +1,15 @@
+.ant-drawer-wrapper-body{
+    font-family: 'Electrolux Sans';
+}
+
+.ant-drawer-title{
+    color: #011e41 !important;
+}
+
 .filter-type-options {
     margin-top: 24px;
     margin-bottom: 14px;
+    font-family: 'Electrolux Sans';
     .ant-select-selector {
         height: 54px !important;
         background: #ffffff;
@@ -8,7 +17,6 @@
         border-radius: 0;
         margin-bottom: 10px;
         .ant-select-selection-item {
-            font-family: 'Electrolux Sans';
             font-style: normal;
             font-weight: 400;
             font-size: 16px;
@@ -17,3 +25,18 @@
         }
     }
 }
+
+.ant-select-focused .ant-select-selector,
+.ant-select-selector:focus,
+.ant-select-selector:active,
+.ant-select-selector:hover,
+.ant-select-open .ant-select-selector {
+    border-color: #d9d9d9 !important;
+    box-shadow: none !important;
+}
+
+.ant-select-selection-placeholder {
+    color: #BCC4CC !important;
+    font-family: 'Electrolux Sans';
+}
+

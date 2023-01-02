@@ -1,49 +1,98 @@
 import { Drawer, Select } from 'antd';
 import React, { useState } from 'react';
 import './CustomDrawer.scss';
-const options = ['All', 'ELUX', 'B2B', 'B2C'];
+const customerOptions = ['All', 'ELUX', 'B2B', 'B2C'];
+const locationOptions = [
+    'Bern',
+    'Zurich',
+    'St. Gallen',
+    'Chur',
+    'Charrant',
+    'Preverenges',
+    'Manno',
+    'Kriens',
+    'Pratteln',
+    'Magenwil',
+    'Volketswil',
+];
+
+const mainCategoryOptions = [
+    'Steamdemo ProfiLine',
+    'Steamdemo owners',
+    'Steamdemo interested parties',
+    'Cooking Course',
+    'Event Location',
+    'Diverses',
+    'Special Operations Inhouse',
+    'Electrolux Employee Training',
+    'AD Customer Event',
+];
+
+const fbLeadOptions = ['Culinary Ambassadors','Consultants','Admins']
 
 function CustomDrawer({ onClose, open }) {
-    const [selectedItems, setSelectedItems] = useState([]);
-    const filteredOptions = options.filter(o => !selectedItems.includes(o));
+    const [customerSelectedItems, setCustomerSelectedItems] = useState([]);
+    const [location, setLocation] = useState([]);
+    const [mainCategory, setMainCategory] = useState([]);
+    const [fbLead, setFbLead]=useState([])
+
+    const customerFilteredOptions = customerOptions.filter(o => !customerSelectedItems.includes(o));
+    const locationFilteredOptions = locationOptions.filter(o => !location.includes(o));
+    const mainCategoryFilteredOptions = mainCategoryOptions.filter(o => !mainCategory.includes(o));
+    const fbLeadFilteredOptions = fbLeadOptions.filter(o => !fbLead.includes(o));
+
+
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
             <div className="filter-type-options">
                 <Select
                     mode="tags"
                     placeholder="Customer Type"
-                    value={selectedItems}
-                    onChange={setSelectedItems}
+                    value={customerSelectedItems}
+                    onChange={setCustomerSelectedItems}
                     style={{
                         width: '100%',
                     }}
-                    options={filteredOptions.map(item => ({
+                    options={customerFilteredOptions.map(item => ({
                         value: item,
                         label: item,
                     }))}
                 />
-                 <Select
+                <Select
                     mode="tags"
                     placeholder="Location"
-                    value={selectedItems}
-                    onChange={setSelectedItems}
+                    value={location}
+                    onChange={setLocation}
                     style={{
                         width: '100%',
                     }}
-                    options={filteredOptions.map(item => ({
+                    options={locationFilteredOptions.map(item => ({
+                        value: item,
+                        label: item,
+                    }))}
+                />
+                <Select
+                    mode="tags"
+                    placeholder="Main Category"
+                    value={mainCategory}
+                    onChange={setMainCategory}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={mainCategoryFilteredOptions.map(item => ({
                         value: item,
                         label: item,
                     }))}
                 />
                  <Select
                     mode="tags"
-                    placeholder="Main Category"
-                    value={selectedItems}
-                    onChange={setSelectedItems}
+                    placeholder="FB Lead"
+                    value={fbLead}
+                    onChange={setFbLead}
                     style={{
                         width: '100%',
                     }}
-                    options={filteredOptions.map(item => ({
+                    options={fbLeadFilteredOptions.map(item => ({
                         value: item,
                         label: item,
                     }))}
