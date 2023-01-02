@@ -23,6 +23,8 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
         $locations              = explode( ',', $locations );
         $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
         $categories             = explode( ',', $categories );
+        $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? $request->get_params()['salesperson'] : '';     // 7 | 8 | 9
+        $sales_person_ids       = explode( ',', $sales_person_ids );
         $data_type              = 'events';
         $timeline               = $request->get_params()['filter_type'];
         
@@ -61,7 +63,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
                         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
                     }
 
-                    $yearly_data = elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $customer_type, $locations, $categories );
+                    $yearly_data = elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids );
                     array_push( $all_yearly_data, $yearly_data );
                 }
 
@@ -118,7 +120,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
                 $all_yearly_data = array();
                 if( is_array( $yearly_order_ids ) && !empty( $yearly_order_ids ) ){
                     foreach( $yearly_order_ids as $year => $yearly_order_ids ){
-                        $yearly_data = elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories );
+                        $yearly_data = elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids );
                         array_push( $all_yearly_data, $yearly_data );
                     }
                 }
@@ -146,7 +148,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
     
 }
 
-function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories ){
+function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids = array() ){
     $planned        = 0;
     $cancelled      = 0;
     $taken_place    = 0;
@@ -177,6 +179,10 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
 
                     // filter event by customer type.
                     if( ( $type !== $customer_type ) && ( 'all' !== $customer_type ) ){
+                        continue;
+                    }
+
+                    if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
                         continue;
                     }
 
