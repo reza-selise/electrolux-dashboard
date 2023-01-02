@@ -170,7 +170,7 @@ function el_get_home_consultations_by_month_STRUCTURE_DATA($product_ids){
         
         
         // add filtering info 
-        $filter_arr = el_GET_PRODUCT_FILTER_VALUES($single_product_id);
+        $filter_arr = el_GET_ORDER_FILTER_VALUES($single_product_id);
 
         foreach( $filter_arr as $filter_key => $filter_value ){
             $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
@@ -399,6 +399,24 @@ function el_get_home_consultations_dataset_by_year($structure_data){
 }
 
 
+// collect filter information which will use to do GLOBAL FILTERING by : el_FILTER_PRODUCTS_from_structure_data () this function 
+function el_GET_ORDER_FILTER_VALUES($order_id){
+    
+    $output = [];
+
+    $order = wc_get_order($order_id);
+
+
+    $service_type = $order->get_meta('order_service_type');
+
+    if($service_type){
+        $output['service_type'] = $service_type;
+    }
+     
+    return $output;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+    
+
+}
 /**
  * get oder IDS from event_start_time
  * 
@@ -527,7 +545,7 @@ function get_ORDERS_IDs_by_timeline_filter_from_event_start_meta( $timeline_type
     /*
         modify start and end range Because in Database it store as
         YYYY-MM-DD HH:MM:SS
-        2023-01-25 11:00:00
+        2023-01-25 11:00:00 
 
         received : 20221231
     */ 
