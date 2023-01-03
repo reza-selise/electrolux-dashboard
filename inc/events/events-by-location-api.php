@@ -12,10 +12,17 @@ add_action( 'rest_api_init', function () {
 
 function get_event_by_locations($request){
     $event_status           = $request->get_params()['event_status']; // planned | cancelled etc. [event_status on product meta]
+    $event_status       = explode( ',', $event_status );    
     $customer_type          = $request->get_params()['customer_type']; // b2b | b2c | electrolux_internal | all etc. [customer_type on product meta]
-    $booking_type           = $request->get_params()['booking_type']; // Manual Booking | Walk-in [consultation_booking_type on order meta]
-    $sales_employee         = $request->get_params()['sales_employee']; // user id [event_consultant on order meta]
-    $event_categories       = $request->get_params()['categories'];  // category ids [product category on product]
+    $customer_type       = explode( ',', $customer_type ); 
+    $booking_type           = $request->get_params()['booking_type']; // Booked Manually | Walk-in | Customer Booking [consultation_booking_type on order meta]
+    $booking_type           = explode( ',', $booking_type ); 
+    $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? $request->get_params()['salesperson'] : '';     // 7 | 8 | 9
+    $sales_person_ids       = explode( ',', $sales_person_ids );     // user id [event_consultant on order meta]
+    
+    $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
+    $categories             = explode( ',', $categories );  // category ids [product category on product]
+    // FB lead = consultant lead on product edit page
 
     $request_data =  $request->get_params()['request_data']; // events,participants 
     $filter_type =  $request->get_params()['filter_type'];
@@ -51,7 +58,7 @@ function get_event_by_locations($request){
                         $end_date           =  new DateTime($year . '-' . $month . '-01 11:59:59');
                         $end_date = $end_date->format('Y-m-t h:i:s');
                           
-                        $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                        $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories);
                         if(!empty($monthly_order_ids)){
                             array_push( $yearly_order_ids, $monthly_order_ids );
                             $yearly_order_ids2 = array_merge( $yearly_order_ids2, $monthly_order_ids );
@@ -93,7 +100,7 @@ function get_event_by_locations($request){
                         
                         
                         if( $start_year === $end_year ){    // selected range is within same year
-                            $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                            $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories);
                             
                             if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
                                 $yearly_order_ids[$start_year] = $range_order_ids;
@@ -138,7 +145,7 @@ function get_event_by_locations($request){
                                     $single_end_date    = $i . "-12-31 23:59:59";
                                 }
                                 
-                                $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                                $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories);
                                 if( ! array_key_exists( $i, $yearly_order_ids ) ){
                                     $yearly_order_ids[$i] = $range_order_ids;
 
@@ -190,8 +197,12 @@ function get_event_by_locations($request){
 }
 
 
-function get_order_count($gallery_location,$filter_type,$start_date,$end_date){ 
+function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories){ 
     global $wpdb;
+    $categories = elux_prepare_category_ids_with_localization($categories);
+
+    error_log(print_r('categories',1));
+    error_log(print_r($categories,1));
     // query 1
     $query =  "SELECT DISTINCT $wpdb->postmeta.post_id from $wpdb->postmeta LEFT JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID
      WHERE $wpdb->posts.post_type = 'shop_order' 
@@ -209,6 +220,75 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date){
             return false;
         }
     } );
+   
+    // new code
+    foreach($valid_event_order_ids as $order_key => $order_id){
+        $order          = wc_get_order( $order_id );
+        $order_items    = $order->get_items();
+        $order_booking_type = get_post_meta($order_id,'consultation_booking_type', true);
+
+        if( is_array( $order_items ) && !empty( $order_items )){
+            foreach( $order_items as $item ){
+                $product_id = (int) $item->get_product_id();
+               
+                $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '-', strtolower(get_post_meta( $product_id, 'product_status', true ))) : ''; // event_status
+                $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';// customer type
+                $product_cat = get_the_terms( $product_id , 'product_cat' );
+                // $sales_person_1 = get_post_meta( $product_id, 'product_status', true);
+
+                // event status [reserved,planned,took_place]
+                if($event_status[0] == 'all'){
+                   return;
+                }
+                else{
+                    if(!in_array($status, $event_status)){
+                        unset($valid_event_order_ids[$order_key]);
+                    }
+                }
+                // type , customer type
+                if($customer_type[0] == 'all'){
+                    return;
+                }
+                else{
+                    if(!in_array($type, $customer_type)){
+                        unset($valid_event_order_ids[$order_key]);
+                    }
+                }
+                // $sales_person_ids
+
+                if($sales_person_ids[0] == 'all'){
+                    return;
+                }
+                else{
+                    if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
+                        unset($valid_event_order_ids[$order_key]);
+                    }    
+                }
+                // categories
+              
+
+                
+            }
+        }
+
+        //---------------- booking type
+        if($booking_type[0] == 'all'){
+            return $valid_event_order_ids;
+        }
+        else{
+
+            if(!in_array($order_booking_type, $booking_type)){
+                unset($valid_event_order_ids[$order_key]);
+            }
+            return $valid_event_order_ids;
+        }
+        
+    }
+    // end new code
+    error_log(print_r('valid_event_order_ids in last', true));
+    error_log(print_r($valid_event_order_ids, true));
+
+   
     return $valid_event_order_ids;
 }
 

@@ -11,7 +11,9 @@
  */
 
 add_action( 'rest_api_init', function () {
-    register_rest_route( 'el-dashboard-api', '/generic-comments', [
+    $namespace = 'elux-dashboard/v1';
+    
+    register_rest_route( $namespace, '/generic-comments', [
         'methods' => 'GET',
         'callback' => 'el_get_generic_comments',
         'login_user_id' => get_current_user_id(),
@@ -85,8 +87,9 @@ function el_get_generic_comments($ReqObj){
 
 add_action( 'rest_api_init', function () {
    
+    $namespace = 'elux-dashboard/v1';
 
-    register_rest_route( 'el-dashboard-api', '/generic-comments', [
+    register_rest_route( $namespace, '/generic-comments', [
         'methods' => 'POST',
         'callback' => 'el_add_generic_comments',
         'login_user_id' => get_current_user_id(),
@@ -174,7 +177,8 @@ function el_add_generic_comments($ReqObj){
  */
 
 add_action( 'rest_api_init', function () {
-    register_rest_route( 'el-dashboard-api', '/generic-comments', [
+    $namespace = 'elux-dashboard/v1';
+    register_rest_route( $namespace, '/generic-comments', [
         'methods' => 'PUT',
         'callback' => 'el_update_generic_comments',
         'login_user_id' => get_current_user_id(),
@@ -280,11 +284,13 @@ function el_update_generic_comments($ReqObj){
  */
 
 add_action( 'rest_api_init', function () {
-    register_rest_route( 'el-dashboard-api', '/generic-comments', [
+    $namespace = 'elux-dashboard/v1';
+    register_rest_route( $namespace, '/generic-comments', [
         'methods' => 'DELETE',
         'callback' => 'el_delete_generic_comments',
         'login_user_id' => get_current_user_id(),
     ]);
+    
 } );
 
 function el_delete_generic_comments($ReqObj){

@@ -4,5 +4,7 @@
   gap: 28px;
   button {
     background-color: transparent;
+    border: none !important;
+    box-shadow: unset !important;
   }
 }

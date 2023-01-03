@@ -3,8 +3,8 @@
 // for global filter
 
 {
-    "event_status": "reserved,planned,took_place",
-    "customer_type": "b2b,b2c",
+    "event_status": "reserved,planned,took_place", // all
+    "customer_type": "b2b,b2c", // all
     "booking_type": "Manual Booking, Walk-in",
     "sales_employee" : "1,2,3",
     "categories": "93,30,18,21",

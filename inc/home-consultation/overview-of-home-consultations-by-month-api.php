@@ -21,9 +21,6 @@ add_action( 'rest_api_init', function () {
 if( ! function_exists( 'elux_get_home_consultations_by_month_data' ) ){
     function elux_get_home_consultations_by_month_data( $ReqObj ){ 
         
-        // Final data for the response
-        $final_data     = [];
-        
         // this will use to store all relevant information along with post id
         $structure_data = [];
 
@@ -70,6 +67,10 @@ if( ! function_exists( 'elux_get_home_consultations_by_month_data' ) ){
         
         // 4. ---------- Get Final output
         $graph_data         = el_get_home_consultations_by_month_FINAL_DATA($structure_data, $received_data);
+
+
+        $table_data         =   el_get_home_consultations_by_month_TABLE_FINAL_DATA($structure_data, $received_data);
+
         
 
 
@@ -79,7 +80,7 @@ if( ! function_exists( 'elux_get_home_consultations_by_month_data' ) ){
                 'status'    => true,
                 'message'   => 'Data fetch successful',
                 // 'data'      => $graph_data,
-                // 'table_data'=> $table_data,
+                'table_data'=> $table_data,
                 'graph_data'=> $graph_data
             ) );
         }else{
@@ -169,7 +170,7 @@ function el_get_home_consultations_by_month_STRUCTURE_DATA($product_ids){
         
         
         // add filtering info 
-        $filter_arr = el_GET_PRODUCT_FILTER_VALUES($single_product_id);
+        $filter_arr = el_GET_ORDER_FILTER_VALUES($single_product_id);
 
         foreach( $filter_arr as $filter_key => $filter_value ){
             $structure_data[$single_product_id]['filter_key_values'][$filter_key] = $filter_value;
@@ -202,6 +203,148 @@ function el_get_home_consultations_by_month_FINAL_DATA($structure_data, $request
         "12" => "Dec",
     ];
 
+    // get dataset by year
+    $dataset_by_year    = el_get_home_consultations_dataset_by_year($structure_data);
+
+
+    $final_datasets = [];
+    foreach($dataset_by_year as $year => $months_arr_with_count ){
+        $each_data_set = [
+            "label" => $year,
+            "data"  => []
+        ];
+        foreach( $months_arr_with_count as $month_number => $count ){
+            $each_data_set['data'][] = $count;
+        }
+        $final_datasets[] = $each_data_set;
+    }
+
+    $final_labels = [];
+    foreach($labels_by_month as $month_number => $month_name ){
+        $final_labels[] = $month_name;
+    }
+
+    
+    
+    return [
+        'labels' => $final_labels,
+        'datasets' => $final_datasets,
+    ];
+
+}
+
+
+
+function el_get_home_consultations_by_month_TABLE_FINAL_DATA($structure_data, $requestData){
+    
+    $labels = []; // store all the years
+
+    $labels_by_month = [
+        "01" => "Jan",
+        "02" => "Feb",
+        "03" => "Mar",
+        "04" => "Apr",
+        "05" => "May",
+        "06" => "Jun",
+        "07" => "Jul",
+        "08" => "Aug",
+        "09" => "Sep",
+        "10" => "Oct",
+        "11" => "Nov",
+        "12" => "Dec",
+    ];
+    
+    // get dataset by year
+    $dataset_by_year    = el_get_home_consultations_dataset_by_year($structure_data);
+    $rows = [];
+
+    foreach( $dataset_by_year as $year => $month_arr ){
+        $each_row = [$year];
+
+        $row_total = 0;
+        foreach($month_arr as $month_key => $count){
+            $each_row[] = $count;
+            $row_total = $row_total + intval($count);
+        }
+        
+        $each_row[] = $row_total;
+        $rows[] = $each_row;
+
+    }
+
+
+    // Gather data by month 
+    $last_row_data_by_month = []; // [ "01" => 10 , "02" => 24,  "03" => 5, ... ]
+    $final_total = 0;// total final for the month 
+    
+
+    foreach( $dataset_by_year as $year => $month_arr ){
+
+        foreach($month_arr as $month_key => $count){
+            
+            if( isset($last_row_data_by_month[$month_key]) ){    
+
+                $previous_count = $last_row_data_by_month[$month_key];
+                $last_row_data_by_month[$month_key] = $previous_count +   intval($count) ;
+
+            }else{
+                $last_row_data_by_month[$month_key] = intval($count);
+            }
+            $final_total = $final_total + intval($count);
+        }
+    }
+
+    $last_row = [];
+
+    foreach($last_row_data_by_month as $month_key => $month_value){
+        $last_row[] = $month_value;
+    }
+
+    $last_row[] = $final_total;
+    array_unshift($last_row,"Total");
+
+
+    $rows[] = $last_row;
+
+    $labels = ["Year"];
+
+    // prepare column
+
+    foreach( $labels_by_month as $month_key => $month_name ){
+        $labels[] = $month_name;
+    }   
+    $labels[] = "Total";
+
+
+    return [
+        'labels'    => $labels,
+        'rows'      => $rows
+    ];
+
+
+
+}
+
+
+/*
+Get get dataset by year 
+
+*/
+function el_get_home_consultations_dataset_by_year($structure_data){
+    $labels_by_month = [
+        "01" => "Jan",
+        "02" => "Feb",
+        "03" => "Mar",
+        "04" => "Apr",
+        "05" => "May",
+        "06" => "Jun",
+        "07" => "Jul",
+        "08" => "Aug",
+        "09" => "Sep",
+        "10" => "Oct",
+        "11" => "Nov",
+        "12" => "Dec",
+    ];
     // get dataset by year
     $dataset_by_year    = [];
 
@@ -251,183 +394,27 @@ function el_get_home_consultations_by_month_FINAL_DATA($structure_data, $request
         }
     }// main structure_data loop end 
 
-
-    // print_r(($structure_data));
-    // print_r(count($structure_data));
-    // print_r($dataset_by_year);
-
-    $final_datasets = [];
-    foreach($dataset_by_year as $year => $months_arr_with_count ){
-        $each_data_set = [
-            "label" => $year,
-            "data"  => []
-        ];
-        foreach( $months_arr_with_count as $month_number => $count ){
-            $each_data_set['data'][] = $count;
-        }
-        $final_datasets[] = $each_data_set;
-    }
-
-    $final_labels = [];
-    foreach($labels_by_month as $month_number => $month_name ){
-        $final_labels[] = $month_name;
-    }
-
-    
-    
-    return [
-        'labels' => $final_labels,
-        'datasets' => $final_datasets,
-    ];
+    return $dataset_by_year;
 
 }
 
 
-
-function el_get_home_consultations_by_month_TABLE_FINAL_DATA($structure_data, $requestData){
+// collect filter information which will use to do GLOBAL FILTERING 
+function el_GET_ORDER_FILTER_VALUES($order_id){
     
-    $labels = []; // store all the years
+    $output = [];
 
+    $order = wc_get_order($order_id);
 
-    foreach($structure_data  as $id =>  $item){
-        $year = $item['event_time']['year'];
-        if(!in_array($year, $labels)){
-            $labels[] = $year;
-        }
+    $service_type = $order->get_meta('order_service_type');
+    if($service_type){
+        $output['service_type'] = $service_type;
     }
-
-
-    /*
-
-        [cat_id] =>{
-            label : category name,
-            year_data : {
-                2022 : 5
-                2021 : 5
-            }
-        }
-
-        [658] =>{
-            label : Fish,
-            total : 6546546
-            year_data : {
-                2022 : 54
-                2021 : 589
-            }
-        }
-
-    */
-
-    // count the data 
-    $data_by_category_and_year = [];
+     
+    return $output;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     
-    foreach($structure_data  as $id =>  $product_data){
 
-
-
-        $category_list  = $product_data['category'];
-        $event_year  = $product_data['event_time']['year'];
-
-        foreach($category_list as $cat_id => $cat_name){
-
-            if( !isset($data_by_category_and_year[$cat_id]) ){
-                $data_by_category_and_year[$cat_id]['label'] = $cat_name;
-            }
-
-
-            if( $requestData['type'] == 'participants' ){
-
-                $previous_count =  0;
-
-                if( isset($data_by_category_and_year[$cat_id]['year_data'][$event_year])) {
-                    $previous_count = intval( $data_by_category_and_year[$cat_id]['year_data'][$event_year]);
-                }
-
-                $this_product_sell_count =  intval($product_data['total_sales']);
-
-                $data_by_category_and_year[$cat_id]['year_data'][$event_year] = $previous_count + $this_product_sell_count;
-
-
-                
-            }else{
-                $previous_count = 0;
-
-                if( isset($data_by_category_and_year[$cat_id]['year_data'][$event_year])) {
-                    $previous_count = $data_by_category_and_year[$cat_id]['year_data'][$event_year];
-                }
-    
-                $data_by_category_and_year[$cat_id]['year_data'][$event_year] = $previous_count + 1;
-            }
-
-
-            
-
-        }
-        
-    }
-
-    // Calculate total 
-    foreach($data_by_category_and_year as $cat_id => $item){
-        $total = 0; 
-
-        $year_data = $data_by_category_and_year[$cat_id]['year_data'];
-
-        foreach($year_data as $year => $year_value ){
-            $total = $total + intval($year_value);
-        }
-
-        $data_by_category_and_year[$cat_id]['total'] = $total;
-
-    }
-
-
-
-
-    $table_rows = [];
-
-    // print_r($data_by_category_and_year);
-    foreach($data_by_category_and_year as $cat_id => $cat_arr ){
-
-
-        $each_table_row = [ $cat_arr['label'] ];
-
-
-        // loop through all the label and append the data RESPECTIVELY (in order)
-        foreach( $labels as $year ){
-
-            
-            // check if year data exist in the array or not 
-            if( isset( $cat_arr['year_data'][$year] ) ){
-                $number_to_push = $cat_arr['year_data'][$year];
-            }else{
-                $number_to_push = 0;
-            }
-
-            $each_table_row[] = $number_to_push;
-
-        }
-        // add last item 
-        $each_table_row[] = $cat_arr['total'];
-
-        $table_rows[] = $each_table_row;
-
-    }
-
-    
-    $labels[] = "Total";
-    array_unshift($labels , "Years");
-
-
-    return [
-        'labels'    => $labels,
-        'rows'      => $table_rows
-    ];
 }
-
-
-
-
-
 /**
  * get oder IDS from event_start_time
  * 
@@ -556,7 +543,7 @@ function get_ORDERS_IDs_by_timeline_filter_from_event_start_meta( $timeline_type
     /*
         modify start and end range Because in Database it store as
         YYYY-MM-DD HH:MM:SS
-        2023-01-25 11:00:00
+        2023-01-25 11:00:00 
 
         received : 20221231
     */ 
