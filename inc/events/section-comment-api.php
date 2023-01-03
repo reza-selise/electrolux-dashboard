@@ -14,8 +14,9 @@
 
 add_action( 'rest_api_init', function () {
    
+    $namespace = 'elux-dashboard/v1';
 
-    register_rest_route( 'el-dashboard-api', '/section-comments', [
+    register_rest_route( $namespace, '/section-comments', [
         'methods' => 'POST',
         'callback' => 'el_add_section_comments',
         'login_user_id' => get_current_user_id(),
