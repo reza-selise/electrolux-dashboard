@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
+    useDeleteIndividualCommentMutation,
     useGetIndividualCommentQuery,
+    useInsetIndividualCommentMutation,
     // eslint-disable-next-line prettier/prettier
-    useInsetIndividualCommentMutation
+    useUpdateIndividualCommentMutation
 } from '../../API/apiSlice';
 import dotsIcon from '../../images/dots.svg';
 import rocketIcon from '../../images/rocket.svg';
+import saveIcon from '../../images/save.svg';
 import { eluxTranslation } from '../../Translation/Translation';
 import './LocalComment.scss';
 
@@ -17,12 +20,15 @@ function LocalComment() {
     const [isEdit, setIsEdit] = useState(false);
     const [showButtons, setShowButtons] = useState(false);
     const [commentContent, setCommentContent] = useState('');
+    const [commentId, setCommentID] = useState();
 
     const handleCommentActionButtons = () => {
         setShowButtons(!showButtons);
     };
 
     const [insetIndividualComment] = useInsetIndividualCommentMutation();
+    const [deleteIndividualComment] = useDeleteIndividualCommentMutation();
+    const [updateIndividualComment] = useUpdateIndividualCommentMutation();
 
     const { data, error, isLoading } = useGetIndividualCommentQuery({
         section_name: location,
@@ -52,20 +58,34 @@ function LocalComment() {
         }
     };
 
-    const handleEdit = () => {
+    const handleEdit = event => {
         setIsEdit(true);
+        setCommentID(event.target.closest('button').getAttribute('data-id'));
     };
-    // const updateCommentHandler = async () => {
-    //     try {
-    //         await updateGenericComment({
-    //             comment_id: commentId,
-    //             comment_content: commentContent,
-    //         });
-    //         setIsEdit(!isEdit);
-    //     } catch (e) {
-    //         console.log('An Error Occurred', e);
-    //     }
-    // };
+    const updateCommentHandler = async () => {
+        try {
+            await updateIndividualComment({
+                comment_id: commentId,
+                comment_content: commentContent,
+            });
+            setIsEdit(!isEdit);
+        } catch (e) {
+            console.log('An Error Occurred', e);
+        }
+    };
+
+    const handleDelete = async event => {
+        console.log(event.target.closest('button').getAttribute('data-id'));
+        try {
+            await deleteIndividualComment({
+                comment_id: event.target.closest('button').getAttribute('data-id'),
+            });
+            // setIsEdit(!isEdit);
+        } catch (e) {
+            console.log('An Error Occurred', e);
+        }
+    };
+
     const updateCommentOnChange = event => {
         setCommentContent(event.target.value);
     };
@@ -82,6 +102,18 @@ function LocalComment() {
         }
         return `${Math.floor(timeDifferenceInMinutes / 1440)} days ago`;
     };
+
+    useEffect(() => {
+        const comment =
+            data && data.data.find(comment => String(comment.comment_ID) === String(commentId));
+
+        try {
+            setCommentContent(comment.comment_content);
+        } catch (error) {
+            setCommentContent('');
+            // console.log('State Not Updated', error);
+        }
+    }, [commentId]);
 
     return (
         <div className="local-comment-wrapper">
@@ -110,8 +142,18 @@ function LocalComment() {
                                       </button>
                                       {showButtons && (
                                           <div className="comment-action-buttons">
-                                              <button type="button">Delete</button>
-                                              <button type="button" onClick={handleEdit}>
+                                              <button
+                                                  type="button"
+                                                  onClick={handleDelete}
+                                                  data-id={comment.comment_ID}
+                                              >
+                                                  Delete
+                                              </button>
+                                              <button
+                                                  type="button"
+                                                  onClick={handleEdit}
+                                                  data-id={comment.comment_ID}
+                                              >
                                                   Edit
                                               </button>
                                           </div>
@@ -130,14 +172,14 @@ function LocalComment() {
                 ) : (
                     <div className="update-generic-comment-wrapper">
                         <textarea value={commentContent} onChange={updateCommentOnChange} />
-                        {/* <div className="comment-action">
+                        <div className="comment-action">
                             <button type="button" onClick={updateCommentHandler}>
                                 <img src={assetsPath + saveIcon} alt="Save Icon" />
                             </button>
-                            <button type="button" onClick={deleteCommentHandler}>
+                            {/* <button type="button" onClick={deleteCommentHandler}>
                                 <img src={assetsPath + deleteIcon} alt="Delete Icon" />
-                            </button>
-                        </div> */}
+                            </button> */}
+                        </div>
                     </div>
                 )}
             </div>

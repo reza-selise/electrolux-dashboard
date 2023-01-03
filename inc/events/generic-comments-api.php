@@ -178,7 +178,6 @@ function el_add_generic_comments($ReqObj){
 
 add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
-
     register_rest_route( $namespace, '/generic-comments', [
         'methods' => 'PUT',
         'callback' => 'el_update_generic_comments',
@@ -286,7 +285,6 @@ function el_update_generic_comments($ReqObj){
 
 add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
-
     register_rest_route( $namespace, '/generic-comments', [
         'methods' => 'DELETE',
         'callback' => 'el_delete_generic_comments',
