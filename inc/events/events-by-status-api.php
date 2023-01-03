@@ -13,17 +13,31 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
     
     function elux_get_events_by_status( $request ) {
 
+        // Generic filter TYPE: event / participants and STATUS: planned ? cancelled won't work here.
         $disallowed_event_types = array( 'giftcard', 'voucher' );
-        $allowed_request_data   = 'events';
-        $allowed_filter_types   = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
-        $filter_type            = $request->get_params()['filter_type'];
-        $request_data           = $request->get_params()['request_data']; // can be events or participants.
+        $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
+        $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
+
+        $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
+        $locations              = ! empty( $request->get_params()['locations'] ) ? $request->get_params()['locations'] : '';      // 188,191,500 etc.
+        $locations              = explode( ',', $locations );
+        $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
+        $categories             = explode( ',', $categories );
+        $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? $request->get_params()['salesperson'] : '';     // 7 | 8 | 9
+        $sales_person_ids       = explode( ',', $sales_person_ids );
+        $data_type              = 'events';
+        $timeline               = $request->get_params()['filter_type'];
+        
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
-            "type"  => $request_data
+            "type"  => $data_type
         );
 
-        if( ! in_array($filter_type, $allowed_filter_types) || $request_data !== $allowed_request_data || ! is_array( $request_body ) || empty( $request_body )){
+        if( 
+            ! in_array( $timeline, $allowed_timeline ) ||
+            ! in_array( $customer_type, $allowed_customer_type ) || 
+            ! is_array( $request_body ) || 
+            empty( $request_body ) ){
             return rest_ensure_response( array(
                 'status_code' => 403,
                 'message'     => 'failure',
@@ -31,7 +45,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
             ) );
         }
 
-        switch( $filter_type ){
+        switch( $timeline ){
             case 'custom_time_frame':
             case 'months':
             case 'years':
@@ -49,7 +63,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
                         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
                     }
 
-                    $yearly_data = elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $request_data );
+                    $yearly_data = elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids );
                     array_push( $all_yearly_data, $yearly_data );
                 }
 
@@ -106,7 +120,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
                 $all_yearly_data = array();
                 if( is_array( $yearly_order_ids ) && !empty( $yearly_order_ids ) ){
                     foreach( $yearly_order_ids as $year => $yearly_order_ids ){
-                        $yearly_data = elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $request_data );
+                        $yearly_data = elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids );
                         array_push( $all_yearly_data, $yearly_data );
                     }
                 }
@@ -134,10 +148,16 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
     
 }
 
-function elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $request_data ){
+function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids = array() ){
     $planned        = 0;
     $cancelled      = 0;
     $taken_place    = 0;
+    $total          = 0;
+
+    // filter order id's by location.
+    $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
+
+    $categories         = elux_prepare_category_ids_with_localization( $categories );
 
     if( is_array( $yearly_order_ids ) && ! empty( $yearly_order_ids ) ){
         foreach( $yearly_order_ids as $order_id ){
@@ -147,8 +167,25 @@ function elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $req
             if( is_array( $order_items ) && !empty( $order_items )){
                 foreach( $order_items as $item ){
                     $product_id = (int) $item->get_product_id();
+                    $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                     $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '-', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
-                    
+                    $product_cat= get_the_terms( $product_id , 'product_cat' );
+
+                    // filter event by category.
+                    // check if any one of the product categories exist in the $categories array.
+                    if( !empty( $categories ) && empty( array_intersect( $product_cat, $categories ) )){
+                        continue;
+                    }
+
+                    // filter event by customer type.
+                    if( ( $type !== $customer_type ) && ( 'all' !== $customer_type ) ){
+                        continue;
+                    }
+
+                    if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
+                        continue;
+                    }
+
                     if ( 'canceled' === $status ){
                         $cancelled++;
                     } elseif ( 'planned' === $status ){
@@ -156,6 +193,8 @@ function elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $req
                     } elseif ('took-place' === $status ){
                         $taken_place++;
                     }
+
+                    $total++;
                 }
             }
         }
@@ -166,7 +205,7 @@ function elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $req
         "planned"       => $planned,
         "cancelled"     => $cancelled,
         "taken_place"   => $taken_place,
-        "total"         => count( $yearly_order_ids )
+        "total"         => $total,
     );
     
     return $yearly_data;

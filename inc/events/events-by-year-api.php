@@ -56,8 +56,8 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                 foreach( $request_body as $single_year ){
                     $year   = $single_year->year;
                     $months = explode(',', $single_year->months);
-                    
                     $yearly_order_ids           = array();
+                    
                     foreach ( $months as $month ) {
                         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
                         $end_date           = $year . '-' . $month . '-31 23:59:59' ;

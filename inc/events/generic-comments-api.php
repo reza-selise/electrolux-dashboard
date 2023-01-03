@@ -11,7 +11,9 @@
  */
 
 add_action( 'rest_api_init', function () {
-    register_rest_route( 'el-dashboard-api', '/generic-comments', [
+    $namespace = 'elux-dashboard/v1';
+    
+    register_rest_route( $namespace, '/generic-comments', [
         'methods' => 'GET',
         'callback' => 'el_get_generic_comments',
         'login_user_id' => get_current_user_id(),

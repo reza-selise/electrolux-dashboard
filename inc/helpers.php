@@ -81,3 +81,24 @@ if( ! function_exists( 'elux_prepare_category_ids_with_localization' ) ){
     
 }
 
+if( ! function_exists( 'product_has_sales_person' ) ){
+    
+    function product_has_sales_person( $product_id, $sales_person_ids = array() ){
+        
+        if( empty( $sales_person_ids ) ){
+            return true;
+        }
+        
+        $sales_person = array();
+        $sales_person[] = get_post_meta( $product_id, 'salesperson-1', true );
+        $sales_person[] = get_post_meta( $product_id, 'salesperson-2', true );
+        $sales_person[] = get_post_meta( $product_id, 'salesperson-3', true );
+    
+        if( empty( $sales_person ) || empty( array_intersect( $sales_person, $sales_person_ids ) ) ){
+            return false;
+        }
+    
+        return true;
+    }
+
+}
