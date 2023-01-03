@@ -22,31 +22,67 @@ import './EventByYear.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const BarOptions = {
-    plugins: {
-        title: {
-            display: false,
-        },
-        legend: {
-            align: 'start',
-            labels: {
-                boxWidth: 16,
-                boxHeight: 16,
+const { Column } = Table;
+
+function GraphView({ data }) {
+    const BarOptions = {
+        plugins: {
+            title: {
+                display: false,
+            },
+            legend: {
+                align: 'start',
+                labels: {
+                    boxWidth: 16,
+                    boxHeight: 16,
+                },
             },
         },
-    },
-    responsive: true,
-    scales: {
-        x: {
-            stacked: true,
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+            },
         },
-        y: {
-            stacked: true,
-        },
-    },
-    barPercentage: 1,
-};
-const { Column } = Table;
+        barPercentage: 1,
+    };
+    let labels = [];
+
+    let graphData = {};
+    try {
+        labels = data.status !== 403 ? data.years.map(year => year.year) : ['2022'];
+
+        graphData = {
+            labels,
+            datasets: [
+                {
+                    label: 'ELUX',
+                    data: data.status !== 403 ? data.years.map(year => year.elux) : 0,
+                    backgroundColor: '#4A2017',
+                },
+                {
+                    label: 'B2B',
+                    data: data.status !== 403 ? data.years.map(year => year.b2b) : 0,
+                    backgroundColor: '#937359',
+                    // barThickness: 32,
+                },
+                {
+                    label: 'B2C',
+                    data: data.status !== 403 ? data.years.map(year => year.b2c) : 0,
+                    backgroundColor: '#D0B993',
+                    // barThickness: 32,
+                },
+            ],
+        };
+    } catch (e) {
+        console.log('evnt graph view error', e);
+    }
+
+    return <Bar id="event-by-year-graph" options={BarOptions} data={graphData} />;
+}
 
 function EventByYear() {
     const eventbyYearTimelineYears = useSelector(state => state.eventbyYearTimelineYears.value);
@@ -104,42 +140,6 @@ function EventByYear() {
         event_status: 'planned',
     };
     const { data, error, isLoading } = useEventByYearQuery(payload);
-    const labels =
-        data && data.data.years.map(year => year.year)
-            ? data.data.years.map(year => year.year)
-            : ['2022'];
-
-    const graphData = {
-        labels,
-        datasets: [
-            {
-                label: 'ELUX',
-                data:
-                    data && data.data.years.map(year => year.elux)
-                        ? data.data.years.map(year => year.elux)
-                        : 0,
-                backgroundColor: '#4A2017',
-            },
-            {
-                label: 'B2B',
-                data:
-                    data && data.data.years.map(year => year.b2b)
-                        ? data.data.years.map(year => year.b2b)
-                        : 0,
-                backgroundColor: '#937359',
-                // barThickness: 32,
-            },
-            {
-                label: 'B2C',
-                data:
-                    data && data.data.years.map(year => year.b2c)
-                        ? data.data.years.map(year => year.b2c)
-                        : 0,
-                backgroundColor: '#D0B993',
-                // barThickness: 32,
-            },
-        ],
-    };
 
     const { pleaseWait } = eluxTranslation;
 
@@ -152,7 +152,7 @@ function EventByYear() {
                     setgGrapOrTable={setGrapOrTableEvntYear}
                     name="event-by-year"
                 />
-                <DownloadButton identifier={1} />
+                <DownloadButton identifier={1} location="event-by-year-comment" />
             </div>
             <div className="graph-overview">
                 <h2 className="graph-title">
@@ -170,7 +170,7 @@ function EventByYear() {
             ) : isLoading ? (
                 pleaseWait
             ) : grapOrTableEvntYear === 'graph' ? (
-                <Bar id="event-by-year-graph" options={BarOptions} data={graphData} />
+                data && <GraphView data={data.data} />
             ) : (
                 <Table
                     dataSource={data.data.years}

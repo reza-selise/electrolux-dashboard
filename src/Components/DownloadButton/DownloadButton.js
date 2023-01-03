@@ -2,6 +2,7 @@ import { Dropdown } from 'antd';
 import React from 'react';
 import commentIcon from '../../images/comment-blue.svg';
 import DownloadIcon from '../../images/download.svg';
+import ModalButton from '../ModalButton/ModalButton';
 import './DownloadButton.scss';
 
 const items = [
@@ -15,7 +16,7 @@ const items = [
     },
 ];
 
-function DownloadButton({ identifier, refer }) {
+function DownloadButton({ identifier, location }) {
     const downloadPNG = id => {
         const chartData = document.getElementById(id).toDataURL('image/png');
 
@@ -53,9 +54,10 @@ function DownloadButton({ identifier, refer }) {
     };
     return (
         <div className="download-button-wrapper">
-            <button type="button">
+            <ModalButton location={location}>
                 <img src={assetsPath + commentIcon} alt="comment icon" />
-            </button>
+            </ModalButton>
+
             <Dropdown
                 menu={{
                     items,
