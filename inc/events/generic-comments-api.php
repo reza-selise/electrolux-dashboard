@@ -86,6 +86,7 @@ function el_get_generic_comments($ReqObj){
 // ------------- ADD Generic Comments ---------------
 
 add_action( 'rest_api_init', function () {
+   
     $namespace = 'elux-dashboard/v1';
 
     register_rest_route( $namespace, '/generic-comments', [
@@ -289,6 +290,7 @@ add_action( 'rest_api_init', function () {
         'callback' => 'el_delete_generic_comments',
         'login_user_id' => get_current_user_id(),
     ]);
+    
 } );
 
 function el_delete_generic_comments($ReqObj){
