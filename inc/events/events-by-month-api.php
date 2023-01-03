@@ -19,14 +19,16 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
         $allowed_event_status   = array( 'planned', 'cancelled', 'taken_place' );
         $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
         
+        // required params.
         $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
-        $locations              = ! empty( $request->get_params()['locations'] ) ? $request->get_params()['locations'] : '';      // 188,191,500 etc.
-        $locations              = explode( ',', $locations );
-        $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
-        $categories             = explode( ',', $categories );
         $data_type              = $request->get_params()['request_data']; // can be events or participants.
         $event_status           = $request->get_params()['event_status'];   // planned | cancelled etc.
         $timeline               = $request->get_params()['filter_type'];
+        
+        // optional params.
+        $locations              = ! empty( $request->get_params()['locations'] ) ? explode( ',', $request->get_params()['locations'] ) : [];      // 188,191,500 etc.
+        $categories             = ! empty( $request->get_params()['categories'] ) ? explode( ',', $request->get_params()['categories'] ) : [];     // 15 | 47 | 104
+        $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? explode( ',', $request->get_params()['salesperson'] ) : [];     // 7 | 8 | 9
         
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
@@ -63,7 +65,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
                         $end_date           = $year . '-' . $month . '-31 23:59:59' ;
                         $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
-                        $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories );
+                        $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids );
                         $single_year_data["months"][] = $monthly_data;
                     }
                     array_push( $all_yearly_data, $single_year_data );
@@ -140,7 +142,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                         }
 
                         foreach ( $monthly_order_ids as $month => $ids ) {
-                            $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories );
+                            $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids );
                             $single_year_data["months"][] = $monthly_data;
                         }
                         array_push( $all_yearly_data, $single_year_data );
@@ -170,7 +172,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
     
 }
 
-function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories ){
+function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations = array(), $categories = array(), $sales_person_ids = array() ){
     $monthly_elux                = 0;
     $monthly_b2b                 = 0;
     $monthly_b2c                 = 0;
@@ -180,6 +182,7 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
     // filter order id's by location.
     $monthly_order_ids   = elux_prepare_order_ids_by_location_filter( $monthly_order_ids, $locations );
 
+    // prepare all category id's including localization.
     $categories          = elux_prepare_category_ids_with_localization( $categories );
 
     if( is_array( $monthly_order_ids ) && ! empty( $monthly_order_ids ) ){
@@ -207,6 +210,11 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
 
                     // filter event by customer type.
                     if( ( $type !== $customer_type ) && ( 'all' !== $customer_type ) ){
+                        continue;
+                    }
+
+                    // filter event by sales person id.
+                    if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
                         continue;
                     }
 
