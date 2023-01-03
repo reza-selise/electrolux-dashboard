@@ -10,7 +10,6 @@ function ModalButton({ location, children }) {
     const showModal = () => {
         dispatch(setModal());
         dispatch(setLocation(location));
-        // setLocation(where);
     };
 
     return <Button onClick={showModal}>{children}</Button>;

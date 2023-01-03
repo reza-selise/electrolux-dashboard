@@ -1,0 +1,103 @@
+.local-comment-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    h2,h3,p,span{
+        margin: 0px;
+        padding: 0px;
+    }
+    .left-comment{
+        flex: 0.7;
+    }
+    .right-comment{
+        flex: 0.3;
+        h2{
+            font-family: 'Electrolux Sans';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 120%;
+            color: #011E41;
+            margin-bottom: 32px;
+        }
+        .comment-submit-wrapper {
+            width: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            input {
+              flex: 1;
+              background-color: #fff;
+              height: 40px;
+              text-indent: 12px;
+              border: 1px solid #adb9c3;
+              &::placeholder {
+                font-family: 'Electrolux Sans';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 150%;
+                color: #7b8a9c;
+              }
+            }
+            button {
+              background: #011e41;
+              border-radius: 6px;
+              width: 40px;
+              height: 40px;
+            }
+          }
+    }
+    .comment-list{
+        max-height: 450px;
+        overflow-x: scroll;
+        li{
+            position: relative;
+            background: #F7F8F9;
+            border-radius: 10px;
+            padding: 10px 16px;
+            &:not(:last-child){
+                margin-bottom: 16px;
+            }
+            h3{
+                font-family: 'Electrolux Sans';
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #011E41;
+                margin-bottom: 8px;
+            }
+            p{
+                font-family: 'Electrolux Sans';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 150%;
+                color: #011E41;
+                margin-bottom: 8px;
+            }
+            span{
+                font-family: 'Electrolux Sans';
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 150%;
+                color: #7B8A9C;
+            }
+            
+            .local-comment-action{
+                position: absolute;
+                top: 10px;
+                right: 16px;
+                &>button{
+                    background-color: transparent;
+                }
+                .comment-action-buttons{
+                    position: absolute;
+                }
+            }
+        }
+    }
+}

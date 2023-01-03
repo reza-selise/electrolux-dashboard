@@ -81,7 +81,9 @@ function Events() {
             <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <GlobalFilterButton />
             </ErrorBoundary>
-            <CustomModal />
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <CustomModal />
+            </ErrorBoundary>
         </>
     );
 }

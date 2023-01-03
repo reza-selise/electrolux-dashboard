@@ -5,7 +5,7 @@ const siteURL = window.eluxDashboard.homeUrl;
 export const eluxAPI = createApi({
     reducerPath: 'eluxAPI',
     baseQuery: fetchBaseQuery({ baseUrl: `${siteURL}/wp-json/` }),
-    tagTypes: ['GenericComment'],
+    tagTypes: ['GenericComment', 'IndividualComment'],
     endpoints: builder => ({
         insetGenericComment: builder.mutation({
             query: payload => ({
@@ -87,6 +87,18 @@ export const eluxAPI = createApi({
                 body: payload,
             }),
         }),
+        insetIndividualComment: builder.mutation({
+            query: payload => ({
+                url: 'el-dashboard-api/section-comments',
+                method: 'POST',
+                body: payload,
+            }),
+            invalidatesTags: ['IndividualComment'],
+        }),
+        getIndividualComment: builder.query({
+            query: () => 'el-dashboard-api/generic-comments',
+            providesTags: ['IndividualComment'],
+        }),
     }),
 });
 
@@ -103,4 +115,6 @@ export const {
     useEventByStatusQuery,
     useEventByCancellationQuery,
     useEventPerSalesPersonQuery,
+    useInsetIndividualCommentMutation,
+    useGetIndividualCommentQuery,
 } = eluxAPI;
