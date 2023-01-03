@@ -18,15 +18,15 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
         $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
         $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
 
+        // required params.
         $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
-        $locations              = ! empty( $request->get_params()['locations'] ) ? $request->get_params()['locations'] : '';      // 188,191,500 etc.
-        $locations              = explode( ',', $locations );
-        $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
-        $categories             = explode( ',', $categories );
-        $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? $request->get_params()['salesperson'] : '';     // 7 | 8 | 9
-        $sales_person_ids       = explode( ',', $sales_person_ids );
         $data_type              = 'events';
         $timeline               = $request->get_params()['filter_type'];
+
+        // optional params.
+        $locations              = ! empty( $request->get_params()['locations'] ) ? explode( ',', $request->get_params()['locations'] ) : [];      // 188,191,500 etc.
+        $categories             = ! empty( $request->get_params()['categories'] ) ? explode( ',', $request->get_params()['categories'] ) : [];     // 15 | 47 | 104
+        $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? explode( ',', $request->get_params()['salesperson'] ) : [];     // 7 | 8 | 9
         
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
@@ -148,7 +148,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
     
 }
 
-function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids = array() ){
+function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations = array(), $categories = array(), $sales_person_ids = array() ){
     $planned        = 0;
     $cancelled      = 0;
     $taken_place    = 0;
@@ -157,6 +157,7 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
     // filter order id's by location.
     $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
 
+    // prepare all category id's including localization.
     $categories         = elux_prepare_category_ids_with_localization( $categories );
 
     if( is_array( $yearly_order_ids ) && ! empty( $yearly_order_ids ) ){
@@ -182,6 +183,7 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
                         continue;
                     }
 
+                    // filter event by sales person id.
                     if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
                         continue;
                     }
