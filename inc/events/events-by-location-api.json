@@ -9,7 +9,7 @@
     "sales_employee" : "1,2,3",
     "categories": "93,30,18,21",
     "filter_type": "months",
-    "request_data": "events",
+    "request_data": "events", // participants
     "locations": "255,477,128,188",
     "request_body": [
         {
