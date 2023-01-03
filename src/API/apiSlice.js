@@ -89,14 +89,14 @@ export const eluxAPI = createApi({
         }),
         insetIndividualComment: builder.mutation({
             query: payload => ({
-                url: 'el-dashboard-api/section-comments',
+                url: 'elux-dashboard/v1/section-comments',
                 method: 'POST',
                 body: payload,
             }),
             invalidatesTags: ['IndividualComment'],
         }),
         getIndividualComment: builder.query({
-            query: () => 'el-dashboard-api/generic-comments',
+            query: () => 'elux-dashboard/v1/generic-comments',
             providesTags: ['IndividualComment'],
         }),
     }),

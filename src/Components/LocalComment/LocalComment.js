@@ -16,6 +16,8 @@ function LocalComment() {
     // const [showButtons, setShowButtons] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [showButtons, setShowButtons] = useState(false);
+    const [commentContent, setCommentContent] = useState('');
+
     const handleCommentActionButtons = () => {
         setShowButtons(!showButtons);
     };
@@ -50,23 +52,23 @@ function LocalComment() {
         }
     };
 
-    // const comments = [
-    //     {
-    //         name: 'Anika Tasnim',
-    //         text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus veniam id quis illo magnam dolore delectus accusamus ipsam iure. Modi libero quasi tempora ad? Maxime eligendi earum molestias repudiandae in.',
-    //         time: '2 hrs ago',
-    //     },
-    //     {
-    //         name: 'John Doe',
-    //         text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus veniam id quis illo magnam dolore delectus accusamus ipsam iure. Modi libero quasi tempora ad? Maxime eligendi earum molestias repudiandae in.',
-    //         time: '3 hrs ago',
-    //     },
-    //     {
-    //         name: 'Jane Doe',
-    //         text: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus veniam id quis illo magnam dolore delectus accusamus ipsam iure. Modi libero quasi tempora ad? Maxime eligendi earum molestias repudiandae in.',
-    //         time: '4 hrs ago',
-    //     },
-    // ];
+    const handleEdit = () => {
+        setIsEdit(true);
+    };
+    // const updateCommentHandler = async () => {
+    //     try {
+    //         await updateGenericComment({
+    //             comment_id: commentId,
+    //             comment_content: commentContent,
+    //         });
+    //         setIsEdit(!isEdit);
+    //     } catch (e) {
+    //         console.log('An Error Occurred', e);
+    //     }
+    // };
+    const updateCommentOnChange = event => {
+        setCommentContent(event.target.value);
+    };
     const convertDateToTimeAgo = dateString => {
         const commentDate = new Date(dateString);
         const currentDate = new Date();
@@ -109,7 +111,9 @@ function LocalComment() {
                                       {showButtons && (
                                           <div className="comment-action-buttons">
                                               <button type="button">Delete</button>
-                                              <button type="button">Edit</button>
+                                              <button type="button" onClick={handleEdit}>
+                                                  Edit
+                                              </button>
                                           </div>
                                       )}
                                   </div>
@@ -125,8 +129,8 @@ function LocalComment() {
                     </form>
                 ) : (
                     <div className="update-generic-comment-wrapper">
-                        {/* <textarea value={commentContent} onChange={updateCommentOnChange} />
-                        <div className="comment-action">
+                        <textarea value={commentContent} onChange={updateCommentOnChange} />
+                        {/* <div className="comment-action">
                             <button type="button" onClick={updateCommentHandler}>
                                 <img src={assetsPath + saveIcon} alt="Save Icon" />
                             </button>
