@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
-import { Table } from 'antd';
+import {Table} from 'antd';
 import {
     BarElement,
     CategoryScale,
@@ -7,18 +7,18 @@ import {
     Legend,
     LinearScale,
     Title,
-    Tooltip,
+    Tooltip
 } from 'chart.js';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React,{useState} from 'react';
+import {useSelector} from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
-import { Bar } from 'react-chartjs-2';
-import { eluxTranslation } from '../../Translation/Translation';
+import {Bar} from 'react-chartjs-2';
+import {eluxTranslation} from '../../Translation/Translation';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
 
-import { useEventByLocationQuery } from '../../API/apiSlice';
+import {useEventByLocationQuery} from '../../API/apiSlice';
 import './EventByLocation.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -68,18 +68,23 @@ function EventByLocation() {
 
     const payload = {
         filter_type: eventByLocationFilterType,
-        request_data: 'events',
+        request_data: requestDataForLocation,
+        event_status: 'reserved,planned,took_place', // all
+        customer_type: 'b2b,b2c', // all
+        booking_type: 'Manual Booking, Walk-in',
+        sales_employee: '1,2,3',
+        categories: '93,30,18,21',
         locations: getLocations().toString(),
         request_body: JSON.stringify(requestBody),
     };
     const { data, error, isLoading } = useEventByLocationQuery(payload);
-    console.log('data-location :', data, error, isLoading);
+    // console.log('data-location :', data, error, isLoading);
     const getDataFromLocation = (location, locationYear) =>
         eventByLocationTimelineYears.map(year => (locationYear === year ? location[year] : 0));
 
     const colors = ['#93735a', '#4a2016', '#a6b2a4', '#6b7a66', '#3b4536'];
 
-    const labels = getLocations();
+    const labels = data && data.data.locations.map(location => location.location);
     const datasets = eventByLocationTimelineYears.map((year, index) => ({
         label: year,
         data: data && data.data.locations.map(location => getDataFromLocation(location, year)),
@@ -89,7 +94,7 @@ function EventByLocation() {
         labels,
         datasets,
     };
-    console.log('data-location-dataset:', eventByLocationTimelineYears);
+    // console.log('data-location-dataset:', eventByLocationTimelineYears);
 
     const { pleaseWait } = eluxTranslation;
     return (
