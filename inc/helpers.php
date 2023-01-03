@@ -10,7 +10,6 @@ if( ! function_exists( 'elux_get_all_valid_event_order_ids_between_date' ) ){
         return $valid_event_order_ids;
     }
 }
-// elux_get_all_valid_event_order_ids_between_date( '2022-10-01 00:00:00', '2022-10-31 11:59:59', array( 'giftcard', 'voucher' ) );
 
 if( ! function_exists( 'elux_order_id_array_map' ) ){
     function elux_order_id_array_map( $order ){
