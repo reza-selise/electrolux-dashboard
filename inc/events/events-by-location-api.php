@@ -16,6 +16,7 @@ function get_event_by_locations($request){
     $booking_type           = $request->get_params()['booking_type']; // Manual Booking | Walk-in [consultation_booking_type on order meta]
     $sales_employee         = $request->get_params()['sales_employee']; // user id [event_consultant on order meta]
     $event_categories       = $request->get_params()['categories'];  // category ids [product category on product]
+    // FB lead = consultant lead on product edit page
 
     $request_data =  $request->get_params()['request_data']; // events,participants 
     $filter_type =  $request->get_params()['filter_type'];
@@ -51,7 +52,7 @@ function get_event_by_locations($request){
                         $end_date           =  new DateTime($year . '-' . $month . '-01 11:59:59');
                         $end_date = $end_date->format('Y-m-t h:i:s');
                           
-                        $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                        $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status);
                         if(!empty($monthly_order_ids)){
                             array_push( $yearly_order_ids, $monthly_order_ids );
                             $yearly_order_ids2 = array_merge( $yearly_order_ids2, $monthly_order_ids );
@@ -93,7 +94,7 @@ function get_event_by_locations($request){
                         
                         
                         if( $start_year === $end_year ){    // selected range is within same year
-                            $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                            $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status);
                             
                             if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
                                 $yearly_order_ids[$start_year] = $range_order_ids;
@@ -138,7 +139,7 @@ function get_event_by_locations($request){
                                     $single_end_date    = $i . "-12-31 23:59:59";
                                 }
                                 
-                                $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date);
+                                $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status);
                                 if( ! array_key_exists( $i, $yearly_order_ids ) ){
                                     $yearly_order_ids[$i] = $range_order_ids;
 
@@ -190,7 +191,7 @@ function get_event_by_locations($request){
 }
 
 
-function get_order_count($gallery_location,$filter_type,$start_date,$end_date){ 
+function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status){ 
     global $wpdb;
     // query 1
     $query =  "SELECT DISTINCT $wpdb->postmeta.post_id from $wpdb->postmeta LEFT JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID
@@ -209,6 +210,41 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date){
             return false;
         }
     } );
+    if($event_status){
+        foreach($valid_event_order_ids as $order_id){
+            $order = wc_get_order($order_id);
+            $order_items =  $order->get_items();
+            $product_id = null;
+
+            foreach( $order_items  as $item){
+                $product_id = $item->get_product_id();
+            }
+        
+            $dadaaa = $event_status;
+            $event_statuses = explode(",",$event_status);
+            $modify_value = [];
+            foreach ($event_statuses as $value) {
+                $modify_value[] = "'$value'";
+            }
+
+            $event_statuses = implode(",",$modify_value);
+
+           
+            error_log(print_r( 'event_statuses',1));
+            error_log(print_r( $event_statuses,1));
+
+            if($product_id){
+         
+                $query22 = "SELECT * FROM `wp_postmeta` WHERE (`meta_key` = 'product_status' AND `meta_value` IN ($event_statuses) )";
+                $responseww   = $wpdb->get_results( $wpdb->prepare( $query22,$event_statuses) );
+
+               
+               // working here
+              
+            }
+          
+        }
+    }
     return $valid_event_order_ids;
 }
 
