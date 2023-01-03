@@ -399,16 +399,14 @@ function el_get_home_consultations_dataset_by_year($structure_data){
 }
 
 
-// collect filter information which will use to do GLOBAL FILTERING by : el_FILTER_PRODUCTS_from_structure_data () this function 
+// collect filter information which will use to do GLOBAL FILTERING 
 function el_GET_ORDER_FILTER_VALUES($order_id){
     
     $output = [];
 
     $order = wc_get_order($order_id);
 
-
     $service_type = $order->get_meta('order_service_type');
-
     if($service_type){
         $output['service_type'] = $service_type;
     }
