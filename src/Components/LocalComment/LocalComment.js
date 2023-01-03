@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
+    useDeleteIndividualCommentMutation,
     useGetIndividualCommentQuery,
+    useInsetIndividualCommentMutation,
     // eslint-disable-next-line prettier/prettier
-    useInsetIndividualCommentMutation
+    useUpdateIndividualCommentMutation
 } from '../../API/apiSlice';
 import dotsIcon from '../../images/dots.svg';
 import rocketIcon from '../../images/rocket.svg';
@@ -25,6 +27,8 @@ function LocalComment() {
     };
 
     const [insetIndividualComment] = useInsetIndividualCommentMutation();
+    const [deleteIndividualComment] = useDeleteIndividualCommentMutation();
+    const [updateIndividualComment] = useUpdateIndividualCommentMutation();
 
     const { data, error, isLoading } = useGetIndividualCommentQuery({
         section_name: location,
@@ -60,15 +64,28 @@ function LocalComment() {
     };
     const updateCommentHandler = async () => {
         try {
-            // await updateGenericComment({
-            //     comment_id: commentId,
-            //     comment_content: commentContent,
-            // });
+            await updateIndividualComment({
+                comment_id: commentId,
+                comment_content: commentContent,
+            });
             setIsEdit(!isEdit);
         } catch (e) {
             console.log('An Error Occurred', e);
         }
     };
+
+    const handleDelete = async event => {
+        console.log(event.target.closest('button').getAttribute('data-id'));
+        try {
+            await deleteIndividualComment({
+                comment_id: event.target.closest('button').getAttribute('data-id'),
+            });
+            // setIsEdit(!isEdit);
+        } catch (e) {
+            console.log('An Error Occurred', e);
+        }
+    };
+
     const updateCommentOnChange = event => {
         setCommentContent(event.target.value);
     };
@@ -125,7 +142,13 @@ function LocalComment() {
                                       </button>
                                       {showButtons && (
                                           <div className="comment-action-buttons">
-                                              <button type="button">Delete</button>
+                                              <button
+                                                  type="button"
+                                                  onClick={handleDelete}
+                                                  data-id={comment.comment_ID}
+                                              >
+                                                  Delete
+                                              </button>
                                               <button
                                                   type="button"
                                                   onClick={handleEdit}

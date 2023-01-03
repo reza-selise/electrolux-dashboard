@@ -96,8 +96,27 @@ export const eluxAPI = createApi({
             invalidatesTags: ['IndividualComment'],
         }),
         getIndividualComment: builder.query({
-            query: () => '/generic-comments',
+            query: payload => ({
+                url: `/section-comments?${new URLSearchParams(payload)}`,
+                method: 'GET',
+            }),
             providesTags: ['IndividualComment'],
+        }),
+        deleteIndividualComment: builder.mutation({
+            query: payload => ({
+                url: '/section-comments',
+                method: 'DELETE',
+                body: payload,
+            }),
+            invalidatesTags: ['IndividualComment'],
+        }),
+        updateIndividualComment: builder.mutation({
+            query: payload => ({
+                url: '/section-comments',
+                method: 'PUT',
+                body: payload,
+            }),
+            invalidatesTags: ['IndividualComment'],
         }),
     }),
 });
@@ -117,4 +136,6 @@ export const {
     useEventPerSalesPersonQuery,
     useInsetIndividualCommentMutation,
     useGetIndividualCommentQuery,
+    useDeleteIndividualCommentMutation,
+    useUpdateIndividualCommentMutation,
 } = eluxAPI;
