@@ -111,7 +111,9 @@ function el_add_section_comments($ReqObj){
 --------------------------------------------------------*/
 
 add_action( 'rest_api_init', function () {
-    register_rest_route( 'el-dashboard-api', '/section-comments', [
+    $namespace = 'elux-dashboard/v1';
+
+    register_rest_route( $namespace, '/section-comments', [
         'methods' => 'GET',
         'callback' => 'el_get_section_comments',
         'login_user_id' => get_current_user_id(),
@@ -155,13 +157,11 @@ function el_get_section_comments($ReqObj){
             }
         }   
 
-         // Filter by year
-         $comment_year   =  intval(  $ReqObj->get_param('comment_year') )  ?  intval(  $ReqObj->get_param('comment_year') ) : date("Y");
-         if( $comment_year ){
-             $args['date_query'] = [
-                'year' => $comment_year
-             ];
-         }
+        // Filter by year
+        $comment_year   =  intval(  $ReqObj->get_param('comment_year') )  ?  intval(  $ReqObj->get_param('comment_year') ) : date("Y");
+        $args['date_query'] = [
+            'year' => $comment_year
+        ];
 
 
 
@@ -192,7 +192,9 @@ function el_get_section_comments($ReqObj){
     2. comment_id = number/text
 --------------------------------------------------------*/
 add_action( 'rest_api_init', function () {
-    register_rest_route( 'el-dashboard-api', '/section-comments', [
+    $namespace = 'elux-dashboard/v1';
+
+    register_rest_route( $namespace, '/section-comments', [
         'methods' => 'PUT',
         'callback' => 'el_update_generic_comments',
         'login_user_id' => get_current_user_id(),
@@ -208,7 +210,9 @@ add_action( 'rest_api_init', function () {
     
 --------------------------------------------------------*/
 add_action( 'rest_api_init', function () {
-    register_rest_route( 'el-dashboard-api', '/generic-comments', [
+    $namespace = 'elux-dashboard/v1';
+
+    register_rest_route( $namespace, '/generic-comments', [
         'methods' => 'DELETE',
         'callback' => 'el_delete_generic_comments',
         'login_user_id' => get_current_user_id(),
