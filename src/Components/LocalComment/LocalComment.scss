@@ -47,7 +47,36 @@
               width: 40px;
               height: 40px;
             }
-          }
+        }
+        .update-generic-comment-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            textarea {
+              flex: 1;
+              padding: 8px 12px;
+              height: 120px;
+              border: 1px solid #adb9c3;
+              border-radius: 4px;
+            }
+            .comment-action {
+              button {
+                width: 40px;
+                height: 40px;
+                border: 1px solid;
+                border-radius: 6px;
+                &:first-child {
+                  background: #011e41;
+                  border-color: #011e41;
+                  margin-right: 8px;
+                }
+                // &:last-child {
+                //   background: #ffffff;
+                //   border-color: #dfe7ea;
+                // }
+              }
+            }
+        }
     }
     .comment-list{
         max-height: 450px;
