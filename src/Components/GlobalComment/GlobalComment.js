@@ -30,11 +30,11 @@ function GlobalComment() {
     const { startTyping, errorOccured, pleaseWait } = eluxTranslation;
 
     const postCommentField = useRef();
-    const handleYearChange = (value) => {
+    const handleYearChange = value => {
         setDate(value);
     };
 
-    const handleCommentInsert = async (event) => {
+    const handleCommentInsert = async event => {
         event.preventDefault();
         if (postCommentField.current.value !== '') {
             const payload = {
@@ -73,18 +73,18 @@ function GlobalComment() {
             console.log('An Error Occurred', e);
         }
     };
-    const openCommentEditBox = (event) => {
+    const openCommentEditBox = event => {
         setIsEdit(!isEdit);
         setCommentID(event.target.closest('button').getAttribute('data-id'));
     };
 
-    const updateCommentOnChange = (event) => {
+    const updateCommentOnChange = event => {
         setCommentContent(event.target.value);
     };
 
     useEffect(() => {
         const comment =
-            data && data.data.find((comment) => String(comment.comment_ID) === String(commentId));
+            data && data.data.find(comment => String(comment.comment_ID) === String(commentId));
         try {
             setCommentContent(comment.comment_content);
         } catch (error) {
@@ -122,11 +122,11 @@ function GlobalComment() {
                     ? pleaseWait
                     : data.data
                           .filter(
-                              (comment) =>
+                              comment =>
                                   String(new Date(comment.comment_date).getFullYear()) ===
                                   String(date)
                           )
-                          .map((comment) => (
+                          .map(comment => (
                               <li key={comment.comment_ID}>
                                   <span>{comment.comment_content}</span>
                                   {comment.user_id === currentUser ? (

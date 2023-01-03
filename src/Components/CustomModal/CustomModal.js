@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setModal } from '../../Redux/Slice/modalSlice';
 import { eluxTranslation } from '../../Translation/Translation';
 import GlobalComment from '../GlobalComment/GlobalComment';
+import LocalComment from '../LocalComment/LocalComment';
 import Timeline from '../Timeline/Timeline';
 import './CustomModal.scss';
 
@@ -143,6 +144,22 @@ function CustomModal() {
                     <Timeline />
                 </Modal>
             );
+
+        case 'event-by-year-comment':
+            return (
+                <Modal
+                    title={null}
+                    open={isModalOpen}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={1056}
+                    centered
+                    className="local-comment-modal"
+                >
+                    <LocalComment />
+                </Modal>
+            );
+
         default:
             return (
                 <Modal
