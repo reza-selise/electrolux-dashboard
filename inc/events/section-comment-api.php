@@ -212,9 +212,10 @@ add_action( 'rest_api_init', function () {
 add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
 
-    register_rest_route( $namespace, '/generic-comments', [
+    register_rest_route( $namespace, '/section-comments', [
         'methods' => 'DELETE',
         'callback' => 'el_delete_generic_comments',
         'login_user_id' => get_current_user_id(),
     ]);
+
 } );

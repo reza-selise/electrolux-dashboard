@@ -20,15 +20,16 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
         $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
         
         // required params.
-        $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
         $data_type              = $request->get_params()['request_data']; // can be events or participants.
         $event_status           = $request->get_params()['event_status'];   // planned | cancelled etc.
         $timeline               = $request->get_params()['filter_type'];
         
         // optional params.
+        $customer_type          = ! empty( $request->get_params()['customer_type'] ) ? $request->get_params()['customer_type'] : 'all';  // b2b | b2c | electrolux_internal | all etc.
         $locations              = ! empty( $request->get_params()['locations'] ) ? explode( ',', $request->get_params()['locations'] ) : [];      // 188,191,500 etc.
         $categories             = ! empty( $request->get_params()['categories'] ) ? explode( ',', $request->get_params()['categories'] ) : [];     // 15 | 47 | 104
         $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? explode( ',', $request->get_params()['salesperson'] ) : [];     // 7 | 8 | 9
+        $consultant_lead_ids    = ! empty( $request->get_params()['consultant_lead'] ) ? explode( ',', $request->get_params()['consultant_lead'] ) : [];     // 7 | 8 | 9
         
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
@@ -65,7 +66,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
                         $end_date           = $year . '-' . $month . '-31 23:59:59' ;
                         $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
-                        $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids );
+                        $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
                         $single_year_data["months"][] = $monthly_data;
                     }
                     array_push( $all_yearly_data, $single_year_data );
@@ -142,7 +143,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                         }
 
                         foreach ( $monthly_order_ids as $month => $ids ) {
-                            $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids );
+                            $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
                             $single_year_data["months"][] = $monthly_data;
                         }
                         array_push( $all_yearly_data, $single_year_data );
@@ -172,7 +173,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
     
 }
 
-function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations = array(), $categories = array(), $sales_person_ids = array() ){
+function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations = array(), $categories = array(), $sales_person_ids = array(), $consultant_lead_ids = array() ){
     $monthly_elux                = 0;
     $monthly_b2b                 = 0;
     $monthly_b2c                 = 0;
@@ -218,6 +219,11 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
                         continue;
                     }
 
+                    // filter event by fb lead id.
+                    if( ! product_has_consultant_lead( $product_id, $consultant_lead_ids ) ) {
+                        continue;
+                    }
+                    
                     $participants_qty           = (int) $value->get_quantity();
                     $monthly_event_participants += $participants_qty;
                     $monthly_events++;

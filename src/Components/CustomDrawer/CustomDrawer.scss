@@ -1,19 +1,22 @@
-.ant-drawer-wrapper-body{
-    font-family: 'Electrolux Sans';
+.ant-drawer-wrapper-body > * {
+    font-family: 'Electrolux Sans' !important;
 }
 
-.ant-drawer-title{
+.ant-drawer-title {
     color: #011e41 !important;
+}
+
+.ant-select-selection-placeholder {
+    font-family: 'Electrolux Sans' !important;
 }
 
 .filter-type-options {
     margin-top: 24px;
     margin-bottom: 14px;
-    font-family: 'Electrolux Sans';
     .ant-select-selector {
         height: 54px !important;
         background: #ffffff;
-        border: 1px solid #adb9c3;
+        border-color: #ADB9C3!important;
         border-radius: 0;
         margin-bottom: 10px;
         .ant-select-selection-item {
@@ -31,12 +34,28 @@
 .ant-select-selector:active,
 .ant-select-selector:hover,
 .ant-select-open .ant-select-selector {
-    border-color: #d9d9d9 !important;
+    border-color: #ADB9C3!important;
     box-shadow: none !important;
 }
 
 .ant-select-selection-placeholder {
-    color: #BCC4CC !important;
-    font-family: 'Electrolux Sans';
+    color: #011e41 !important;
 }
 
+.generic-timeline-button-wrapper {
+    .ant-btn-default {
+        width: 330px;
+        height: 54px;
+        border: 1px solid #ADB9C3;
+        text-align: left;
+        border-radius: 0 !important;
+        padding: 10px !important;
+    }
+    .ant-btn-default:hover {
+        border-color: #ADB9C3 !important;
+    }
+    > button > span {
+        font-family: 'Electrolux Sans';
+        color: #011e41 !important;
+    }
+}

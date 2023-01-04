@@ -10,7 +10,6 @@ if( ! function_exists( 'elux_get_all_valid_event_order_ids_between_date' ) ){
         return $valid_event_order_ids;
     }
 }
-// elux_get_all_valid_event_order_ids_between_date( '2022-10-01 00:00:00', '2022-10-31 11:59:59', array( 'giftcard', 'voucher' ) );
 
 if( ! function_exists( 'elux_order_id_array_map' ) ){
     function elux_order_id_array_map( $order ){
@@ -98,6 +97,33 @@ if( ! function_exists( 'product_has_sales_person' ) ){
             return false;
         }
     
+        // STEP 3: All filters passed, return true for everything else.
+        return true;
+    }
+
+}
+
+if( ! function_exists( 'product_has_consultant_lead' ) ){
+    
+    function product_has_consultant_lead( $product_id, $consultant_lead_ids = array() ) {
+        
+        // STEP 1: returns true, if requested consultant_lead parameter is empty.
+        if( empty( $consultant_lead_ids ) ){
+            return true;
+        }
+        
+        $product_consultant_lead = get_post_meta( $product_id, 'product_event_consultant', true );
+    
+        /*
+        * STEP 2: Requested consultant_lead parameter contains some id's.
+        * Return false, if product does not has any consultant_lead id,
+        * or product has consultant_lead id but that does not exist in the requested consultant_lead parameter. 
+        */
+        if( empty( $product_consultant_lead ) || ! in_array( $product_consultant_lead, $consultant_lead_ids ) ){
+            return false;
+        }
+    
+        // STEP 3: All filters passed, return true for everything else.
         return true;
     }
 

@@ -13,15 +13,20 @@ add_action( 'rest_api_init', function () {
 function get_event_by_locations($request){
     $event_status           = $request->get_params()['event_status']; // planned | cancelled etc. [event_status on product meta]
     $event_status       = explode( ',', $event_status );    
+   
     $customer_type          = $request->get_params()['customer_type']; // b2b | b2c | electrolux_internal | all etc. [customer_type on product meta]
     $customer_type       = explode( ',', $customer_type ); 
+   
     $booking_type           = $request->get_params()['booking_type']; // Booked Manually | Walk-in | Customer Booking [consultation_booking_type on order meta]
     $booking_type           = explode( ',', $booking_type ); 
+    
     $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? $request->get_params()['salesperson'] : '';     // 7 | 8 | 9
     $sales_person_ids       = explode( ',', $sales_person_ids );     // user id [event_consultant on order meta]
     
     $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
     $categories             = explode( ',', $categories );  // category ids [product category on product]
+    $fb_leads               = $request->get_params()['fb_leads']; //product_event_consultant [on product meta]
+    $fb_leads             = explode( ',', $fb_leads );
     // FB lead = consultant lead on product edit page
 
     $request_data =  $request->get_params()['request_data']; // events,participants 
@@ -42,7 +47,7 @@ function get_event_by_locations($request){
     foreach($gallery_locations_arr as $gallery_location){
         $my_data = array(
             "location"  => get_the_title($gallery_location),
-            "total" => 0,//get_order_count($gallery_location,$filter_type,$start_date,$end_date),        
+            "total" => 0, 
         );
         if(!empty($request_body)){
             // by months and year
@@ -58,7 +63,7 @@ function get_event_by_locations($request){
                         $end_date           =  new DateTime($year . '-' . $month . '-01 11:59:59');
                         $end_date = $end_date->format('Y-m-t h:i:s');
                           
-                        $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories);
+                        $monthly_order_ids  = get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories,$fb_leads);
                         if(!empty($monthly_order_ids)){
                             array_push( $yearly_order_ids, $monthly_order_ids );
                             $yearly_order_ids2 = array_merge( $yearly_order_ids2, $monthly_order_ids );
@@ -73,7 +78,7 @@ function get_event_by_locations($request){
                     }
                     
                     elseif(!empty($yearly_order_ids2) && 'participants'== $request_data){
-                        $my_data[$single_year['year']] = event_person_count($yearly_order_ids2);
+                        $my_data[$single_year['year']] = event_person_count($yearly_order_ids2,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories, $fb_leads);
                     }
                     else{
                         $my_data[$single_year['year']] = 0;
@@ -100,7 +105,7 @@ function get_event_by_locations($request){
                         
                         
                         if( $start_year === $end_year ){    // selected range is within same year
-                            $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories);
+                            $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories,$fb_leads);
                             
                             if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
                                 $yearly_order_ids[$start_year] = $range_order_ids;
@@ -110,7 +115,7 @@ function get_event_by_locations($request){
                                     $my_data[$start_year] = count($yearly_order_ids[$start_year]);
                                 }
                                 elseif('participants'== $request_data){
-                                    $my_data[$start_year] = event_person_count($yearly_order_ids[$start_year]);
+                                    $my_data[$start_year] = event_person_count($yearly_order_ids[$start_year],$event_status, $customer_type, $booking_type, $sales_person_ids, $categories,$fb_leads);
                                 }
                                 
                             } else {
@@ -123,7 +128,7 @@ function get_event_by_locations($request){
                                     $my_data[$start_year] = count($yearly_order_ids[$start_year]);
                                 }
                                 elseif('participants'== $request_data){
-                                    $my_data[$start_year] = event_person_count($yearly_order_ids[$start_year]);
+                                    $my_data[$start_year] = event_person_count($yearly_order_ids[$start_year],$event_status, $customer_type, $booking_type, $sales_person_ids, $categories,$fb_leads);
                                 }
 
                                 
@@ -145,7 +150,7 @@ function get_event_by_locations($request){
                                     $single_end_date    = $i . "-12-31 23:59:59";
                                 }
                                 
-                                $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories);
+                                $range_order_ids =  get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories,$fb_leads);
                                 if( ! array_key_exists( $i, $yearly_order_ids ) ){
                                     $yearly_order_ids[$i] = $range_order_ids;
 
@@ -155,7 +160,7 @@ function get_event_by_locations($request){
                                         $my_data[$i] = count($yearly_order_ids[$i]);
                                     }
                                     elseif('participants'== $request_data){
-                                        $my_data[$i] = event_person_count($yearly_order_ids[$i]);
+                                        $my_data[$i] = event_person_count($yearly_order_ids[$i],$event_status, $customer_type, $booking_type, $sales_person_ids, $categories,$fb_leads);
                                     }
 
                                 } else {
@@ -167,7 +172,7 @@ function get_event_by_locations($request){
                                         $my_data[$i] = count($yearly_order_ids[$i]);
                                     }
                                     elseif('participants'== $request_data){
-                                        $my_data[$i] = event_person_count($yearly_order_ids[$i]);
+                                        $my_data[$i] = event_person_count($yearly_order_ids[$i],$event_status, $customer_type, $booking_type, $sales_person_ids, $categories,$fb_leads);
                                     }
                                 }
                                  // location wise total count
@@ -197,12 +202,11 @@ function get_event_by_locations($request){
 }
 
 
-function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories){ 
+function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories, $fb_leads){ 
     global $wpdb;
     $categories = elux_prepare_category_ids_with_localization($categories);
 
-    error_log(print_r('categories',1));
-    error_log(print_r($categories,1));
+
     // query 1
     $query =  "SELECT DISTINCT $wpdb->postmeta.post_id from $wpdb->postmeta LEFT JOIN $wpdb->posts ON $wpdb->postmeta.post_id = $wpdb->posts.ID
      WHERE $wpdb->posts.post_type = 'shop_order' 
@@ -213,8 +217,13 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
     $response   = $wpdb->get_results( $wpdb->prepare( $query, $start_date, $end_date ) );
     $order_ids  = array_map( "elux_order_id_array_map", $response );
 
-    $valid_event_order_ids = array_filter( $order_ids, function( $order_id) use ($gallery_location){
-        if( 'voucher' !== get_post_meta( $order_id, 'order_service_type', true ) && $gallery_location == get_post_meta( $order_id, 'event_location', true )){
+    $event_types = [
+        "steamdemo",
+        "cooking-class" 
+    ];
+
+    $valid_event_order_ids = array_filter( $order_ids, function( $order_id) use ($gallery_location,$event_types){
+        if($gallery_location == get_post_meta( $order_id, 'event_location', true ) && in_array( get_post_meta( $order_id, 'order_service_type', true ), $event_types)){
             return true;
         } else {
             return false;
@@ -235,10 +244,18 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
                 $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';// customer type
                 $product_cat = get_the_terms( $product_id , 'product_cat' );
                 // $sales_person_1 = get_post_meta( $product_id, 'product_status', true);
+                $product_fb_lead = !empty( get_post_meta( $product_id, 'product_event_consultant', true ) ) ? strtolower(get_post_meta( $product_id, 'product_event_consultant', true )) : ''; // Culinary Ambassador [product_event_consultant]
 
+                $product_cats = [];
+                if($product_cat){
+                    foreach($product_cat as $p_cat){
+                        array_push($product_cats, $p_cat->term_id);
+                    }
+                }
+                
                 // event status [reserved,planned,took_place]
                 if($event_status[0] == 'all'){
-                   return;
+                //    return;
                 }
                 else{
                     if(!in_array($status, $event_status)){
@@ -247,7 +264,7 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
                 }
                 // type , customer type
                 if($customer_type[0] == 'all'){
-                    return;
+                    // return;
                 }
                 else{
                     if(!in_array($type, $customer_type)){
@@ -257,7 +274,7 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
                 // $sales_person_ids
 
                 if($sales_person_ids[0] == 'all'){
-                    return;
+                    // return;
                 }
                 else{
                     if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
@@ -266,6 +283,33 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
                 }
                 // categories
               
+                if($categories[0] == 'all'){
+                    // return;
+                }
+                else{
+                    // error_log(print_r('product_cats',1));
+                    // error_log(print_r($product_cats,1));
+                    foreach($categories as $category){
+                        if(!in_array($category,$product_cats)){
+                            unset($valid_event_order_ids[$order_key]);
+                            // error_log(print_r('i am here unset ',1));
+                        }
+                        else{
+                            // error_log(print_r('i am here setsss ',1));
+                        }
+                    }
+                }
+                //--------------------------- FB Leads---------------
+                if($fb_leads[0] == 'all'){
+                    
+                }
+                else{
+                    if(!in_array($product_fb_lead,$fb_leads)){
+                        unset($valid_event_order_ids[$order_key]);
+                    }
+                   
+                }
+                // FB leads  $fb_leads
 
                 
             }
@@ -285,32 +329,119 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
         
     }
     // end new code
-    error_log(print_r('valid_event_order_ids in last', true));
-    error_log(print_r($valid_event_order_ids, true));
-
+ 
    
     return $valid_event_order_ids;
 }
 
 // persopn count yearwise
-function event_person_count($orders_ids){
+function event_person_count($orders_ids,$event_status, $customer_type, $booking_type, $sales_person_ids, $categories,$fb_leads){
     global $woocommerce;
-    error_log(print_r('order id in event_person count ',1));
-    error_log(print_r($orders_ids,1));
+    // error_log(print_r('order id in event_person count ',1));
+    // error_log(print_r($orders_ids,1));
     $yearly_event_participants  = 0;
     
     if(!empty($orders_ids)){
         foreach( $orders_ids as $order_id ){
             $order      = wc_get_order( $order_id );
-           
+            $order_items    = $order->get_items();
 
-            if($order->get_items() && isset($order->get_items()[0])){
+            if( is_array( $order_items ) && !empty( $order_items )){
+                foreach( $order_items as $item ){
+                    
+                    //------------------- new code ------------------------------
 
-                $event      = $order->get_items()[0];
-                // $product_id = (int) $event->get_product_id();
-                // $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
-            
-                $participants_qty           = (int) $event->get_quantity();
+                    $product_id = (int) $item->get_product_id();
+               
+                    $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '-', strtolower(get_post_meta( $product_id, 'product_status', true ))) : ''; // event_status
+                    $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';// customer type
+                    $product_cat = get_the_terms( $product_id , 'product_cat' );
+                    // $sales_person_1 = get_post_meta( $product_id, 'product_status', true);
+                    $product_fb_lead = !empty( get_post_meta( $product_id, 'product_event_consultant', true ) ) ? strtolower(get_post_meta( $product_id, 'product_event_consultant', true )) : ''; // Culinary Ambassador [product_event_consultant]
+                  
+                    $product_cats = [];
+                    if($product_cat){
+                        foreach($product_cat as $p_cat){
+                            array_push($product_cats, $p_cat->term_id);
+                        }
+                    }
+                    
+                    // event status [reserved,planned,took_place]
+                    if($event_status[0] == 'all'){
+                        $participants_qty = (int) $item->get_quantity();
+                    }
+                    else{
+                        if(!in_array($status, $event_status)){
+                            $participants_qty = 0;
+                        }
+                        else{
+                            $participants_qty = (int) $item->get_quantity();
+                        }
+                    }
+                    // type , customer type
+                    if($customer_type[0] == 'all'){
+                        $participants_qty = (int) $item->get_quantity();
+                    }
+                    else{
+                        if(!in_array($type, $customer_type)){
+                            $participants_qty = 0;
+                        }
+                        else{
+                            $participants_qty = (int) $item->get_quantity();
+                        }
+                    }
+                    // $sales_person_ids
+    
+                    if($sales_person_ids[0] == 'all'){
+                        $participants_qty = (int) $item->get_quantity();
+                    }
+                    else{
+                        if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
+                            $participants_qty = 0;
+                        } 
+                        else{
+                            $participants_qty = (int) $item->get_quantity();
+                        }  
+                    }
+                    // categories
+                  
+                    if($categories[0] == 'all'){
+                        $participants_qty = (int) $item->get_quantity();
+                    }
+                    else{
+                        // error_log(print_r('product_cats',1));
+                        // error_log(print_r($product_cats,1));
+                        foreach($categories as $category){
+                            if(!in_array($category,$product_cats)){
+                                $participants_qty = 0;
+                                
+                            }
+                            else{
+                                $participants_qty = (int) $item->get_quantity();
+                            }
+                        }
+                    }
+                    //--- fb leads
+                                       
+                    if($fb_leads[0] == 'all'){
+                        $participants_qty = (int) $item->get_quantity();
+                    }
+                    else{
+                        if(!in_array($product_fb_lead,$fb_leads)){
+                            $participants_qty = 0;
+                        }
+                        else{
+                            $participants_qty = (int) $item->get_quantity();
+                        }
+                       
+                    }
+                    //------------------- end new code ------------------------------
+
+                    // $participants_qty = (int) $item->get_quantity();
+
+                }
+
+                
             }
             else{
                 $participants_qty = 1;
@@ -320,15 +451,7 @@ function event_person_count($orders_ids){
         }
     }
     
-    error_log(print_r('perticipant yearly_event_participants ',1));
-    error_log(print_r($yearly_event_participants,1));
+    
     return $yearly_event_participants;
-//     error_log(print_r('order_ids array length ',1));
-//     error_log(print_r(count($orders_ids,1)));
 
-//     global $wpdb;
-//     $query =  "SELECT * FROM wp_woocommerce_order_items WHERE order_id  IN ($orders_ids)";
-//     $response   = $wpdb->get_results($wpdb->prepare( $query));
-
-//    return count($response);
 }

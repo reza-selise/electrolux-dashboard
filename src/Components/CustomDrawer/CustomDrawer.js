@@ -1,8 +1,11 @@
 import { Drawer, Select } from 'antd';
 import React, { useState } from 'react';
+import ModalButton from '../ModalButton/ModalButton';
 import './CustomDrawer.scss';
 
 const customerOptions = ['All', 'ELUX', 'B2B', 'B2C'];
+const eventStatusOptions = ['Planned', 'Canceled', 'Taken Place'];
+const dataTypeOptions = ['Events', 'Participants'];
 const locationOptions = [
     'Bern',
     'Zurich',
@@ -28,19 +31,22 @@ const mainCategoryOptions = [
     'Electrolux Employee Training',
     'AD Customer Event',
 ];
-
 const fbLeadOptions = ['Culinary Ambassadors', 'Consultants', 'Admins'];
 
 function CustomDrawer({ onClose, open }) {
     const [customerSelectedItems, setCustomerSelectedItems] = useState([]);
-    const [location, setLocation] = useState([]);
+    const [filterLocation, setFilterLocation] = useState([]);
     const [mainCategory, setMainCategory] = useState([]);
     const [fbLead, setFbLead] = useState([]);
-
+    const [dataType, setDataType] = useState([]);
+    const [eventStatus, setEventStatus] = useState([]);
+    // filter
     const customerFilteredOptions = customerOptions.filter(o => !customerSelectedItems.includes(o));
-    const locationFilteredOptions = locationOptions.filter(o => !location.includes(o));
+    const locationFilteredOptions = locationOptions.filter(o => !filterLocation.includes(o));
     const mainCategoryFilteredOptions = mainCategoryOptions.filter(o => !mainCategory.includes(o));
     const fbLeadFilteredOptions = fbLeadOptions.filter(o => !fbLead.includes(o));
+    const typeOfDataFilteredOptions = dataTypeOptions.filter(o => !dataType.includes(o));
+    const eventStatusFilteredOptions = eventStatusOptions.filter(o => !eventStatus.includes(o));
 
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
@@ -61,8 +67,8 @@ function CustomDrawer({ onClose, open }) {
                 <Select
                     mode="tags"
                     placeholder="Location"
-                    value={location}
-                    onChange={setLocation}
+                    value={filterLocation}
+                    onChange={setFilterLocation}
                     style={{
                         width: '100%',
                     }}
@@ -97,6 +103,36 @@ function CustomDrawer({ onClose, open }) {
                         label: item,
                     }))}
                 />
+
+                <Select
+                    mode="tags"
+                    placeholder="Type Of Data"
+                    value={dataType}
+                    onChange={setDataType}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={typeOfDataFilteredOptions.map(item => ({
+                        value: item,
+                        label: item,
+                    }))}
+                />
+                <Select
+                    mode="tags"
+                    placeholder="Event Status"
+                    value={eventStatus}
+                    onChange={setEventStatus}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={eventStatusFilteredOptions.map(item => ({
+                        value: item,
+                        label: item,
+                    }))}
+                />
+                <div className="generic-timeline-button-wrapper">
+                    <ModalButton location="global-timeline">Timeline</ModalButton>
+                </div>
             </div>
         </Drawer>
     );

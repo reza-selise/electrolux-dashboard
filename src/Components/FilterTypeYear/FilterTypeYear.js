@@ -6,14 +6,15 @@ import { setCookingCourseYears } from '../../Redux/Slice/CookingCourseType/Cooki
 import { setEventByCancellationYearMonths } from '../../Redux/Slice/EventByCancellation/EventByCancellationYearMonths';
 import { setEventByCancellationYears } from '../../Redux/Slice/EventByCancellation/EventByCancellationYears';
 import { setEventbyCategoryTimelineYears } from '../../Redux/Slice/EventByCategory/eventbyCategoryTimelineYears';
+import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
+import { setEventByLocationTimelineYears } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineYears';
 import { setEventbyMonthTimelineYears } from '../../Redux/Slice/EventByMonth/eventByMonthTimelineYears';
 import { seteventByStatusYearMonth } from '../../Redux/Slice/EventByStatus/EventByStatusYearMonth';
 import { setEventByStatusYears } from '../../Redux/Slice/EventByStatus/EventByStatusYears';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
 import { setEventbyYearTimelineYears } from '../../Redux/Slice/EventByYear/eventByYearTimelineYear';
-import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineMonth';
-import { setEventByLocationTimelineYears } from '../../Redux/Slice/EventByLocation/eventByLocationTimelineYears';
 
+import { setGlobalFilterTimelineYears } from '../../Redux/Slice/GlobalFilterTimeline/GlobalFilterTimelineYears';
 import './FilterTypeYear.scss';
 
 function FilterTypeYear() {
@@ -57,6 +58,10 @@ function FilterTypeYear() {
                     dispatch(setEventByStatusYears(years));
                     break;
 
+                case 'global-timeline':
+                    dispatch(setGlobalFilterTimelineYears(years));
+                    break;
+
                 default:
                     console.log('filter type year default', location);
             }
@@ -83,6 +88,10 @@ function FilterTypeYear() {
                     break;
                 case 'event-by-cancellation-timeline':
                     dispatch(setEventByCancellationYears(value));
+                    break;
+
+                case 'global-timeline':
+                    dispatch(setGlobalFilterTimelineYears(value));
                     break;
 
                 default:

@@ -19,14 +19,15 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
         $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
 
         // required params.
-        $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
         $data_type              = 'events';
         $timeline               = $request->get_params()['filter_type'];
 
         // optional params.
+        $customer_type          = ! empty( $request->get_params()['customer_type'] ) ? $request->get_params()['customer_type'] : 'all';  // b2b | b2c | electrolux_internal | all etc.
         $locations              = ! empty( $request->get_params()['locations'] ) ? explode( ',', $request->get_params()['locations'] ) : [];      // 188,191,500 etc.
         $categories             = ! empty( $request->get_params()['categories'] ) ? explode( ',', $request->get_params()['categories'] ) : [];     // 15 | 47 | 104
         $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? explode( ',', $request->get_params()['salesperson'] ) : [];     // 7 | 8 | 9
+        $consultant_lead_ids    = ! empty( $request->get_params()['consultant_lead'] ) ? explode( ',', $request->get_params()['consultant_lead'] ) : [];     // 7 | 8 | 9
         
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
@@ -63,7 +64,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
                         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
                     }
 
-                    $yearly_data = elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids );
+                    $yearly_data = elux_prepare_single_year_by_status_data( $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
                     array_push( $all_yearly_data, $yearly_data );
                 }
 
@@ -120,7 +121,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
                 $all_yearly_data = array();
                 if( is_array( $yearly_order_ids ) && !empty( $yearly_order_ids ) ){
                     foreach( $yearly_order_ids as $year => $yearly_order_ids ){
-                        $yearly_data = elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids );
+                        $yearly_data = elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
                         array_push( $all_yearly_data, $yearly_data );
                     }
                 }
@@ -148,7 +149,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
     
 }
 
-function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations = array(), $categories = array(), $sales_person_ids = array() ){
+function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations = array(), $categories = array(), $sales_person_ids = array(), $consultant_lead_ids = array() ){
     $planned        = 0;
     $cancelled      = 0;
     $taken_place    = 0;
@@ -185,6 +186,11 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
 
                     // filter event by sales person id.
                     if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
+                        continue;
+                    }
+
+                    // filter event by fb lead id.
+                    if( ! product_has_consultant_lead( $product_id, $consultant_lead_ids ) ) {
                         continue;
                     }
 

@@ -7,6 +7,7 @@ import { setEventbyLocationTimelineMonth } from '../../Redux/Slice/EventByLocati
 import { setEventbyMonthTimelineMonth } from '../../Redux/Slice/EventByMonth/eventMyMonthTimelineMonth';
 import { setEventByStatusMonths } from '../../Redux/Slice/EventByStatus/EventByStatusMonths';
 import { setEventbyYearTimelineMonth } from '../../Redux/Slice/EventByYear/eventByYearTimelineMonth';
+import { setGlobalFilterTimelineMonths } from '../../Redux/Slice/GlobalFilterTimeline/GlobalFilterTimelineMonths';
 
 function FilterTypeMonth() {
     const location = useSelector(state => state.location.value);
@@ -81,6 +82,9 @@ function FilterTypeMonth() {
                 break;
             case 'event-by-cancellation-timeline':
                 dispatch(setEventByCancellationMonths(value));
+                break;
+            case 'global-timeline':
+                dispatch(setGlobalFilterTimelineMonths(value));
                 break;
 
             default:
