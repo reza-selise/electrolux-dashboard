@@ -54,9 +54,9 @@ function MyTable({ data }) {
         let total = 0;
         data.datasets.forEach((data, index) => {
             row[`year${data.label}`] = data.data[outerIndex];
-            total = total + parseInt(data.data[outerIndex]);
+            total += parseInt(data.data[outerIndex]);
         });
-        dataSource.push({ ...row, total: total });
+        dataSource.push({ ...row, total });
     });
     const columns = [
         {
@@ -202,7 +202,11 @@ function EventByCancellation() {
                     setgGrapOrTable={setGrapTableEventCancellation}
                     name="event-by-cancellation"
                 />
-                <DownloadButton identifier={8} />
+                <DownloadButton
+                    identifier={8}
+                    location="event-by-cancellation-comment"
+                    graphID="event-by-cancellation-graph"
+                />
             </div>
 
             <div className="graph-overview">
@@ -217,7 +221,7 @@ function EventByCancellation() {
 
             {grapTableEventCancellation === 'graph' ? (
                 isLoading === false ? (
-                    <Bar options={options} data={graphData} />
+                    <Bar options={options} data={graphData} id="event-by-cancellation-graph" />
                 ) : (
                     'Loading'
                 )

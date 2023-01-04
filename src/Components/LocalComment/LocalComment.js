@@ -11,20 +11,18 @@ import dotsIcon from '../../images/dots.svg';
 import rocketIcon from '../../images/rocket.svg';
 import saveIcon from '../../images/save.svg';
 import { eluxTranslation } from '../../Translation/Translation';
+import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import './LocalComment.scss';
 
 function LocalComment() {
     const location = useSelector(state => state.location.value);
+    const graphURL = useSelector(state => state.graphURL.value);
 
-    // const [showButtons, setShowButtons] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [showButtons, setShowButtons] = useState(false);
+    const [showButtons, setShowButtons] = useState(null);
     const [commentContent, setCommentContent] = useState('');
     const [commentId, setCommentID] = useState();
-
-    const handleCommentActionButtons = () => {
-        setShowButtons(!showButtons);
-    };
+    const [grapOrTableComment, setGrapOrTableComment] = useState('graph');
 
     const [insetIndividualComment] = useInsetIndividualCommentMutation();
     const [deleteIndividualComment] = useDeleteIndividualCommentMutation();
@@ -38,6 +36,10 @@ function LocalComment() {
     const individualCommentField = useRef();
 
     const { startTyping } = eluxTranslation;
+
+    const handleCommentActionButtons = comment => {
+        setShowButtons(comment);
+    };
 
     const handleCommentInsert = async event => {
         event.preventDefault();
@@ -117,7 +119,14 @@ function LocalComment() {
 
     return (
         <div className="local-comment-wrapper">
-            <div className="left-comment" />
+            <div className="left-comment">
+                <GraphTableSwitch
+                    grapOrTable={grapOrTableComment}
+                    setgGrapOrTable={setGrapOrTableComment}
+                    name="local-comment"
+                />
+                {grapOrTableComment === 'graph' ? <GraphView graphURL={graphURL} /> : <TableView />}
+            </div>
             <div className="right-comment">
                 <h2>Comments</h2>
                 <ul className="comment-list">
@@ -137,10 +146,13 @@ function LocalComment() {
                                   <p>{comment.comment_content}</p>
                                   <span>{convertDateToTimeAgo(comment.comment_date)}</span>
                                   <div className="local-comment-action">
-                                      <button type="button" onClick={handleCommentActionButtons}>
+                                      <button
+                                          type="button"
+                                          onClick={() => handleCommentActionButtons(comment)}
+                                      >
                                           <img src={assetsPath + dotsIcon} alt="comment icon" />
                                       </button>
-                                      {showButtons && (
+                                      {showButtons === comment && (
                                           <div className="comment-action-buttons">
                                               <button
                                                   type="button"
@@ -188,3 +200,11 @@ function LocalComment() {
 }
 
 export default LocalComment;
+
+function GraphView({ graphURL }) {
+    return <img src={graphURL} alt="graph-view" />;
+}
+
+function TableView() {
+    return <h1>Table View</h1>;
+}

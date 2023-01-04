@@ -16,7 +16,7 @@ const items = [
     },
 ];
 
-function DownloadButton({ identifier, location }) {
+function DownloadButton({ identifier, location, graphID }) {
     const downloadPNG = id => {
         const chartData = document.getElementById(id).toDataURL('image/png');
 
@@ -54,7 +54,7 @@ function DownloadButton({ identifier, location }) {
     };
     return (
         <div className="download-button-wrapper">
-            <ModalButton location={location}>
+            <ModalButton location={location} graphID={graphID}>
                 <img src={assetsPath + commentIcon} alt="comment icon" />
             </ModalButton>
 

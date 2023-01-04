@@ -185,7 +185,11 @@ function CookingCourseType() {
                     setgGrapOrTable={setGrapTableCookingCourse}
                     name="cooking-course-type"
                 />
-                <DownloadButton identifier={7} />
+                <DownloadButton
+                    identifier={7}
+                    location="cooking-course-comment"
+                    graphID="cooking-course-graph"
+                />
             </div>
             <h2 className="graph-title">Overview of Cooking Course Type</h2>
             <div className="graph-overview">
@@ -219,7 +223,7 @@ function CookingCourseType() {
             {data && data.status ? (
                 grapTableCookingCourse === 'graph' ? (
                     isLoading === false ? (
-                        <Bar options={options} data={graphData} />
+                        <Bar options={options} data={graphData} id="cooking-course-graph" />
                     ) : (
                         'Loading'
                     )

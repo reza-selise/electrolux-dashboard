@@ -60,17 +60,15 @@ function EventByMonth() {
         request_data: requestData,
         filter_type: eventByMonthFilterType,
         request_body: JSON.stringify(requestBody),
-        event_status: "planned",
-        customer_type: "all",
-       
+        event_status: 'planned',
+        customer_type: 'all',
     };
     const { data, error, isLoading } = useEventByMonthsQuery(payload);
-    console.log("data Shuvo", data,);
+    console.log('data Shuvo', data);
 
     // ************** dynamic years **********
     let years = [];
     years = data && data.data.years.map(item => item.year);
-   
 
     let months = [];
     months = data && data.data.years.map(item => item.months);
@@ -186,14 +184,18 @@ function EventByMonth() {
                     setgGrapOrTable={setgGrapOrTableForMonth}
                     name="event-by-month"
                 />
-                <DownloadButton identifier={3} />
+                <DownloadButton
+                    identifier={3}
+                    location="event-by-month-comment"
+                    graphID="event-by-month-graph"
+                />
             </div>
 
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 className="graph-title">
                     Overview of Events <span>by month</span>
                 </h2>
-                <div style={{display:"flex",columnGap:'10px'}} className="graph-overview">
+                <div style={{ display: 'flex', columnGap: '10px' }} className="graph-overview">
                     <LocalFilter
                         showBoth="true"
                         requestData={requestData}
@@ -208,7 +210,12 @@ function EventByMonth() {
             ) : isLoading ? (
                 pleaseWait
             ) : graphTableforMonth === 'graph' ? (
-                <Bar className="custom_month_graph" options={options} data={graphData} />
+                <Bar
+                    className="custom_month_graph"
+                    options={options}
+                    data={graphData}
+                    id="event-by-month-graph"
+                />
             ) : (
                 <Table
                     className="custom_footer"
@@ -217,6 +224,7 @@ function EventByMonth() {
                     dataSource={tableData}
                     bordered
                     size="middle"
+                    // eslint-disable-next-line react/no-unstable-nested-components
                     footer={() => (
                         <Row style={{ display: 'flex', justifyContent: 'space-around' }}>
                             <Col

@@ -131,7 +131,11 @@ function EventByCategory() {
                     setgGrapOrTable={setGrapTableEvntCat}
                     name="event-by-category"
                 />
-                <DownloadButton identifier={4} />
+                <DownloadButton
+                    identifier={4}
+                    location="event-by-category-comment"
+                    graphID="event-by-category-graph"
+                />
             </div>
             <h2 className="graph-title">Overview of Events Category</h2>
             <div className="graph-overview">
@@ -166,7 +170,7 @@ function EventByCategory() {
                 'error'
             ) : grapTableEvntCat === 'graph' ? (
                 data && data.status === true ? (
-                    <Bar id="eventCategoryChartRef" options={options} data={graphData} />
+                    <Bar id="event-by-category-graph" options={options} data={graphData} />
                 ) : (
                     ''
                 )

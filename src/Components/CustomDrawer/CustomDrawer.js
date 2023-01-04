@@ -2,6 +2,7 @@ import { Drawer, Select } from 'antd';
 import React, { useState } from 'react';
 import ModalButton from '../ModalButton/ModalButton';
 import './CustomDrawer.scss';
+
 const customerOptions = ['All', 'ELUX', 'B2B', 'B2C'];
 const eventStatusOptions = ['Planned', 'Canceled', 'Taken Place'];
 const dataTypeOptions = ['Events', 'Participants'];

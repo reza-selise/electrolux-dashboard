@@ -34,7 +34,7 @@ import globalFilterTimelineFilterTypeReducer from './Slice/GlobalFilterTimeline/
 import globalFilterTimelineMonthsReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineMonths';
 import globalFilterTimelineYearMonthsReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineYearMonths';
 import globalFilterTimelineYearsReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineYears';
-
+import graphURLReducer from './Slice/graphURL';
 
 import locationReducer from './Slice/locationSlice';
 import modalReducer from './Slice/modalSlice';
@@ -72,12 +72,12 @@ export const store = configureStore({
         eventByStatusMonths: eventByStatusMonthsReducer,
         eventByStatusCustomDate: eventByStatusCustomDateReducer,
         eventPerSalesPersonFilterType: eventPerSalesPersonFilterTypeReducer,
-        globalFilterTimelineFilterType:globalFilterTimelineFilterTypeReducer,
-        globalFilterTimelineYears:globalFilterTimelineYearsReducer,
-        globalFilterTimelineMonths:globalFilterTimelineMonthsReducer,
-        globalFilterTimelineYearMonths:globalFilterTimelineYearMonthsReducer,
-        globalFilterTimelineCustomDate:globalFilterTimelineCustomDateReducer
-
+        graphURL: graphURLReducer,
+        globalFilterTimelineFilterType: globalFilterTimelineFilterTypeReducer,
+        globalFilterTimelineYears: globalFilterTimelineYearsReducer,
+        globalFilterTimelineMonths: globalFilterTimelineMonthsReducer,
+        globalFilterTimelineYearMonths: globalFilterTimelineYearMonthsReducer,
+        globalFilterTimelineCustomDate: globalFilterTimelineCustomDateReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });

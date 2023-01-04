@@ -96,7 +96,7 @@ function EventPerSalesPerson() {
         <div className="event-per-sales-person">
             <h2 className="graph-title">Overview of Sales Events per Salesperson</h2>
             <div className="graph-overview">
-                <DownloadButton identifier={8} />
+                <DownloadButton identifier={8} location="sales-per-person-comment" />
                 <LocalFilter showBoth="false" location="event-per-sales-person-timeline" />
             </div>
             {error ? 'Error' : isLoading ? 'Please wait' : data && <TableView data={data.data} />}
