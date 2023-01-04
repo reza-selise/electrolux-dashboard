@@ -19,11 +19,11 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
         $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
 
         // required params.
-        $customer_type          = $request->get_params()['customer_type'];  // b2b | b2c | electrolux_internal | all etc.
         $data_type              = 'events';
         $timeline               = $request->get_params()['filter_type'];
 
         // optional params.
+        $customer_type          = ! empty( $request->get_params()['customer_type'] ) ? $request->get_params()['customer_type'] : 'all';  // b2b | b2c | electrolux_internal | all etc.
         $locations              = ! empty( $request->get_params()['locations'] ) ? explode( ',', $request->get_params()['locations'] ) : [];      // 188,191,500 etc.
         $categories             = ! empty( $request->get_params()['categories'] ) ? explode( ',', $request->get_params()['categories'] ) : [];     // 15 | 47 | 104
         $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? explode( ',', $request->get_params()['salesperson'] ) : [];     // 7 | 8 | 9
