@@ -27,7 +27,7 @@
     "type" : "participants",
     "timeline_type" : "year",
     "timeline_filter" : ["2022","2024","2020"],
-    "filter_key_value" : {
+    "filter_key_values" : {
         "product_status" : "Planned"
     },
     "year_months" : ["01","02"]

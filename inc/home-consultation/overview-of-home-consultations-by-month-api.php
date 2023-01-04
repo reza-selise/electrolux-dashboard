@@ -400,15 +400,51 @@ function el_get_home_consultations_dataset_by_year($structure_data){
 
 
 // collect filter information which will use to do GLOBAL FILTERING 
+// Category : https://docs.google.com/document/d/1nDTzBubjUGB20VPOThgd0Hoc3eeQb4UNFfHR6Ggse3Y/edit
 function el_GET_ORDER_FILTER_VALUES($order_id){
     
+
+
     $output = [];
 
     $order = wc_get_order($order_id);
 
-    $service_type = $order->get_meta('order_service_type');
-    if($service_type){
-        $output['service_type'] = $service_type;
+    $order_items =$order->get_items();
+
+    foreach ( $order_items() as $item_id => $item ) {
+        $product_id = $item->get_product_id();
+
+        $customer_type =  get_post_meta( $product_id, 'customer_type', true );
+
+        if($customer_type){
+            if(isset($output['customer_type'])) {
+                $output['customer_type'][] = $customer_type;
+            }else{
+                $output['customer_type'] = [];
+                $output['customer_type'][] = $customer_type;
+            }
+        }
+
+        $location       = get_post_meta( $single_product_id, 'event_location', true );
+
+        if($location){
+            if(isset($output['location'])) {
+                $output['location'][] = $location;
+            }else{
+                $output['location'] = [];
+                $output['location'][] = $location;
+            }
+        }
+        
+    }
+
+
+
+    $product_ids = 
+
+    $order_service_type = $order->get_meta('order_service_type');
+    if($order_service_type){
+        $output['category'] = $order_service_type;
     }
      
     return $output;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
