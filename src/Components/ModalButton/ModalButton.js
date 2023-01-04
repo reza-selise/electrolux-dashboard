@@ -15,6 +15,8 @@ function ModalButton({ location, children, graphID }) {
         const graphCanvas = document.getElementById(graphID);
         if (graphCanvas !== null) {
             dispatch(setGraphURL(graphCanvas.toDataURL()));
+        } else {
+            dispatch(setGraphURL(''));
         }
     };
 

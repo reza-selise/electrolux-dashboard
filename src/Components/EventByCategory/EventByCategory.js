@@ -48,6 +48,7 @@ function EventByCategory() {
 
     const [grapTableEvntCat, setGrapTableEvntCat] = useState('graph');
     const eventByCategoryFilterType = useSelector(state => state.eventByCategoryFilterType.value);
+    const customerType = useSelector(state => state.customerType.value);
     const eventbyCategoryTimelineYears = useSelector(
         state => state.eventbyCategoryTimelineYears.value
     );
@@ -65,6 +66,7 @@ function EventByCategory() {
         filter_key_value: {
             product_status: productStatus,
         },
+        customer_type: customerType,
     };
 
     const { error, data } = useEventByCategoryQuery(payload);

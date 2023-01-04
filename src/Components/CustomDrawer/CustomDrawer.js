@@ -1,5 +1,7 @@
 import { Drawer, Select } from 'antd';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setCustomerType } from '../../Redux/Slice/GlobalFilter/customerTypeSlice';
 import ModalButton from '../ModalButton/ModalButton';
 import './CustomDrawer.scss';
 
@@ -40,7 +42,10 @@ function CustomDrawer({ onClose, open }) {
     const [fbLead, setFbLead] = useState([]);
     const [dataType, setDataType] = useState([]);
     const [eventStatus, setEventStatus] = useState([]);
+
+    const dispatch = useDispatch();
     // filter
+
     const customerFilteredOptions = customerOptions.filter(o => !customerSelectedItems.includes(o));
     const locationFilteredOptions = locationOptions.filter(o => !filterLocation.includes(o));
     const mainCategoryFilteredOptions = mainCategoryOptions.filter(o => !mainCategory.includes(o));
@@ -48,6 +53,10 @@ function CustomDrawer({ onClose, open }) {
     const typeOfDataFilteredOptions = dataTypeOptions.filter(o => !dataType.includes(o));
     const eventStatusFilteredOptions = eventStatusOptions.filter(o => !eventStatus.includes(o));
 
+    const handleCustomerTypeChange = value => {
+        dispatch(setCustomerType(value));
+    };
+    
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
             <div className="filter-type-options">
@@ -55,7 +64,7 @@ function CustomDrawer({ onClose, open }) {
                     mode="tags"
                     placeholder="Customer Type"
                     value={customerSelectedItems}
-                    onChange={setCustomerSelectedItems}
+                    onChange={handleCustomerTypeChange}
                     style={{
                         width: '100%',
                     }}
