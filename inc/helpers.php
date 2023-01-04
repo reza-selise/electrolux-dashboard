@@ -112,7 +112,7 @@ if( ! function_exists( 'product_has_consultant_lead' ) ){
             return true;
         }
         
-        $product_consultant_lead = get_post_meta( $product_id, 'consultant_lead', true );
+        $product_consultant_lead = get_post_meta( $product_id, 'product_event_consultant', true );
     
         /*
         * STEP 2: Requested consultant_lead parameter contains some id's.
