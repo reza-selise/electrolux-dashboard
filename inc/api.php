@@ -17,7 +17,7 @@ class Elux_DB_API {
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-by-cooking-course-type-api.php';
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-by-sale-person-api.php';
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-by-cancellation-api.php';
-		require_once ELUX_DB_PLUGIN_DIR . 'inc/generic-filter-data-api.php';
+		require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-generic-filter-data-api.php';
 		//consultations
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/consultations/consultation-by-acquisition-type-api.php';
 		
