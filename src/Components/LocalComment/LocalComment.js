@@ -17,6 +17,7 @@ import './LocalComment.scss';
 function LocalComment() {
     const location = useSelector(state => state.location.value);
     const graphURL = useSelector(state => state.graphURL.value);
+    const tableURL = useSelector(state => state.tableURL.value);
 
     const [isEdit, setIsEdit] = useState(false);
     const [showButtons, setShowButtons] = useState(null);
@@ -115,6 +116,7 @@ function LocalComment() {
             setCommentContent('');
             // console.log('State Not Updated', error);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [commentId]);
 
     return (
@@ -125,7 +127,11 @@ function LocalComment() {
                     setgGrapOrTable={setGrapOrTableComment}
                     name="local-comment"
                 />
-                {grapOrTableComment === 'graph' ? <GraphView graphURL={graphURL} /> : <TableView />}
+                {grapOrTableComment === 'graph' ? (
+                    <GraphView graphURL={graphURL} />
+                ) : (
+                    <TableView tableURL={tableURL} />
+                )}
             </div>
             <div className="right-comment">
                 <h2>Comments</h2>
@@ -205,6 +211,7 @@ function GraphView({ graphURL }) {
     return <img src={graphURL} alt="graph-view" />;
 }
 
-function TableView() {
-    return <h1>Table View</h1>;
+function TableView({ tableURL }) {
+    // eslint-disable-next-line react/no-danger
+    return <div dangerouslySetInnerHTML={{ __html: tableURL }} />;
 }
