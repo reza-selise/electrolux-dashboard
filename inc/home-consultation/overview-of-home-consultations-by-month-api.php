@@ -440,7 +440,6 @@ function el_GET_ORDER_FILTER_VALUES($order_id){
 
 
 
-    $product_ids = 
 
     $order_service_type = $order->get_meta('order_service_type');
     if($order_service_type){
