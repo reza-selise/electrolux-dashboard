@@ -1,7 +1,9 @@
-import { Drawer, Select } from 'antd';
+import { Button, Drawer, Select } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCustomerType } from '../../Redux/Slice/GlobalFilter/customerTypeSlice';
+import { setLocationType } from '../../Redux/Slice/GlobalFilter/locationTypeSlice';
+
 import ModalButton from '../ModalButton/ModalButton';
 import './CustomDrawer.scss';
 
@@ -53,10 +55,16 @@ function CustomDrawer({ onClose, open }) {
     const typeOfDataFilteredOptions = dataTypeOptions.filter(o => !dataType.includes(o));
     const eventStatusFilteredOptions = eventStatusOptions.filter(o => !eventStatus.includes(o));
 
+
     const handleCustomerTypeChange = value => {
         dispatch(setCustomerType(value));
     };
-    
+
+    const handleLocationTypeChange = value => {
+      dispatch(setLocationType(value[0]));
+       
+    };
+
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
             <div className="filter-type-options">
@@ -77,7 +85,7 @@ function CustomDrawer({ onClose, open }) {
                     mode="tags"
                     placeholder="Location"
                     value={filterLocation}
-                    onChange={setFilterLocation}
+                    onChange={handleLocationTypeChange}
                     style={{
                         width: '100%',
                     }}
@@ -141,6 +149,9 @@ function CustomDrawer({ onClose, open }) {
                 />
                 <div className="generic-timeline-button-wrapper">
                     <ModalButton location="global-timeline">Timeline</ModalButton>
+                    <div className="apply-filter-button">
+                        <Button>Apply Filter</Button>
+                    </div>
                 </div>
             </div>
         </Drawer>
