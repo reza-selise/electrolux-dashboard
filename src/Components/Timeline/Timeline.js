@@ -9,6 +9,7 @@ import { setEventByMonthFilterType } from '../../Redux/Slice/EventByMonth/eventB
 import { setEventByStatusFilterType } from '../../Redux/Slice/EventByStatus/EventByStatusFilterType';
 import { setEventByYearFilterType } from '../../Redux/Slice/EventByYear/eventByYearFilterType';
 import { setEventPerSalesPersonFilterType } from '../../Redux/Slice/EventPerSalesPerson/EventPerSalesPersonFilterType';
+import { setGlobalFilterTimelineFilterType } from '../../Redux/Slice/GlobalFilterTimeline/GlobalFilterTimelineFilterType';
 import FilterTypeCustomDate from '../FilterTypeCustomDate/FilterTypeCustomDate';
 import FilterTypeMonth from '../FilterTypeMonth/FilterTypeMonth';
 import FilterTypeTimeFrame from '../FilterTypeTImeFrame/FilterTypeTimeFrame';
@@ -51,6 +52,9 @@ function Timeline() {
                 break;
             case 'event-per-sales-person-timeline':
                 dispatch(setEventPerSalesPersonFilterType(filterType));
+                break;
+            case 'global-timeline':
+                dispatch(setGlobalFilterTimelineFilterType(filterType));
                 break;
 
             default:

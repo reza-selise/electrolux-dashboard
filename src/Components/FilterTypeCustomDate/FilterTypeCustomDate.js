@@ -9,6 +9,7 @@ import { setCookingCourseCustomDate } from '../../Redux/Slice/CookingCourseType/
 import { setEventByCancellationCustomDate } from '../../Redux/Slice/EventByCancellation/EventByCancellationCustomDate';
 import { setEventByStatusCustomDate } from '../../Redux/Slice/EventByStatus/EventByStatusCustomDate';
 import { setEventbyYearTimelineYearDateRange } from '../../Redux/Slice/EventByYear/eventbyYearTimelineYearDateRange';
+import { setGlobalFilterTimelineCustomDate } from '../../Redux/Slice/GlobalFilterTimeline/GlobalFilterTimelineCustomDate';
 import './FilterTypeCustomDate.scss';
 
 function FilterTypeCustomDate() {
@@ -74,6 +75,10 @@ function FilterTypeCustomDate() {
 
             case 'event-by-cancellation-timeline':
                 dispatch(setEventByCancellationCustomDate(dateRanges));
+                break;
+
+            case 'global-timeline':
+                dispatch(setGlobalFilterTimelineCustomDate(dateRanges));
                 break;
 
             default:
