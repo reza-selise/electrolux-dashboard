@@ -29,6 +29,7 @@ import eventbyYearTimelineMonthReducer from './Slice/EventByYear/eventByYearTime
 import eventbyYearTimelineYearsReducer from './Slice/EventByYear/eventByYearTimelineYear';
 import eventbyYearTimelineYearDateRangeReducer from './Slice/EventByYear/eventbyYearTimelineYearDateRange';
 import eventPerSalesPersonFilterTypeReducer from './Slice/EventPerSalesPerson/EventPerSalesPersonFilterType';
+import customerTypeReducer from './Slice/GlobalFilter/customerTypeSlice';
 import globalFilterTimelineCustomDateReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineCustomDate';
 import globalFilterTimelineFilterTypeReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineFilterType';
 import globalFilterTimelineMonthsReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineMonths';
@@ -78,6 +79,7 @@ export const store = configureStore({
         globalFilterTimelineMonths: globalFilterTimelineMonthsReducer,
         globalFilterTimelineYearMonths: globalFilterTimelineYearMonthsReducer,
         globalFilterTimelineCustomDate: globalFilterTimelineCustomDateReducer,
+        customerType: customerTypeReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });

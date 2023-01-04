@@ -170,23 +170,28 @@ function EventByYear() {
                 />
             </div>
             {error ? (
-                'error'
+                'Error'
             ) : isLoading ? (
-                pleaseWait
-            ) : grapOrTableEvntYear === 'graph' ? (
-                data && <GraphView data={data.data} />
+                'Loading'
             ) : (
-                <Table
-                    dataSource={data.data.years}
-                    pagination={false}
-                    className="event-by-year-table"
-                >
-                    <Column title="Year" dataIndex="year" key="year" />
-                    <Column title="ELUX" dataIndex="elux" key="elux" />
-                    <Column title="B2B" dataIndex="b2b" key="b2b" />
-                    <Column title="B2C" dataIndex="b2c" key="b2c" />
-                    <Column title="Total" dataIndex="total" key="total" />
-                </Table>
+                <>
+                    <GraphView
+                        data={data.data}
+                        style={{ display: grapOrTableEvntYear === 'graph' ? 'block' : 'none' }}
+                    />
+                    <Table
+                        style={{ display: grapOrTableEvntYear === 'table' ? 'block' : 'none' }}
+                        dataSource={data.data.years}
+                        pagination={false}
+                        className="event-by-year-table"
+                    >
+                        <Column title="Year" dataIndex="year" key="year" />
+                        <Column title="ELUX" dataIndex="elux" key="elux" />
+                        <Column title="B2B" dataIndex="b2b" key="b2b" />
+                        <Column title="B2C" dataIndex="b2c" key="b2c" />
+                        <Column title="Total" dataIndex="total" key="total" />
+                    </Table>
+                </>
             )}
         </>
     );
