@@ -152,7 +152,11 @@ function EventByYear() {
                     setgGrapOrTable={setGrapOrTableEvntYear}
                     name="event-by-year"
                 />
-                <DownloadButton identifier={1} location="event-by-year-comment" />
+                <DownloadButton
+                    identifier={1}
+                    location="event-by-year-comment"
+                    graphID="event-by-year-graph"
+                />
             </div>
             <div className="graph-overview">
                 <h2 className="graph-title">

@@ -2,12 +2,19 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    gap: 20px;
     h2,h3,p,span{
         margin: 0px;
         padding: 0px;
     }
     .left-comment{
         flex: 0.7;
+        label{
+            height: 28px;
+        }
+        img{
+            width: 100%;
+        }
     }
     .right-comment{
         flex: 0.3;

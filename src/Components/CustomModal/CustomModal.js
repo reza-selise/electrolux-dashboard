@@ -33,89 +33,12 @@ function CustomModal() {
                 </Modal>
             );
         case 'event-by-year-timeline':
-            return (
-                <Modal
-                    title={timeline}
-                    open={isModalOpen}
-                    onCancel={handleCancel}
-                    footer={null}
-                    width={461}
-                    centered
-                    className="timeline-modal"
-                >
-                    <Timeline />
-                </Modal>
-            );
+        case 'event-per-sales-person-timeline':
         case 'event-by-location-timeline':
-            return (
-                <Modal
-                    title={timeline}
-                    open={isModalOpen}
-                    onCancel={handleCancel}
-                    footer={null}
-                    width={461}
-                    centered
-                    className="timeline-modal"
-                >
-                    <Timeline />
-                </Modal>
-            );
         case 'event-by-months-timeline':
-            return (
-                <Modal
-                    title={timeline}
-                    open={isModalOpen}
-                    onCancel={handleCancel}
-                    footer={null}
-                    width={461}
-                    centered
-                    className="timeline-modal"
-                >
-                    <Timeline />
-                </Modal>
-            );
         case 'event-by-category-timeline':
-            return (
-                <Modal
-                    title={timeline}
-                    open={isModalOpen}
-                    onCancel={handleCancel}
-                    footer={null}
-                    width={461}
-                    centered
-                    className="timeline-modal"
-                >
-                    <Timeline />
-                </Modal>
-            );
         case 'event-by-cancellation-timeline':
-            return (
-                <Modal
-                    title={timeline}
-                    open={isModalOpen}
-                    onCancel={handleCancel}
-                    footer={null}
-                    width={461}
-                    centered
-                    className="timeline-modal"
-                >
-                    <Timeline />
-                </Modal>
-            );
         case 'cooking-course-type-timeline':
-            return (
-                <Modal
-                    title={timeline}
-                    open={isModalOpen}
-                    onCancel={handleCancel}
-                    footer={null}
-                    width={461}
-                    centered
-                    className="timeline-modal"
-                >
-                    <Timeline />
-                </Modal>
-            );
         case 'event-by-status-timeline':
             return (
                 <Modal
@@ -130,22 +53,14 @@ function CustomModal() {
                     <Timeline />
                 </Modal>
             );
-        case 'event-per-sales-person-timeline':
-            return (
-                <Modal
-                    title={timeline}
-                    open={isModalOpen}
-                    onCancel={handleCancel}
-                    footer={null}
-                    width={461}
-                    centered
-                    className="timeline-modal"
-                >
-                    <Timeline />
-                </Modal>
-            );
-
         case 'event-by-year-comment':
+        case 'event-by-location-comment':
+        case 'event-by-month-comment':
+        case 'event-by-category-comment':
+        case 'event-by-status-comment':
+        case 'cooking-course-comment':
+        case 'sales-per-person-comment':
+        case 'location="cooking-course-comment"':
             return (
                 <Modal
                     title={null}

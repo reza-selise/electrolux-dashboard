@@ -79,7 +79,7 @@ function Graph({ data }) {
             },
         ],
     };
-    return <Bar id="event-by-year-graph" options={BarOptions} data={graphData} />;
+    return <Bar id="event-by-status-graph" options={BarOptions} data={graphData} />;
 }
 
 function TableView({ data }) {
@@ -177,7 +177,11 @@ function EventByStatus() {
                     setgGrapOrTable={setGrapOrTableEvntStatus}
                     name="event-by-status"
                 />
-                <DownloadButton identifier={5} />
+                <DownloadButton
+                    identifier={5}
+                    location="event-by-status-comment"
+                    graphID="event-by-status-graph"
+                />
             </div>
             <div className="graph-overview">
                 <h2 className="graph-title">Overview of Events by Status</h2>

@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-unresolved
-import {Table} from 'antd';
+import { Table } from 'antd';
 import {
     BarElement,
     CategoryScale,
@@ -9,16 +9,16 @@ import {
     Title,
     Tooltip
 } from 'chart.js';
-import React,{useState} from 'react';
-import {useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 // eslint-disable-next-line import/no-unresolved
-import {Bar} from 'react-chartjs-2';
-import {eluxTranslation} from '../../Translation/Translation';
+import { Bar } from 'react-chartjs-2';
+import { eluxTranslation } from '../../Translation/Translation';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
 
-import {useEventByLocationQuery} from '../../API/apiSlice';
+import { useEventByLocationQuery } from '../../API/apiSlice';
 import './EventByLocation.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -106,7 +106,10 @@ function EventByLocation() {
                     setgGrapOrTable={setgGrapOrTableForLocation}
                     name="event-by-location"
                 />
-                <DownloadButton />
+                <DownloadButton
+                    location="event-by-location-comment"
+                    graphID="event-by-location-graph"
+                />
             </div>
             <div className="graph-overview location-graph">
                 <h2 className="graph-title">
@@ -125,7 +128,7 @@ function EventByLocation() {
             ) : isLoading ? (
                 pleaseWait
             ) : grapOrTableForLocation === 'graph' ? (
-                <Bar options={BarOptions} data={graphData} />
+                <Bar options={BarOptions} data={graphData} id="event-by-location-graph" />
             ) : (
                 <Table
                     dataSource={data.data.locations}
