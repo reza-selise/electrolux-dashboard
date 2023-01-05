@@ -54,9 +54,15 @@ function CustomDrawer({ onClose, open }) {
     const eventStatusFilteredOptions = eventStatusOptions.filter(o => !eventStatus.includes(o));
 
     const handleCustomerTypeChange = value => {
-        dispatch(setCustomerType(value));
+        setCustomerSelectedItems(value);
     };
-    
+
+    const applyFilterBtn = () => {
+        dispatch(setCustomerType(customerSelectedItems));
+        // dispatch all filter for the global state here.
+        
+    };
+
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
             <div className="filter-type-options">
@@ -142,6 +148,9 @@ function CustomDrawer({ onClose, open }) {
                 <div className="generic-timeline-button-wrapper">
                     <ModalButton location="global-timeline">Timeline</ModalButton>
                 </div>
+                <button onClick={applyFilterBtn} type="button">
+                    Apply Filter
+                </button>
             </div>
         </Drawer>
     );
