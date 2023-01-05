@@ -130,7 +130,9 @@ function LocalComment() {
                 {grapOrTableComment === 'graph' ? (
                     <GraphView graphURL={graphURL} />
                 ) : (
-                    <TableView tableURL={tableURL} />
+                    <div className="ant-table-wrapper">
+                        <TableView tableURL={tableURL} />
+                    </div>
                 )}
             </div>
             <div className="right-comment">
