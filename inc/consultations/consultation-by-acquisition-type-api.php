@@ -67,9 +67,61 @@ function get_consultation_by_acquisition_type($request){
             }
         }
     }
-    // filter_type custom_date_range
+    // ------------------------------------------------------------------ filter_type custom_date_range, custom_time_frame --------------------
     if($filter_type == 'custom_date_range' || $filter_type == 'custom_time_frame'){
-        $return_data = [];
+
+        $get_data = array();
+
+        foreach ( $request_body as $single_range ) {
+            if( empty( $single_range['start'] ) || empty( $single_range['end'] ) ){
+                continue;
+            }
+            $start_date = $single_range['start'] . ' 00:00:00' ;
+            $end_date   = $single_range['end'] . ' 23:59:59' ;
+            
+            $start_year = date( "Y", strtotime( $start_date ) );
+            $end_year   = date( "Y", strtotime( $end_date ) );
+
+          
+            $data = array();
+
+            if( $start_year === $end_year ){
+                $yearly_order_data = find_consultation_orders($consultation_types,$customer_types, $gallery_locations, $device_types, $device_categories, $event_status, $cancelation_types, $start_date,$end_date);
+
+               
+                $data['year'] = $start_year;
+                $get_booking_formated_data = get_booking_formated_data($yearly_order_data);
+                $data = array_merge( $data, $get_booking_formated_data );
+                
+                array_push($get_data, $data);
+            }
+            elseif ( $start_year !== $end_year ) {
+               
+                $yearly_order_data = find_consultation_orders($consultation_types,$customer_types, $gallery_locations, $device_types, $device_categories, $event_status, $cancelation_types, $start_date,$end_date);
+
+                for( $i = $start_year; $i <= $end_year; $i++ ) {
+                    if ( $i === $start_year ){
+                        $single_start_date  = $start_date;
+                        $single_end_date    = $start_year . "-12-31 23:59:59";
+                    } elseif ( $i === $end_year ) {
+                        $single_start_date  = $end_year . "-01-01 00:00:00";
+                        $single_end_date    = $end_date;
+                    } else {
+                        $single_start_date  = $i . "-01-01 00:00:00";
+                        $single_end_date    = $i . "-12-31 23:59:59";
+                    }
+                    // ------|working here|---------
+                    
+                    $data['year'] = $i;
+
+                    $get_booking_formated_data = get_booking_formated_data($yearly_order_data);
+                    $data = array_merge( $data, $get_booking_formated_data );
+                    
+                    array_push($get_data, $data);
+                }
+            }
+        }
+        $return_data = $get_data;
     }
     // return $return_data;
     return rest_ensure_response( array(
@@ -117,14 +169,58 @@ function find_consultation_orders($consultation_types,$customer_types, $gallery_
             return false;
         }
     } );
+    //------- unit_type [$device_types]
+    $valid_event_order_ids = array_filter( $order_ids, function( $order_id) use ($device_types){
+        if(in_array( get_post_meta( $order_id, 'unit_type', true ), $device_types)){
+            return true;
+        } else {
+            return false;
+        }
+    } );
 
-
+     //-------  [consultation_types ] $device_categories
+    $valid_event_order_ids = array_filter( $order_ids, function( $order_id) use ($device_categories){
+        $order_device_categories = get_post_meta( $order_id, 'consultation_types', true );
+        $cat_unserial = unserialize($order_device_categories); // array form order meta
+        if($cat_unserial){
+            foreach($device_categories as $d_cat){
+                if(in_array($d_cat, $cat_unserial)){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        else{
+            return false;
+        }
+        
+    } );
+    //-------------------- order item loop property of products------------------------------
+    //--------- customer type .. b2b,b2c,electrolux_internal
+    $valid_event_order_ids = array_filter( $order_ids, function( $order_id) use ($customer_types, $device_types, $device_categories,$event_status){
+        $order          = wc_get_order( $order_id );
+        $order_items    = $order->get_items();
+        
+        if( is_array( $order_items ) && !empty( $order_items )){
+            foreach( $order_items as $item ){
+                $product_id = (int) $item->get_product_id();
+                $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '-', strtolower(get_post_meta( $product_id, 'product_status', true ))) : ''; // event_status
+                $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';// customer type
+                
+                //event status [reserved,too_place,palanned etc] 
+                if(!in_array($status, $event_status)){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+    } );
 
     return $valid_event_order_ids;
 
-  
-    // return formated data
-    
 }
 
 function get_booking_formated_data($order_ids){
@@ -135,8 +231,6 @@ function get_booking_formated_data($order_ids){
     $data['total'] = 0;
    
     // ----------------------------------------------------------------
-   
-   
     foreach($order_ids as $order_id){
         $booking_type = get_post_meta( $order_id, 'consultation_booking_type', true );
         

@@ -1,11 +1,11 @@
 
 // request from frontend
-
+// filter type months, years
 {
     "categories": "all,onsite,live-video", // onsite-consultation | live-consultation [do not send all string]
     "customer_type": "b2b,b2c", // all | b2b | b2c
     "locations": "255,477,128,188", // location_id
-    "device_type": "all,single_product,multiple_product",
+    "device_type": "complete-kitchen,single-unit", //[multiple product, single product]
     "device_category": "101,102,155",
     "event_status": "reserved,planned,took_place", // all
     "cancelation_type": "customer,admin", // do not use all
@@ -22,24 +22,26 @@
         }
     ]
 },
+// custom_time_frame, custom_date_range
 {
-    "categories": "all,onsite,live-video",
-    "customer_type": "b2b,b2c",
-    "locations": "255,477,128,188",
-    "device_type": "all,single_product,multiple_product",
+    "categories": "all,onsite,live-video", // onsite-consultation | live-consultation [do not send all string]
+    "customer_type": "b2b,b2c", // all | b2b | b2c
+    "locations": "255,477,128,188", // location_id
+    "device_type": "complete-kitchen,single-unit", //[multiple product, single product]
     "device_category": "101,102,155",
-    "event_status": "reserved,planned,took_place", 
-    "cancelation_type": "by_customer,by_electrolux",
+    "event_status": "reserved,planned,took_place", // all
+    "cancelation_type": "customer,admin", // do not use all
 
-    "filter_type": "months", 
+    "filter_type": "custom_date_range",
+    "request_data": "events/participants",
     "request_body": [
         {
-            "year": "2022",
-            "months": "02,10,12"
+            "start":  "2022-01-01",
+            "end":  "2022-01-31",
         },
-         {
-            "year": "2021",
-            "months": "02,10,12"
-        }
+        {
+            "start":  "2022-02-01",
+            "end":  "2022-03-31",
+        },
     ]
 }
