@@ -219,7 +219,8 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
 
     $event_types = [
         "steamdemo",
-        "cooking-class" 
+        "cooking-class",
+        "event_location"  
     ];
 
     $valid_event_order_ids = array_filter( $order_ids, function( $order_id) use ($gallery_location,$event_types){
