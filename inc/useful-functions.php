@@ -614,3 +614,22 @@ function el_GET_PRODUCT_FILTER_VALUES($single_product_id){
     
 
 }
+
+/* 
+    Check is if its a event
+
+*/
+function el_is_event($post_id){
+
+    $status = false;
+    $arr = ['event-location','steamdemo','cooking-class' ];
+
+    $saved_type = get_post_meta( $post_id, 'order_service_type', true );
+
+    if( in_array( $saved_type , $arr ) ){
+        $status = true;
+    }
+
+    return $status;
+
+}
