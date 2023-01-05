@@ -178,7 +178,7 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
     $monthly_b2b                 = 0;
     $monthly_b2c                 = 0;
     $monthly_event_participants  = 0;
-    $monthly_events              = 0;
+    $monthly_events              = [];
 
     // filter order id's by location.
     $monthly_order_ids   = elux_prepare_order_ids_by_location_filter( $monthly_order_ids, $locations );
@@ -194,6 +194,11 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
             if( is_array( $order_items ) && !empty( $order_items )){
                 foreach( $order_items as $key => $value ){
                     $product_id = (int) $value->get_product_id();
+                    
+                    if( in_array( $product_id, $monthly_events ) ){
+                        continue;
+                    }
+
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                     $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
                     $product_cat= get_the_terms( $product_id , 'product_cat' );
@@ -226,7 +231,8 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
                     
                     $participants_qty           = (int) $value->get_quantity();
                     $monthly_event_participants += $participants_qty;
-                    $monthly_events++;
+                    
+                    array_push( $monthly_events, $product_id );
         
                     switch( $data_type ){
                         case 'events':
@@ -263,7 +269,7 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
         "b2b"   => $monthly_b2b,
         "b2c"   => $monthly_b2c,
     );
-    $monthly_data['total']   = ( 'events' === $data_type ) ? $monthly_events : $monthly_event_participants;
+    $monthly_data['total']   = ( 'events' === $data_type ) ? count( $monthly_events ) : $monthly_event_participants;
     
     return $monthly_data;
 }

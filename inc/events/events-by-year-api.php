@@ -160,7 +160,7 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
     $yearly_b2b                 = 0;
     $yearly_b2c                 = 0;
     $yearly_event_participants  = 0;
-    $yearly_events              = 0;
+    $yearly_events              = [];
 
     // filter order id's by location.
     $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
@@ -176,6 +176,11 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
             if( is_array( $order_items ) && !empty( $order_items )){
                 foreach( $order_items as $key => $value ){
                     $product_id = (int) $value->get_product_id();
+
+                    if( in_array( $product_id, $yearly_events ) ){
+                        continue;
+                    }
+
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                     $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
                     $product_cat= get_the_terms( $product_id , 'product_cat' );
@@ -208,7 +213,8 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
                     
                     $participants_qty           = (int) $value->get_quantity();
                     $yearly_event_participants += $participants_qty;
-                    $yearly_events++;
+                    
+                    array_push( $yearly_events, $product_id );
             
                     switch( $data_type ){
                         case 'events':
@@ -245,7 +251,7 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
         "b2b"   => $yearly_b2b,
         "b2c"   => $yearly_b2c,
     );
-    $yearly_data['total']   = ( 'events' === $data_type ) ? $yearly_events : $yearly_event_participants;
+    $yearly_data['total']   = ( 'events' === $data_type ) ? count( $yearly_events ) : $yearly_event_participants;
     
     return $yearly_data;
 }

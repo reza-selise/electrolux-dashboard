@@ -153,7 +153,7 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
     $planned        = 0;
     $cancelled      = 0;
     $taken_place    = 0;
-    $total          = 0;
+    $events  = [];
 
     // filter order id's by location.
     $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
@@ -169,6 +169,11 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
             if( is_array( $order_items ) && !empty( $order_items )){
                 foreach( $order_items as $item ){
                     $product_id = (int) $item->get_product_id();
+                    
+                    if( in_array( $product_id, $events ) ){
+                        continue;
+                    }
+
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                     $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '-', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
                     $product_cat= get_the_terms( $product_id , 'product_cat' );
@@ -193,6 +198,8 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
                     if( ! product_has_consultant_lead( $product_id, $consultant_lead_ids ) ) {
                         continue;
                     }
+                    
+                    array_push( $events, $product_id );
 
                     if ( 'canceled' === $status ){
                         $cancelled++;
@@ -201,8 +208,6 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
                     } elseif ('took-place' === $status ){
                         $taken_place++;
                     }
-
-                    $total++;
                 }
             }
         }
@@ -213,7 +218,7 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
         "planned"       => $planned,
         "cancelled"     => $cancelled,
         "taken_place"   => $taken_place,
-        "total"         => $total,
+        "total"         => count( $events ),
     );
     
     return $yearly_data;
