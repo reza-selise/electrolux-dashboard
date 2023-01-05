@@ -13,7 +13,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
     
     function elux_get_events_by_year( $request ) {
 
-        $disallowed_event_types = array( 'giftcard', 'voucher' );
+        $filter_types           = array( 'disallowed_types'   => array( 'voucher', 'onsite-consultation', 'live-consultation', 'home-consultation' ) );
         $allowed_data_type      = array( 'events', 'participants' );
         $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
         $allowed_event_status   = array( 'planned', 'cancelled', 'taken_place' );
@@ -64,7 +64,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                     foreach ( $months as $month ) {
                         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
                         $end_date           = $year . '-' . $month . '-31 23:59:59' ;
-                        $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
+                        $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $filter_types );
                         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
                     }
 
@@ -92,7 +92,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                         
                         
                         if( $start_year === $end_year ){    // selected range is within same year
-                            $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
+                            $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $filter_types );
                             
                             if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
                                 $yearly_order_ids[$start_year] = $range_order_ids;
@@ -112,7 +112,7 @@ if( ! function_exists( 'elux_get_events_by_year' ) ){
                                     $single_end_date    = $i . "-12-31 23:59:59";
                                 }
                                 
-                                $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $single_start_date, $single_end_date, $disallowed_event_types );
+                                $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $single_start_date, $single_end_date, $filter_types );
                                 if( ! array_key_exists( $i, $yearly_order_ids ) ){
                                     $yearly_order_ids[$i] = $range_order_ids;
                                 } else {
@@ -160,7 +160,7 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
     $yearly_b2b                 = 0;
     $yearly_b2c                 = 0;
     $yearly_event_participants  = 0;
-    $yearly_events              = 0;
+    $yearly_events              = [];
 
     // filter order id's by location.
     $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
@@ -176,6 +176,11 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
             if( is_array( $order_items ) && !empty( $order_items )){
                 foreach( $order_items as $key => $value ){
                     $product_id = (int) $value->get_product_id();
+
+                    if( in_array( $product_id, $yearly_events ) ){
+                        continue;
+                    }
+
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                     $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
                     $product_cat= get_the_terms( $product_id , 'product_cat' );
@@ -208,7 +213,8 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
                     
                     $participants_qty           = (int) $value->get_quantity();
                     $yearly_event_participants += $participants_qty;
-                    $yearly_events++;
+                    
+                    array_push( $yearly_events, $product_id );
             
                     switch( $data_type ){
                         case 'events':
@@ -245,7 +251,7 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
         "b2b"   => $yearly_b2b,
         "b2c"   => $yearly_b2c,
     );
-    $yearly_data['total']   = ( 'events' === $data_type ) ? $yearly_events : $yearly_event_participants;
+    $yearly_data['total']   = ( 'events' === $data_type ) ? count( $yearly_events ) : $yearly_event_participants;
     
     return $yearly_data;
 }

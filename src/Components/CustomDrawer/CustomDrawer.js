@@ -156,7 +156,7 @@ function CustomDrawer({ onClose, open }) {
     const dispatch = useDispatch();
     // filter
     const handleCustomerTypeChange = value => {
-        dispatch(setCustomerType(value));
+        setCustomerSelectedItems(value);
     };
     const handleLocationTypeChange = value => {
         dispatch(setLocationType(value));
@@ -172,6 +172,11 @@ function CustomDrawer({ onClose, open }) {
     };
     const handleEventStatusTypeChange = value => {
         dispatch(setEventStatusType(value));
+
+    const applyFilterBtn = () => {
+        dispatch(setCustomerType(customerSelectedItems));
+        // dispatch all filter for the global state here.
+        
     };
 
     return (
@@ -240,6 +245,9 @@ function CustomDrawer({ onClose, open }) {
                         <Button>Apply Filter</Button>
                     </div>
                 </div>
+                <button onClick={applyFilterBtn} type="button">
+                    Apply Filter
+                </button>
             </div>
         </Drawer>
     );
