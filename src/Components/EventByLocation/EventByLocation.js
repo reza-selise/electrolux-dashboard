@@ -59,8 +59,6 @@ function EventByLocation() {
 
     const [grapOrTableForLocation, setgGrapOrTableForLocation] = useState('graph');
     const [requestDataForLocation, setRequestDataForLocation] = useState('events');
-    const locationType = useSelector(state => state.locationType.value);
-    const customerType = useSelector(state => state.customerType.value);
 
     const requestBody = eventByLocationTimelineYears.map(year => ({
         year: year.toString(),
@@ -72,11 +70,11 @@ function EventByLocation() {
         filter_type: eventByLocationFilterType,
         request_data: requestDataForLocation,
         event_status: 'reserved,planned,took_place', // all
-        customer_type:customerType,
+        customer_type: 'b2b,b2c', // all
         booking_type: 'Manual Booking, Walk-in',
         sales_employee: '1,2,3',
         categories: '93,30,18,21',
-        locations:locationType,
+        locations: getLocations().toString(),
         request_body: JSON.stringify(requestBody),
     };
     const { data, error, isLoading } = useEventByLocationQuery(payload);

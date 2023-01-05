@@ -71,3 +71,11 @@
         color: white;
     }
 }
+
+.single-select-box .ant-select-selection-placeholder{
+    margin: auto;
+}
+
+.filter-type-options .single-select-box .ant-select-selector .ant-select-selection-item{
+    line-height: 3rem;
+}
