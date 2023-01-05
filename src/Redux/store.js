@@ -36,6 +36,7 @@ import globalFilterTimelineMonthsReducer from './Slice/GlobalFilterTimeline/Glob
 import globalFilterTimelineYearMonthsReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineYearMonths';
 import globalFilterTimelineYearsReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineYears';
 import graphURLReducer from './Slice/graphURL';
+import tableURLReducer from './Slice/tableURL';
 
 import locationReducer from './Slice/locationSlice';
 import modalReducer from './Slice/modalSlice';
@@ -80,6 +81,7 @@ export const store = configureStore({
         globalFilterTimelineYearMonths: globalFilterTimelineYearMonthsReducer,
         globalFilterTimelineCustomDate: globalFilterTimelineCustomDateReducer,
         customerType: customerTypeReducer,
+        tableURL: tableURLReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),
 });

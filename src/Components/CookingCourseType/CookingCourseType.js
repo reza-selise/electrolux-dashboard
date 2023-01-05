@@ -46,7 +46,7 @@ const options = {
     barPercentage: 1,
 };
 
-function TableView({ data }) {
+function TableView({ data, grapTableCookingCourse }) {
     const columns = data.labels.map(label => ({
         title: label,
         key: label,
@@ -54,24 +54,31 @@ function TableView({ data }) {
     const dataSource = data.rows;
 
     return (
-        <table className="cooking-course-table">
-            <thead>
-                <tr>
-                    {columns.map(item => (
-                        <th key={item.key}>{item.title} </th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {dataSource.map((item, index) => (
-                    <tr key={index}>
-                        {item.map((data, index) => (
-                            <td key={index}>{data} </td>
+        <div id="cooking-course-table">
+            <table
+                className="cooking-course-table"
+                style={{
+                    display: grapTableCookingCourse === 'table' && 'block',
+                }}
+            >
+                <thead>
+                    <tr>
+                        {columns.map(item => (
+                            <th key={item.key}>{item.title} </th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {dataSource.map((item, index) => (
+                        <tr key={index}>
+                            {item.map((data, index) => (
+                                <td key={index}>{data} </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 }
 
@@ -156,7 +163,7 @@ function CookingCourseType() {
         cookingCourseCustomDate,
     ]);
 
-    const { data, isLoading } = useCookingCourseTypeQuery(payload);
+    const { error, data, isLoading } = useCookingCourseTypeQuery(payload);
 
     const handleProductStatusChange = value => {
         setProductStatus(value);
@@ -189,6 +196,7 @@ function CookingCourseType() {
                     identifier={7}
                     location="cooking-course-comment"
                     graphID="cooking-course-graph"
+                    tableID="cooking-course-table"
                 />
             </div>
             <h2 className="graph-title">Overview of Cooking Course Type</h2>
@@ -219,19 +227,28 @@ function CookingCourseType() {
                     ]}
                 />
             </div>
-
-            {data && data.status ? (
-                grapTableCookingCourse === 'graph' ? (
-                    isLoading === false ? (
-                        <Bar options={options} data={graphData} id="cooking-course-graph" />
-                    ) : (
-                        'Loading'
-                    )
-                ) : (
-                    data && <TableView data={data && data.table_data} />
-                )
+            {error ? (
+                'error'
+            ) : isLoading ? (
+                'Loading'
+            ) : data && data.status === true ? (
+                <>
+                    <Bar
+                        style={{
+                            display: grapTableCookingCourse === 'graph' && 'block',
+                        }}
+                        options={options}
+                        data={graphData}
+                        id="cooking-course-graph"
+                        className="cooking-course-graph"
+                    />
+                    <TableView
+                        data={data && data.table_data}
+                        grapTableCookingCourse={grapTableCookingCourse}
+                    />
+                </>
             ) : (
-                'Nothng Found'
+                'Noting to show'
             )}
         </div>
     );

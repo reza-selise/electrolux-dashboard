@@ -17,11 +17,12 @@ import { useEventByStatusQuery } from '../../API/apiSlice';
 import DownloadButton from '../DownloadButton/DownloadButton';
 import GraphTableSwitch from '../GraphTableSwitch/GraphTableSwitch';
 import LocalFilter from '../LocalFilter/LocalFilter';
+import './EventByStatus.scss';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 const { Column } = Table;
 
-function Graph({ data }) {
+function Graph({ data, grapOrTableEvntStatus }) {
     const BarOptions = {
         plugins: {
             title: {
@@ -79,12 +80,30 @@ function Graph({ data }) {
             },
         ],
     };
-    return <Bar id="event-by-status-graph" options={BarOptions} data={graphData} />;
+    return (
+        <Bar
+            style={{
+                display: grapOrTableEvntStatus === 'graph' && 'block',
+            }}
+            id="event-by-status-graph"
+            className="event-by-status-graph"
+            options={BarOptions}
+            data={graphData}
+        />
+    );
 }
 
-function TableView({ data }) {
+function TableView({ data, grapOrTableEvntStatus }) {
     return (
-        <Table dataSource={data.years} pagination={false} className="event-by-status-table">
+        <Table
+            style={{
+                display: grapOrTableEvntStatus === 'table' && 'block',
+            }}
+            dataSource={data.years}
+            pagination={false}
+            className="event-by-status-table"
+            id="event-by-staus-table"
+        >
             <Column title="Year" dataIndex="year" key="year" />
             <Column title="Planned" dataIndex="planned" key="planned" />
             <Column title="Cancelled" dataIndex="cancelled" key="cancelled" />
@@ -161,6 +180,7 @@ function EventByStatus() {
                 setPayload();
                 console.log('Cooking course type default payload');
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         eventByStatusYears,
         eventByStatusYearMonth,
@@ -181,21 +201,26 @@ function EventByStatus() {
                     identifier={5}
                     location="event-by-status-comment"
                     graphID="event-by-status-graph"
+                    tableID="event-by-staus-table"
                 />
             </div>
             <div className="graph-overview">
                 <h2 className="graph-title">Overview of Events by Status</h2>
                 <LocalFilter showBoth="false" location="event-by-status-timeline" />
             </div>
-            {error ? (
-                'Error MSG'
-            ) : isLoading ? (
-                'Loading'
-            ) : grapOrTableEvntStatus === 'graph' ? (
-                <Graph data={data.data} />
-            ) : (
-                <TableView data={data.data} />
-            )}
+            {error
+                ? 'Error'
+                : isLoading
+                ? 'Loading'
+                : data && (
+                      <>
+                          <Graph data={data.data} grapOrTableEvntStatus={grapOrTableEvntStatus} />
+                          <TableView
+                              data={data.data}
+                              grapOrTableEvntStatus={grapOrTableEvntStatus}
+                          />
+                      </>
+                  )}
         </>
     );
 }

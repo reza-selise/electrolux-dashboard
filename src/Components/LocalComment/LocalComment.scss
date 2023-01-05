@@ -15,6 +15,12 @@
         img{
             width: 100%;
         }
+        .ant-table-wrapper{
+            margin-top: 30px;
+        }
+        .cooking-course-table{
+            display: block;
+        }
     }
     .right-comment{
         flex: 0.3;
@@ -87,7 +93,7 @@
     }
     .comment-list{
         max-height: 450px;
-        overflow-x: scroll;
+        overflow-y: scroll;
         li{
             position: relative;
             background: #F7F8F9;
@@ -133,6 +139,48 @@
                 .comment-action-buttons{
                     position: absolute;
                 }
+            }
+        }
+    }
+}
+
+
+.ant-table-wrapper table{
+    width: 100%;
+    border-collapse: collapse;
+    thead{
+        tr{
+            
+            background: #DFE7EA;
+            height: 42px;
+            th{
+                border-bottom: 1px solid #252969;
+                &:first-child{
+                    text-align: left;
+                    padding-left: 8px;
+                }
+                &:not(:last-child){
+                    border-right: 1px solid #ADB9C3;
+                }
+            }
+        }
+    }
+    tbody{
+        border: 1px solid #ADB9C3;
+        td{
+            border-bottom: 1px solid #252969;
+            text-align: center;
+            height: 33px;
+
+            &:first-child{
+                text-align: left;
+                padding-left: 8px;
+            }
+            &:not(:last-child){
+                border-right: 1px solid #ADB9C3;
+            }
+            &:last-child{
+                background: #DFE7EA;
             }
         }
     }
