@@ -153,7 +153,6 @@ const fbLeadOptions = [
 ];
 
 function CustomDrawer({ onClose, open }) {
-    console.log(open, 'open');
     const dispatch = useDispatch();
     // filter
     const handleCustomerTypeChange = value => {
