@@ -172,11 +172,10 @@ function CustomDrawer({ onClose, open }) {
     };
     const handleEventStatusTypeChange = value => {
         dispatch(setEventStatusType(value));
-
+    };
     const applyFilterBtn = () => {
         dispatch(setCustomerType(customerSelectedItems));
         // dispatch all filter for the global state here.
-        
     };
 
     return (
