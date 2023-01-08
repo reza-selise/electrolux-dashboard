@@ -13,36 +13,41 @@ if( ! function_exists( 'elux_get_consultations_by_year' ) ){
     
     function elux_get_consultations_by_year( $request ) {
 
-        $allowed_consultation_types = array( 'live-consultation', 'onsite-consultation' );
-        $allowed_data_type          = array( 'events' );
-        $allowed_timeline           = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
-        $allowed_event_status       = array( 'planned', 'cancelled', 'taken_place' );
-        $allowed_customer_type      = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
+        $filter_types           = array( 
+            'allowed_types'   => array( 
+                'onsite-consultation', 
+                'live-consultation', 
+            ) 
+        );
+        $allowed_data_type      = 'events';
+        $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
+        // $allowed_customer_type      = array( 'b2b', 'b2c', 'all' );
+        // $allowed_event_status       = array( 'planned', 'cancelled', 'taken_place' );
 
         // required params.
-        $data_type              = $request->get_params()['request_data'];   // events | participants etc.
-        $event_status           = $request->get_params()['event_status'];   // planned | cancelled etc.
+        // $data_type              = $request->get_params()['request_data'];   // events | participants etc.
+        // $event_status           = $request->get_params()['event_status'];   // planned | cancelled etc.
         $timeline               = $request->get_params()['filter_type'];
         
         // optional params.
-        $customer_type          = ! empty( $request->get_params()['customer_type'] ) ? $request->get_params()['customer_type'] : 'all';  // b2b | b2c | electrolux_internal | all etc.
-        $locations              = ! empty( $request->get_params()['locations'] ) ? explode( ',', $request->get_params()['locations'] ) : [];      // 188,191,500 etc.
-        $categories             = ! empty( $request->get_params()['categories'] ) ? explode( ',', $request->get_params()['categories'] ) : [];     // 15 | 47 | 104
-        $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? explode( ',', $request->get_params()['salesperson'] ) : [];     // 7 | 8 | 9
-        $consultant_lead_ids    = ! empty( $request->get_params()['consultant_lead'] ) ? explode( ',', $request->get_params()['consultant_lead'] ) : [];     // 7 | 8 | 9
+        // $customer_type          = ! empty( $request->get_params()['customer_type'] ) ? $request->get_params()['customer_type'] : 'all';  // b2b | b2c | electrolux_internal | all etc.
+        // $locations              = ! empty( $request->get_params()['locations'] ) ? explode( ',', $request->get_params()['locations'] ) : [];      // 188,191,500 etc.
+        // $categories             = ! empty( $request->get_params()['categories'] ) ? explode( ',', $request->get_params()['categories'] ) : [];     // 15 | 47 | 104
+        // $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? explode( ',', $request->get_params()['salesperson'] ) : [];     // 7 | 8 | 9
+        // $consultant_lead_ids    = ! empty( $request->get_params()['consultant_lead'] ) ? explode( ',', $request->get_params()['consultant_lead'] ) : [];     // 7 | 8 | 9
         
         $request_body           = json_decode($request->get_params()['request_body']);
         $response               = array(
-            "type"  => $data_type
+            "type"  => $allowed_data_type
         );
 
         if( 
+            empty( $timeline ) || 
+            empty( $request_body ) ||
             ! in_array( $timeline, $allowed_timeline ) || 
-            ! in_array( $data_type, $allowed_data_type ) || 
-            ! in_array( $event_status, $allowed_event_status ) || 
-            ! in_array( $customer_type, $allowed_customer_type ) || 
-            ! is_array( $request_body ) || 
-            empty( $request_body ) ){
+            // ! in_array( $event_status, $allowed_event_status ) || 
+            // ! in_array( $customer_type, $allowed_customer_type ) || 
+            ! is_array( $request_body )  ){
             return rest_ensure_response( array(
                 'status_code' => 403,
                 'message'     => 'failure',
@@ -59,16 +64,16 @@ if( ! function_exists( 'elux_get_consultations_by_year' ) ){
                 foreach( $request_body as $single_year ){
                     $year   = $single_year->year;
                     $months = explode(',', $single_year->months);
-                    $yearly_order_ids           = array();
+                    $yearly_order_ids   = array();
                     
                     foreach ( $months as $month ) {
                         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
                         $end_date           = $year . '-' . $month . '-31 23:59:59' ;
-                        $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $allowed_consultation_types );
+                        $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $filter_types );
                         $yearly_order_ids   = array_merge( $yearly_order_ids, $monthly_order_ids );
                     }
 
-                    $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
+                    $yearly_data = elux_prepare_single_year_consultations( $year, $yearly_order_ids );
                     array_push( $all_yearly_data, $yearly_data );
                 }
 
@@ -92,7 +97,7 @@ if( ! function_exists( 'elux_get_consultations_by_year' ) ){
                         
                         
                         if( $start_year === $end_year ){    // selected range is within same year
-                            $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $allowed_consultation_types );
+                            $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $filter_types );
                             
                             if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
                                 $yearly_order_ids[$start_year] = $range_order_ids;
@@ -112,7 +117,7 @@ if( ! function_exists( 'elux_get_consultations_by_year' ) ){
                                     $single_end_date    = $i . "-12-31 23:59:59";
                                 }
                                 
-                                $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $single_start_date, $single_end_date, $allowed_consultation_types );
+                                $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $single_start_date, $single_end_date, $filter_types );
                                 if( ! array_key_exists( $i, $yearly_order_ids ) ){
                                     $yearly_order_ids[$i] = $range_order_ids;
                                 } else {
@@ -127,7 +132,7 @@ if( ! function_exists( 'elux_get_consultations_by_year' ) ){
                 $all_yearly_data = array();
                 if( is_array( $yearly_order_ids ) && !empty( $yearly_order_ids ) ){
                     foreach( $yearly_order_ids as $year => $yearly_order_ids ){
-                        $yearly_data = elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
+                        $yearly_data = elux_prepare_single_year_consultations( $year, $yearly_order_ids );
                         array_push( $all_yearly_data, $yearly_data );
                     }
                 }
@@ -155,18 +160,16 @@ if( ! function_exists( 'elux_get_consultations_by_year' ) ){
     
 }
 
-function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $event_status, $customer_type, $locations = array(), $categories = array(), $sales_person_ids = array(), $consultant_lead_ids = array() ){
-    $yearly_elux                = 0;
+function elux_prepare_single_year_consultations( $year, $yearly_order_ids, $locations = array(), $categories = array(), $sales_person_ids = array(), $consultant_lead_ids = array() ){
     $yearly_b2b                 = 0;
     $yearly_b2c                 = 0;
-    $yearly_event_participants  = 0;
     $yearly_events              = 0;
 
     // filter order id's by location.
-    $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
+    // $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
 
     // prepare all category id's including localization.
-    $categories         = elux_prepare_category_ids_with_localization( $categories );
+    // $categories         = elux_prepare_category_ids_with_localization( $categories );
 
     if( is_array( $yearly_order_ids ) && ! empty( $yearly_order_ids ) ){
         foreach( $yearly_order_ids as $order_id ){
@@ -177,63 +180,45 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
                 foreach( $order_items as $key => $value ){
                     $product_id = (int) $value->get_product_id();
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
-                    $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
-                    $product_cat= get_the_terms( $product_id , 'product_cat' );
+                    // $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
+                    // $product_cat= get_the_terms( $product_id , 'product_cat' );
 
                     // filter event by category.
                     // check if any one of the product categories exist in the $categories array.
-                    if( !empty( $categories ) && empty( array_intersect( $product_cat, $categories ) )){
-                        continue;
-                    }
+                    // if( !empty( $categories ) && empty( array_intersect( $product_cat, $categories ) )){
+                    //     continue;
+                    // }
 
                     // filter event by event_status.
-                    if( $status !== $event_status ){
-                        continue;
-                    }
+                    // if( $status !== $event_status ){
+                    //     continue;
+                    // }
 
                     // filter event by customer type.
-                    if( ( $type !== $customer_type ) && ( 'all' !== $customer_type ) ){
-                        continue;
-                    }
+                    // if( ( $type !== $customer_type ) && ( 'all' !== $customer_type ) ){
+                    //     continue;
+                    // }
 
                     // filter event by sales person id.
-                    if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
-                        continue;
-                    }
+                    // if( ! product_has_sales_person( $product_id, $sales_person_ids ) ) {
+                    //     continue;
+                    // }
 
                     // filter event by fb lead id.
-                    if( ! product_has_consultant_lead( $product_id, $consultant_lead_ids ) ) {
+                    // if( ! product_has_consultant_lead( $product_id, $consultant_lead_ids ) ) {
+                    //     continue;
+                    // }
+
+                    
+                    if ( 'b2b' === $type ){
+                        $yearly_b2b++;
+                    } elseif ( 'b2c' === $type ){
+                        $yearly_b2c++;
+                    } else {
                         continue;
                     }
-                    
-                    $participants_qty           = (int) $value->get_quantity();
-                    $yearly_event_participants += $participants_qty;
-                    $yearly_events++;
-            
-                    switch( $data_type ){
-                        case 'events':
-                            if ( 'b2b' === $type ){
-                                $yearly_b2b++;
-                            } elseif ( 'b2c' === $type ){
-                                $yearly_b2c++;
-                            } elseif ( 'electrolux_internal' === $type ){
-                                $yearly_elux++;
-                            }
-                            break;
-                            
-                        case 'participants':
-                            if ( 'b2b' === $type ){
-                                $yearly_b2b += $participants_qty;
-                            } elseif ( 'b2c' === $type ){
-                                $yearly_b2c += $participants_qty;
-                            } elseif ( 'electrolux_internal' === $type ){
-                                $yearly_elux += $participants_qty;
-                            }
-                            break;
 
-                        default:
-                            break;
-                    } 
+                    $yearly_events++;
                 }
             }
         }
@@ -241,11 +226,10 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
 
     $yearly_data = array(
         "year"  => $year,
-        "elux"  => $yearly_elux,
         "b2b"   => $yearly_b2b,
         "b2c"   => $yearly_b2c,
+        'total' => $yearly_events
     );
-    $yearly_data['total']   = ( 'events' === $data_type ) ? $yearly_events : $yearly_event_participants;
     
     return $yearly_data;
 }
