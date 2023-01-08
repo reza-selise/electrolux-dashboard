@@ -161,9 +161,22 @@ if( ! function_exists( 'elux_get_consultations_by_year' ) ){
 }
 
 function elux_prepare_single_year_consultations( $year, $yearly_order_ids, $locations = array(), $categories = array(), $sales_person_ids = array(), $consultant_lead_ids = array() ){
-    $yearly_b2b                 = 0;
-    $yearly_b2c                 = 0;
-    $yearly_events              = 0;
+    $response   = array(
+        "year"      => $year,
+        "onsite"    => array(
+            "b2b"   => 0,
+            "b2c"   => 0,
+        ),
+        "live"    => array(
+            "b2b"   => 0,
+            "b2c"   => 0,
+        ),
+        "total"     => 0,
+    );
+    $order_type_map =   array(
+        "onsite-consultation"   => "onsite",
+        "live-consultation"     => "live",
+    );
 
     // filter order id's by location.
     // $yearly_order_ids   = elux_prepare_order_ids_by_location_filter( $yearly_order_ids, $locations );
@@ -175,6 +188,7 @@ function elux_prepare_single_year_consultations( $year, $yearly_order_ids, $loca
         foreach( $yearly_order_ids as $order_id ){
             $order          = wc_get_order( $order_id );
             $order_items    = $order->get_items();
+            $order_type     = $order_type_map[get_post_meta( $order_id, 'order_service_type', true )];
             
             if( is_array( $order_items ) && !empty( $order_items )){
                 foreach( $order_items as $key => $value ){
@@ -210,26 +224,16 @@ function elux_prepare_single_year_consultations( $year, $yearly_order_ids, $loca
                     // }
 
                     
-                    if ( 'b2b' === $type ){
-                        $yearly_b2b++;
-                    } elseif ( 'b2c' === $type ){
-                        $yearly_b2c++;
+                    if ( 'b2b' === $type || 'b2c' === $type ){
+                        $response[$order_type][$type]++;
+                        $response["total"]++;
                     } else {
                         continue;
                     }
-
-                    $yearly_events++;
                 }
             }
         }
     }
-
-    $yearly_data = array(
-        "year"  => $year,
-        "b2b"   => $yearly_b2b,
-        "b2c"   => $yearly_b2c,
-        'total' => $yearly_events
-    );
     
-    return $yearly_data;
+    return $response;
 }

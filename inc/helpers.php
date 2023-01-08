@@ -29,7 +29,6 @@ if( ! function_exists( 'elux_get_all_valid_event_order_ids_between_date' ) ){
             });
         }
 
-        
         return $order_ids;
     }
 }
