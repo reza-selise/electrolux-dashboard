@@ -153,6 +153,7 @@ const fbLeadOptions = [
 ];
 
 function CustomDrawer({ onClose, open }) {
+    console.log(open, 'open');
     const dispatch = useDispatch();
     // filter
     const handleCustomerTypeChange = value => {
@@ -172,85 +173,84 @@ function CustomDrawer({ onClose, open }) {
     };
     const handleEventStatusTypeChange = value => {
         dispatch(setEventStatusType(value));
-
-        const applyFilterBtn = () => {
-            dispatch(setCustomerType(customerSelectedItems));
-            // dispatch all filter for the global state here.
-        };
-
-        return (
-            <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
-                <div className="filter-type-options">
-                    <Select
-                        mode="multiple"
-                        placeholder="Customer Type"
-                        onChange={handleCustomerTypeChange}
-                        style={{
-                            width: '100%',
-                        }}
-                        options={customerOptions}
-                    />
-                    <Select
-                        mode="multiple"
-                        placeholder="Location"
-                        onChange={handleLocationTypeChange}
-                        style={{
-                            width: '100%',
-                        }}
-                        options={locationOptions}
-                    />
-                    <Select
-                        className="single-select-box"
-                        placeholder="Main Category"
-                        onChange={handleMainCategoryTypeChange}
-                        style={{
-                            width: '100%',
-                        }}
-                        options={mainCategoryOptions}
-                    />
-                    <Select
-                        mode="multiple"
-                        placeholder="FB Lead"
-                        onChange={handleFbLeadTypeChange}
-                        style={{
-                            width: '100%',
-                        }}
-                        options={fbLeadOptions}
-                    />
-
-                    <Select
-                        defaultValue="Events"
-                        className="single-select-box"
-                        placeholder="Type Of Data"
-                        onChange={handleTypeOfDataChange}
-                        style={{
-                            width: '100%',
-                        }}
-                        options={dataTypeOptions}
-                    />
-                    <Select
-                        mode="multiple"
-                        defaultValue="Taken Place"
-                        placeholder="Event Status"
-                        onChange={handleEventStatusTypeChange}
-                        style={{
-                            width: '100%',
-                        }}
-                        options={eventStatusOptions}
-                    />
-                    <div className="generic-timeline-button-wrapper">
-                        <ModalButton location="global-timeline">Timeline</ModalButton>
-                        <div className="apply-filter-button">
-                            <Button>Apply Filter</Button>
-                        </div>
-                    </div>
-                    <button onClick={applyFilterBtn} type="button">
-                        Apply Filter
-                    </button>
-                </div>
-            </Drawer>
-        );
     };
+    const applyFilterBtn = () => {
+        dispatch(setCustomerType(customerSelectedItems));
+        // dispatch all filter for the global state here.
+    };
+
+    return (
+        <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
+            <div className="filter-type-options">
+                <Select
+                    mode="multiple"
+                    placeholder="Customer Type"
+                    onChange={handleCustomerTypeChange}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={customerOptions}
+                />
+                <Select
+                    mode="multiple"
+                    placeholder="Location"
+                    onChange={handleLocationTypeChange}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={locationOptions}
+                />
+                <Select
+                    className="single-select-box"
+                    placeholder="Main Category"
+                    onChange={handleMainCategoryTypeChange}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={mainCategoryOptions}
+                />
+                <Select
+                    mode="multiple"
+                    placeholder="FB Lead"
+                    onChange={handleFbLeadTypeChange}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={fbLeadOptions}
+                />
+
+                <Select
+                    defaultValue="Events"
+                    className="single-select-box"
+                    placeholder="Type Of Data"
+                    onChange={handleTypeOfDataChange}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={dataTypeOptions}
+                />
+                <Select
+                    mode="multiple"
+                    defaultValue="Taken Place"
+                    placeholder="Event Status"
+                    onChange={handleEventStatusTypeChange}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={eventStatusOptions}
+                />
+                <div className="generic-timeline-button-wrapper">
+                    <ModalButton location="global-timeline">Timeline</ModalButton>
+                    <div className="apply-filter-button">
+                        <Button>Apply Filter</Button>
+                    </div>
+                </div>
+                <button onClick={applyFilterBtn} type="button">
+                    Apply Filter
+                </button>
+            </div>
+        </Drawer>
+    );
 }
 
 export default CustomDrawer;
