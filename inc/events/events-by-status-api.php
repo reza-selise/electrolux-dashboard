@@ -14,7 +14,14 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
     function elux_get_events_by_status( $request ) {
 
         // Generic filter TYPE: event / participants and STATUS: planned ? cancelled won't work here.
-        $filter_types           = array( 'disallowed_types'   => array( 'voucher', 'onsite-consultation', 'live-consultation', 'home-consultation' ) );
+        $filter_types           = array( 
+            'disallowed_types'   => array( 
+                'voucher', 
+                'onsite-consultation', 
+                'live-consultation', 
+                'home-consultation' 
+                ) 
+            );
         $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
         $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
 
@@ -35,10 +42,11 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
         );
 
         if( 
+            empty( $timeline ) ||
+            empty( $request_body ) ||
             ! in_array( $timeline, $allowed_timeline ) ||
             ! in_array( $customer_type, $allowed_customer_type ) || 
-            ! is_array( $request_body ) || 
-            empty( $request_body ) ){
+            ! is_array( $request_body ) ){
             return rest_ensure_response( array(
                 'status_code' => 403,
                 'message'     => 'failure',

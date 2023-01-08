@@ -1,7 +1,7 @@
 <?php
 
 if( ! function_exists( 'elux_get_all_valid_event_order_ids_between_date' ) ){
-    function elux_get_all_valid_event_order_ids_between_date( $start_date = '', $end_date = '', $filter_types = array() ){
+    function elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $filter_types = array() ){
         global $wpdb;
         $allowed_types      = isset( $filter_types['allowed_types'] ) ? $filter_types['allowed_types'] : [];
         $disallowed_types   = isset( $filter_types['disallowed_types'] ) ? $filter_types['disallowed_types'] : [];
