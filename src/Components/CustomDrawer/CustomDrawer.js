@@ -156,7 +156,7 @@ function CustomDrawer({ onClose, open }) {
     const dispatch = useDispatch();
     // filter
     const handleCustomerTypeChange = value => {
-        setCustomerSelectedItems(value);
+        dispatch(setCustomerType(value));
     };
     const handleLocationTypeChange = value => {
         dispatch(setLocationType(value));
@@ -174,7 +174,8 @@ function CustomDrawer({ onClose, open }) {
         dispatch(setEventStatusType(value));
     };
     const applyFilterBtn = () => {
-        dispatch(setCustomerType(customerSelectedItems));
+        dispatch(setCustomerType(customerOptions));
+        dispatch(setLocationType(locationOptions))
         // dispatch all filter for the global state here.
     };
 
@@ -241,12 +242,9 @@ function CustomDrawer({ onClose, open }) {
                 <div className="generic-timeline-button-wrapper">
                     <ModalButton location="global-timeline">Timeline</ModalButton>
                     <div className="apply-filter-button">
-                        <Button>Apply Filter</Button>
+                        <Button onClick={applyFilterBtn}>Apply Filter</Button>
                     </div>
                 </div>
-                <button onClick={applyFilterBtn} type="button">
-                    Apply Filter
-                </button>
             </div>
         </Drawer>
     );
