@@ -1,19 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: [
-        'bern',
-        'zurich',
-        'st_gallen',
-        'chur',
-        'charrant',
-        'preverenges',
-        'manno',
-        'kriens',
-        'pratteln',
-        'magenwil',
-        'volketswil',
-    ],
+    value: "all",
 };
 
 export const locationTypeSlice = createSlice({
