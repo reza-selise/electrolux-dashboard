@@ -194,43 +194,12 @@ function CustomDrawer({ onClose, open }) {
 
     // dispatch all filter for the global state here.
     const applyFilterBtn = () => {
-        dispatch(
-            setCustomerType({
-                type: customerType,
-                payload: customerOptionsType,
-            })
-        );
-        dispatch(
-            setLocationType({
-                type: locationType,
-                payload: locationOptionsType,
-            })
-        );
-        dispatch(
-            setMainCategorytype({
-                type: mainCategoryType,
-                payload: mainCategoryOptionsType,
-            })
-        );
-        dispatch(
-            setFbLeadType({
-                type: fbLeadType,
-                payload: fbLeadOptionsType,
-            })
-        );
-        dispatch(
-            setTypeOfData({
-                type: typeOfData,
-                payload: typeOfOptionsData,
-            })
-        );
-
-        dispatch(
-            setEventStatusType({
-                type: eventStatusType,
-                payload: eventStatusOptionsType,
-            })
-        );
+        dispatch(setCustomerType(customerOptionsType));
+        dispatch(setLocationType(locationOptionsType));
+        dispatch(setMainCategorytype(mainCategoryOptionsType));
+        dispatch(setFbLeadType(fbLeadOptionsType));
+        dispatch(setTypeOfData(typeOfOptionsData));
+        dispatch(setEventStatusType(eventStatusOptionsType));
         console.log('button clicked');
     };
 
