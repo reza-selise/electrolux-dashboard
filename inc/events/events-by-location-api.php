@@ -284,21 +284,24 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
                 }
                 // categories
               
-                if($categories[0] == 'all'){
+                if($categories && $categories[0] == 'all'){
                     // return;
                 }
                 else{
                     // error_log(print_r('product_cats',1));
                     // error_log(print_r($product_cats,1));
-                    foreach($categories as $category){
-                        if(!in_array($category,$product_cats)){
-                            unset($valid_event_order_ids[$order_key]);
-                            // error_log(print_r('i am here unset ',1));
-                        }
-                        else{
-                            // error_log(print_r('i am here setsss ',1));
+                    if($categories){
+                        foreach($categories as $category){
+                            if(!in_array($category,$product_cats)){
+                                unset($valid_event_order_ids[$order_key]);
+                                // error_log(print_r('i am here unset ',1));
+                            }
+                            else{
+                                // error_log(print_r('i am here setsss ',1));
+                            }
                         }
                     }
+                    
                 }
                 //--------------------------- FB Leads---------------
                 if($fb_leads[0] == 'all'){
