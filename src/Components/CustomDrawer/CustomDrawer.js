@@ -1,6 +1,6 @@
 import { Button, Drawer, Select } from 'antd';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCustomerType } from '../../Redux/Slice/GlobalFilter/customerTypeSlice';
 import { setEventStatusType } from '../../Redux/Slice/GlobalFilter/eventStatusTypeSlice';
 import { setFbLeadType } from '../../Redux/Slice/GlobalFilter/fbLeadTypeSlice';
@@ -53,6 +53,10 @@ const dataTypeOptions = [
     },
 ];
 const locationOptions = [
+    {
+        label: 'All',
+        value: 'all',
+    },
     {
         label: 'Bern',
         value: 'bern',
@@ -153,35 +157,88 @@ const fbLeadOptions = [
 ];
 
 function CustomDrawer({ onClose, open }) {
+    const [customerOptionsType, setCustomerOptionsType] = useState('all');
+    const [locationOptionsType, setLocationOptionsType] = useState('all');
+    const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState('');
+    const [fbLeadOptionsType, setFbLeadOptionsType] = useState('');
+    const [typeOfOptionsData, setTypeOfOptionsData] = useState('events');
+    const [eventStatusOptionsType, setEventStatusOptionsType] = useState('takenPlace');
+
+    const customerType = useSelector(state => state.customerType.value);
+    const locationType = useSelector(state => state.locationType.value);
+    const mainCategoryType = useSelector(state => state.mainCategoryType.value);
+    const fbLeadType = useSelector(state => state.fbLeadType.value);
+    const typeOfData = useSelector(state => state.typeOfData.value);
+    const eventStatusType = useSelector(state => state.eventStatusType.value);
+
     const dispatch = useDispatch();
     // filter
     const handleCustomerTypeChange = value => {
-        setCustomerSelectedItems(value);
+        setCustomerOptionsType(value);
     };
     const handleLocationTypeChange = value => {
-        dispatch(setLocationType(value));
+        setLocationOptionsType(value);
     };
     const handleMainCategoryTypeChange = value => {
-        dispatch(setMainCategorytype(value));
+        setMainCategoryOptionstype(value);
     };
     const handleFbLeadTypeChange = value => {
-        dispatch(setFbLeadType(value));
+        setFbLeadOptionsType(value);
     };
     const handleTypeOfDataChange = value => {
-        dispatch(setTypeOfData(value));
+        setTypeOfOptionsData(value);
     };
     const handleEventStatusTypeChange = value => {
-        dispatch(setEventStatusType(value));
+        setEventStatusOptionsType(value);
     };
+
+    // dispatch all filter for the global state here.
     const applyFilterBtn = () => {
-        dispatch(setCustomerType(customerSelectedItems));
-        // dispatch all filter for the global state here.
+        dispatch(
+            setCustomerType({
+                type: customerType,
+                payload: customerOptionsType,
+            })
+        );
+        dispatch(
+            setLocationType({
+                type: locationType,
+                payload: locationOptionsType,
+            })
+        );
+        dispatch(
+            setMainCategorytype({
+                type: mainCategoryType,
+                payload: mainCategoryOptionsType,
+            })
+        );
+        dispatch(
+            setFbLeadType({
+                type: fbLeadType,
+                payload: fbLeadOptionsType,
+            })
+        );
+        dispatch(
+            setTypeOfData({
+                type: typeOfData,
+                payload: typeOfOptionsData,
+            })
+        );
+
+        dispatch(
+            setEventStatusType({
+                type: eventStatusType,
+                payload: eventStatusOptionsType,
+            })
+        );
+        console.log('button clicked');
     };
 
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
             <div className="filter-type-options">
                 <Select
+                    defaultValue="All"
                     mode="multiple"
                     placeholder="Customer Type"
                     onChange={handleCustomerTypeChange}
@@ -191,6 +248,7 @@ function CustomDrawer({ onClose, open }) {
                     options={customerOptions}
                 />
                 <Select
+                    defaultValue="All"
                     mode="multiple"
                     placeholder="Location"
                     onChange={handleLocationTypeChange}
@@ -241,12 +299,9 @@ function CustomDrawer({ onClose, open }) {
                 <div className="generic-timeline-button-wrapper">
                     <ModalButton location="global-timeline">Timeline</ModalButton>
                     <div className="apply-filter-button">
-                        <Button>Apply Filter</Button>
+                        <Button onClick={applyFilterBtn}>Apply Filter</Button>
                     </div>
                 </div>
-                <button onClick={applyFilterBtn} type="button">
-                    Apply Filter
-                </button>
             </div>
         </Drawer>
     );
