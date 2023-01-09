@@ -113,6 +113,7 @@ final class Electrolux_Dashboard {
         require_once ELUX_DB_PLUGIN_DIR . 'inc/add-menu-page.php';
         require_once ELUX_DB_PLUGIN_DIR . 'inc/api.php';
         require_once ELUX_DB_PLUGIN_DIR . 'inc/useful-functions.php';
+        require_once ELUX_DB_PLUGIN_DIR . 'inc/useful-functions-consultation.php';
     }
 
     /**
