@@ -13,7 +13,14 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
     
     function elux_get_events_by_month( $request ) {
         
-        $filter_types           = array( 'disallowed_types'   => array( 'voucher', 'onsite-consultation', 'live-consultation', 'home-consultation' ) );
+        $filter_types           = array( 
+            'disallowed_types'   => array( 
+                'voucher', 
+                'onsite-consultation', 
+                'live-consultation', 
+                'home-consultation' 
+                ) 
+            );
         $allowed_data_type      = array( 'events', 'participants' );
         $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
         $allowed_event_status   = array( 'planned', 'cancelled', 'taken_place' );
@@ -36,12 +43,16 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
             "type"  => $data_type
         );
 
-        if( ! in_array( $timeline, $allowed_timeline ) || 
+        if( 
+            empty( $data_type ) || 
+            empty( $event_status ) ||
+            empty( $timeline ) ||
+            empty( $request_body ) ||
+            ! in_array( $timeline, $allowed_timeline ) || 
             ! in_array( $data_type, $allowed_data_type ) || 
             ! in_array( $event_status, $allowed_event_status ) || 
             ! in_array( $customer_type, $allowed_customer_type ) || 
-            ! is_array( $request_body ) || 
-            empty( $request_body ) ){
+            ! is_array( $request_body ) ){
             return rest_ensure_response( array(
                 'status_code' => 403,
                 'message'     => 'failure',
@@ -194,8 +205,9 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
             if( is_array( $order_items ) && !empty( $order_items )){
                 foreach( $order_items as $key => $value ){
                     $product_id = (int) $value->get_product_id();
-                    
-                    if( in_array( $product_id, $monthly_events ) ){
+                  
+                    // don't check this step for participants.
+                    if( 'events' === $data_type && in_array( $product_id, $monthly_events ) ){
                         continue;
                     }
 
