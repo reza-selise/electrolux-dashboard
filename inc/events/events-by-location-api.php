@@ -218,13 +218,18 @@ function get_order_count($gallery_location,$filter_type,$start_date,$end_date,$e
     $order_ids  = array_map( "elux_order_id_array_map", $response );
 
     $event_types = [
-        "steamdemo",
-        "cooking-class",
-        "event_location"  
+        // "steamdemo",
+        // "cooking-class",
+        // "event_location"  
+        'giftcard',
+        'voucher', 
+        'onsite-consultation', 
+        'live-consultation', 
+        'home-consultation'
     ];
 
     $valid_event_order_ids = array_filter( $order_ids, function( $order_id) use ($gallery_location,$event_types){
-        if($gallery_location == get_post_meta( $order_id, 'event_location', true ) && in_array( get_post_meta( $order_id, 'order_service_type', true ), $event_types)){
+        if($gallery_location == get_post_meta( $order_id, 'event_location', true ) && !in_array( get_post_meta( $order_id, 'order_service_type', true ), $event_types)){
             return true;
         } else {
             return false;

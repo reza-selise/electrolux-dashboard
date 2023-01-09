@@ -199,5 +199,5 @@ function get_generic_filter_data($request){
 
    
     // return  $return_data;
-    return  json_encode($return_data);
+    return  $return_data;
 }
