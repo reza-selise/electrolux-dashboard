@@ -121,6 +121,18 @@ function get_consultation_by_acquisition_type($request){
                 }
             }
         }
+        // find duplicate
+        // $result = [];
+
+        // foreach($get_data as $row) {
+        //     if ( !isset($result[$row['year']]) ) {
+        //         $result[$row['year']] = 0;
+        //     }
+        //     $result[$row['manual_booking']] = $result[$row['manual_booking']] + $row['manual_booking']; 
+        // }
+        // error_log(print_r($result,1));
+
+        // return in api
         $return_data = $get_data;
     }
     // return $return_data;
