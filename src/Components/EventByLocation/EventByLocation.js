@@ -50,6 +50,7 @@ const BarOptions = {
 const { Column } = Table;
 function EventByLocation() {
     const eventByLocationFilterType = useSelector(state => state.eventByLocationFilterType.value);
+    const fbLeads = useSelector(state => state.fbLeadType.value);
     const eventByLocationTimelineYears = useSelector(
         state => state.eventByLocationTimelineYears.value
     );
@@ -73,12 +74,13 @@ function EventByLocation() {
         customer_type: 'b2b,b2c', // all
         booking_type: 'Manual Booking, Walk-in',
         sales_employee: '1,2,3',
+        fb_leads: fbLeads,
         categories: '93,30,18,21',
         locations: getLocations().toString(),
         request_body: JSON.stringify(requestBody),
     };
     const { data, error, isLoading } = useEventByLocationQuery(payload);
-    // console.log('data-location :', data, error, isLoading);
+    console.log('data-location :', data, error, isLoading);
     const getDataFromLocation = (location, locationYear) =>
         eventByLocationTimelineYears.map(year => (locationYear === year ? location[year] : 0));
 
@@ -94,7 +96,7 @@ function EventByLocation() {
         labels,
         datasets,
     };
-    // console.log('data-location-dataset:', eventByLocationTimelineYears);
+    console.log('data-location-dataset:', eventByLocationTimelineYears);
 
     const { pleaseWait } = eluxTranslation;
     return (
