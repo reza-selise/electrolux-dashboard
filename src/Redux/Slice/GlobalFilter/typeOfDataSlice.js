@@ -1,10 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: [
-        'events',
-        'participants',
-    ],
+    value: 'events',
 };
 
 export const typeOfDataSlice = createSlice({
