@@ -6,6 +6,7 @@ import {
     Legend,
     LinearScale,
     Title,
+    // eslint-disable-next-line prettier/prettier
     Tooltip
 } from 'chart.js';
 
@@ -37,7 +38,6 @@ export const options = {
     },
     responsive: true,
 };
-const { Column } = Table;
 
 function EventByMonth() {
     const [requestData, setRequestData] = useState('events');
@@ -51,9 +51,6 @@ function EventByMonth() {
         months: eventbyMonthTimelineMonth.toString(),
     }));
 
-    const handleSwitchChange = e => {
-        setgGrapOrTableForMonth(e.target.value);
-    };
     const eventTotals = {};
 
     const payload = {
@@ -88,6 +85,7 @@ function EventByMonth() {
             width: 100,
         },
     ];
+    // eslint-disable-next-line no-unused-expressions
     years &&
         years.forEach(year => {
             eventTotals[`b2b_${year}`] = 0;
@@ -121,8 +119,9 @@ function EventByMonth() {
     const tableData = [];
 
     if (data && Object.keys(data).length > 0) {
-        for (let i = 0; i < formatedMonths.length; i++) {
+        for (let i = 0; i < formatedMonths.length; i += 1) {
             const item = { key: i, month: formatedMonths[i] };
+            // eslint-disable-next-line array-callback-return
             years.map((year, index) => {
                 // console.log('Test: ', data && data.data.years[0].months[i].b2b);
                 // console.log('I ', i);

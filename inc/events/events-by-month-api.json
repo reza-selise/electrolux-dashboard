@@ -95,6 +95,8 @@
     "customer_type": "b2b/b2c/electrolux_internal/all",
     "locations": "188,191,500",
     "categories": "15,47,104",
+    "salesperson": "15,47,104",
+    "consultant_lead": "15,47,104",
     "request_body": [
         {
             "year": "2022",
@@ -126,6 +128,8 @@
     "customer_type": "b2b/b2c/electrolux_internal/all",
     "locations": "188,191,500",
     "categories": "15,47,104",
+    "salesperson": "15,47,104",
+    "consultant_lead": "15,47,104",
     "filter_type": "years",
     "request_body": [
         {
@@ -150,6 +154,8 @@
     "customer_type": "b2b/b2c/electrolux_internal/all",
     "locations": "188,191,500",
     "categories": "15,47,104",
+    "salesperson": "15,47,104",
+    "consultant_lead": "15,47,104",
     "filter_type": "custom_date_range",
     "request_body": [
         {
@@ -175,6 +181,8 @@
     "customer_type": "b2b/b2c/electrolux_internal/all",
     "locations": "188,191,500",
     "categories": "15,47,104",
+    "salesperson": "15,47,104",
+    "consultant_lead": "15,47,104",
     "request_body": [
         {
             "year": "2021",

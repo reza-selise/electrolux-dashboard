@@ -24,7 +24,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const { Column } = Table;
 
-function GraphView({ data }) {
+function GraphView({ data, grapOrTableEvntYear }) {
     const BarOptions = {
         plugins: {
             title: {
@@ -81,7 +81,17 @@ function GraphView({ data }) {
         console.log('evnt graph view error', e);
     }
 
-    return <Bar id="event-by-year-graph" options={BarOptions} data={graphData} />;
+    return (
+        <Bar
+            className="event-by-year-graph-view"
+            style={{
+                display: grapOrTableEvntYear === 'graph' && 'block',
+            }}
+            id="event-by-year-graph"
+            options={BarOptions}
+            data={graphData}
+        />
+    );
 }
 
 function EventByYear() {
@@ -156,6 +166,7 @@ function EventByYear() {
                     identifier={1}
                     location="event-by-year-comment"
                     graphID="event-by-year-graph"
+                    tableID="event-by-year-table"
                 />
             </div>
             <div className="graph-overview">
@@ -172,18 +183,18 @@ function EventByYear() {
             {error ? (
                 'Error'
             ) : isLoading ? (
-                'Loading'
+                pleaseWait
             ) : (
                 <>
-                    <GraphView
-                        data={data.data}
-                        style={{ display: grapOrTableEvntYear === 'graph' ? 'block' : 'none' }}
-                    />
+                    <GraphView data={data.data} grapOrTableEvntYear={grapOrTableEvntYear} />
                     <Table
-                        style={{ display: grapOrTableEvntYear === 'table' ? 'block' : 'none' }}
+                        style={{
+                            display: grapOrTableEvntYear === 'table' && 'block',
+                        }}
                         dataSource={data.data.years}
                         pagination={false}
                         className="event-by-year-table"
+                        id="event-by-year-table"
                     >
                         <Column title="Year" dataIndex="year" key="year" />
                         <Column title="ELUX" dataIndex="elux" key="elux" />

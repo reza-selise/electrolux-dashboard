@@ -137,6 +137,7 @@ function EventByCategory() {
                     identifier={4}
                     location="event-by-category-comment"
                     graphID="event-by-category-graph"
+                    tableID="event-by-category-table"
                 />
             </div>
             <h2 className="graph-title">Overview of Events Category</h2>
@@ -170,19 +171,29 @@ function EventByCategory() {
 
             {error ? (
                 'error'
-            ) : grapTableEvntCat === 'graph' ? (
-                data && data.status === true ? (
-                    <Bar id="event-by-category-graph" options={options} data={graphData} />
-                ) : (
-                    ''
-                )
             ) : data && data.status === true ? (
-                <Table
-                    ref={eventCategoryChartRef}
-                    columns={columns}
-                    dataSource={tableData}
-                    pagination={false}
-                />
+                <>
+                    <Bar
+                        style={{
+                            display: grapTableEvntCat === 'graph' && 'block',
+                        }}
+                        id="event-by-category-graph"
+                        className="event-by-category-graph"
+                        options={options}
+                        data={graphData}
+                    />
+                    <Table
+                        style={{
+                            display: grapTableEvntCat === 'table' && 'block',
+                        }}
+                        ref={eventCategoryChartRef}
+                        columns={columns}
+                        dataSource={tableData}
+                        pagination={false}
+                        id="event-by-category-table"
+                        className="event-by-category-table"
+                    />
+                </>
             ) : (
                 ''
             )}

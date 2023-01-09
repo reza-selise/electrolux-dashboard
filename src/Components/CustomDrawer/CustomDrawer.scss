@@ -16,7 +16,7 @@
     .ant-select-selector {
         height: 54px !important;
         background: #ffffff;
-        border-color: #ADB9C3!important;
+        border-color: #adb9c3 !important;
         border-radius: 0;
         margin-bottom: 10px;
         .ant-select-selection-item {
@@ -34,7 +34,7 @@
 .ant-select-selector:active,
 .ant-select-selector:hover,
 .ant-select-open .ant-select-selector {
-    border-color: #ADB9C3!important;
+    border-color: #adb9c3 !important;
     box-shadow: none !important;
 }
 
@@ -46,16 +46,36 @@
     .ant-btn-default {
         width: 330px;
         height: 54px;
-        border: 1px solid #ADB9C3;
+        border: 1px solid #adb9c3;
         text-align: left;
         border-radius: 0 !important;
         padding: 10px !important;
     }
     .ant-btn-default:hover {
-        border-color: #ADB9C3 !important;
+        border-color: #adb9c3 !important;
     }
     > button > span {
         font-family: 'Electrolux Sans';
         color: #011e41 !important;
     }
+}
+
+.apply-filter-button {
+    .ant-btn-default {
+        text-align: center;
+        margin-top: 3rem;
+        background-color: #011e41;
+    }
+    > button > span {
+        font-family: 'Electrolux Sans';
+        color: white;
+    }
+}
+
+.single-select-box .ant-select-selection-placeholder{
+    margin: auto;
+}
+
+.filter-type-options .single-select-box .ant-select-selector .ant-select-selection-item{
+    line-height: 3rem;
 }

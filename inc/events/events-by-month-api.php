@@ -13,7 +13,14 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
     
     function elux_get_events_by_month( $request ) {
         
-        $disallowed_event_types = array( 'giftcard', 'voucher' );
+        $filter_types           = array( 
+            'disallowed_types'   => array( 
+                'voucher', 
+                'onsite-consultation', 
+                'live-consultation', 
+                'home-consultation' 
+                ) 
+            );
         $allowed_data_type      = array( 'events', 'participants' );
         $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
         $allowed_event_status   = array( 'planned', 'cancelled', 'taken_place' );
@@ -36,12 +43,16 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
             "type"  => $data_type
         );
 
-        if( ! in_array( $timeline, $allowed_timeline ) || 
+        if( 
+            empty( $data_type ) || 
+            empty( $event_status ) ||
+            empty( $timeline ) ||
+            empty( $request_body ) ||
+            ! in_array( $timeline, $allowed_timeline ) || 
             ! in_array( $data_type, $allowed_data_type ) || 
             ! in_array( $event_status, $allowed_event_status ) || 
             ! in_array( $customer_type, $allowed_customer_type ) || 
-            ! is_array( $request_body ) || 
-            empty( $request_body ) ){
+            ! is_array( $request_body ) ){
             return rest_ensure_response( array(
                 'status_code' => 403,
                 'message'     => 'failure',
@@ -65,7 +76,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                     foreach ( $months as $month ) {
                         $start_date         = $year . '-' . $month . '-01 00:00:00' ;
                         $end_date           = $year . '-' . $month . '-31 23:59:59' ;
-                        $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
+                        $monthly_order_ids  = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $filter_types );
                         $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
                         $single_year_data["months"][] = $monthly_data;
                     }
@@ -92,7 +103,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                         $end_year   = date( "Y", strtotime( $end_date ) );
 
                         if( $start_year === $end_year ){    // selected range is within same year
-                            $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $disallowed_event_types );
+                            $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $start_date, $end_date, $filter_types );
                             
                             if( ! array_key_exists( $start_year, $yearly_order_ids ) ){
                                 $yearly_order_ids[$start_year] = $range_order_ids;
@@ -112,7 +123,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                                     $single_end_date    = $i . "-12-31 23:59:59";
                                 }
                                 
-                                $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $single_start_date, $single_end_date, $disallowed_event_types );
+                                $range_order_ids = elux_get_all_valid_event_order_ids_between_date( $single_start_date, $single_end_date, $filter_types );
                                 if( ! array_key_exists( $i, $yearly_order_ids ) ){
                                     $yearly_order_ids[$i] = $range_order_ids;
                                 } else {
@@ -178,7 +189,7 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
     $monthly_b2b                 = 0;
     $monthly_b2c                 = 0;
     $monthly_event_participants  = 0;
-    $monthly_events              = 0;
+    $monthly_events              = [];
 
     // filter order id's by location.
     $monthly_order_ids   = elux_prepare_order_ids_by_location_filter( $monthly_order_ids, $locations );
@@ -194,6 +205,12 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
             if( is_array( $order_items ) && !empty( $order_items )){
                 foreach( $order_items as $key => $value ){
                     $product_id = (int) $value->get_product_id();
+                  
+                    // don't check this step for participants.
+                    if( 'events' === $data_type && in_array( $product_id, $monthly_events ) ){
+                        continue;
+                    }
+
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
                     $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
                     $product_cat= get_the_terms( $product_id , 'product_cat' );
@@ -226,7 +243,8 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
                     
                     $participants_qty           = (int) $value->get_quantity();
                     $monthly_event_participants += $participants_qty;
-                    $monthly_events++;
+                    
+                    array_push( $monthly_events, $product_id );
         
                     switch( $data_type ){
                         case 'events':
@@ -263,7 +281,7 @@ function elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type,
         "b2b"   => $monthly_b2b,
         "b2c"   => $monthly_b2c,
     );
-    $monthly_data['total']   = ( 'events' === $data_type ) ? $monthly_events : $monthly_event_participants;
+    $monthly_data['total']   = ( 'events' === $data_type ) ? count( $monthly_events ) : $monthly_event_participants;
     
     return $monthly_data;
 }
