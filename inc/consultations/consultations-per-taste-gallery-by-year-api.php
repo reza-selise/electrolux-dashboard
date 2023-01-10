@@ -48,17 +48,17 @@ if( ! function_exists( 'elux_get_consultation_per_taste_gallery_data' ) ){
         
         // /// 2. ---------- Get Structure data along with post id
         $structure_data     = el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_ids, $received_data);
-        print_r($structure_data);
+        // print_r($structure_data);
 
-        // // print_r( count( $structure_data));
 
         // /// 3. ---------- Filter data
         // $filtered_data      = el_FILTER_PRODUCTS_from_structure_data($structure_data, $received_data,['categories']);
 
         
         // // 4. ---------- Get Final output
-        // $graph_data         = el_get_home_consultations_by_month_FINAL_DATA($structure_data, $received_data);
+        $graph_data         = el_get_consultation_per_taste_gallery_by_year_GRAPH_FINAL_DATA($structure_data, $received_data);
 
+        print_r($graph_data);
 
         // $table_data         =   el_get_home_consultations_by_month_TABLE_FINAL_DATA($structure_data, $received_data);
 
@@ -95,20 +95,25 @@ function el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_id
     foreach($order_ids as $order_id){
         
         $order_service_type = get_post_meta( $order_id, 'order_service_type', true );
+        $event_location_id = get_post_meta( $order_id, 'event_location', true );
         
-        // only interest in consultation
+        // only interest in consultation and if valid event id assign
         if( 
-            $order_service_type == 'onsite-consultation' ||
-            $order_service_type == 'live-consultation' 
+            (
+                $order_service_type == 'onsite-consultation' ||
+                $order_service_type == 'live-consultation' 
+            ) &&
+            intval($event_location_id) > 0
         ){
 
             $each_structure_data = [];
             $order = wc_get_order($order_id);
 
 
-            $event_location_id = get_post_meta( $order_id, 'event_location', true );
             if($event_location_id){
-                $each_structure_data['location'][$event_location_id] = get_the_title( $event_location_id ) ;
+                $each_structure_data['location_id'] = $event_location_id  ;
+                $each_structure_data['location_name'] =  get_the_title(  $event_location_id  );
+                $each_structure_data['location_slug'] = sanitize_key(  get_the_title( $event_location_id ) );
             }
 
             $event_time_string  = (string) get_post_meta( $order_id, 'event_start_time', true );
@@ -121,7 +126,7 @@ function el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_id
 
                 $each_structure_data['day']      = $event_date;
                 $each_structure_data['month']    = $event_month;
-                $each_structure_data['year']     = $event_year;
+                $each_structure_data['year']     = intval($event_year);
             }
 
 
@@ -160,9 +165,74 @@ function el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_id
         } // consulatation checking end 
 
 
-
     }
 
     return $structure_data;
 }
 
+
+
+function el_get_consultation_per_taste_gallery_by_year_GRAPH_FINAL_DATA($structure_data,$received_data ){
+
+    /*
+    dataset[
+
+        location_slug => [
+            2008 => 1,
+            2009 => 5,
+        ],
+        location_slug_2 => [
+            2008 => 1,
+            2009 => 5,
+        ]
+    ] 
+    */
+
+    $dataset_by_location = [];
+    $final_labels = [ ]; // List of years
+
+    foreach($structure_data as $order_id => $order_data ){
+
+        $location_slug = $order_data['location_slug'];
+        $year = $order_data['year'];
+
+        if( isset($dataset_by_location[$location_slug][$year]) ){
+            $previous_count = intval($dataset_by_location[$location_slug][$year]);
+            $dataset_by_location[$location_slug][$year] = $previous_count + 1;
+        }else{
+            $dataset_by_location[$location_slug][$year] =  1;
+        }
+
+        // push the label/Year if not found
+        if(!in_array($year, $final_labels)){
+            $final_labels[] = $year;
+        }
+
+    }
+
+    // prepare final data set 
+    $final_dataset = [];
+
+    foreach($dataset_by_location as $location_slug => $year_list_arr ){
+        $each_data_set = ['label' => $location_slug];
+
+        // to match with the order loop all the labels and push data 
+        foreach($final_labels as $year){
+
+            if(isset($year_list_arr[$year])){
+                $each_data_set['data'][] = $year_list_arr[$year];
+            }else{
+                $each_data_set['data'][] = "0";
+            }
+        }
+
+        $final_dataset[] = $each_data_set;
+
+    }
+
+    return [
+        'labels'    => $final_labels,
+        'datasets'  => $final_dataset
+    ];
+
+}
