@@ -62,7 +62,7 @@ if( ! function_exists( 'elux_get_consultation_per_taste_gallery_data' ) ){
 
         $table_data         =   el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structure_data, $received_data);
 
-        print_r($table_data);
+        // print_r($table_data);
 
 
         if($structure_data && $graph_data   ){
@@ -267,7 +267,10 @@ function el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structu
 
 
         $year = $order_data['year'];
-        $customer_type = sanitize_key(  $order_data['customer_type'] );
+        $customer_type = '';
+        if( isset($order_data['customer_type']) ){
+            $customer_type = trim( sanitize_key(  $order_data['customer_type'] ));
+        }
 
         if( isset($dataset_by_location[$location_slug][$year][$customer_type]) ){
             $previous_count = intval($dataset_by_location[$location_slug][$year][$customer_type]);

@@ -61,7 +61,6 @@ function EventByMonth() {
         customer_type: 'all',
     };
     const { data, error, isLoading } = useEventByMonthsQuery(payload);
-    console.log('data Shuvo', data);
 
     // ************** dynamic years **********
     let years = [];

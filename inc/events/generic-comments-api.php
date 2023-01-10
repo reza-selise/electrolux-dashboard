@@ -17,6 +17,8 @@ add_action( 'rest_api_init', function () {
         'methods' => 'GET',
         'callback' => 'el_get_generic_comments',
         'login_user_id' => get_current_user_id(),
+        'permission_callback' => '__return_true',
+
     ]);
 });
 

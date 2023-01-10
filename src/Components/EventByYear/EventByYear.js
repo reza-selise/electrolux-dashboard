@@ -101,6 +101,10 @@ function EventByYear() {
     const eventbyYearTimelineYearDateRange = useSelector(
         state => state.eventbyYearTimelineYearDateRange.value
     );
+    const customerType = useSelector(state => state.customerType.value);
+    const locationType = useSelector(state => state.locationType.value);
+    const fbLeadType = useSelector(state => state.fbLeadType.value);
+
     const [requestData, setRequestData] = useState('events');
     const [requestBody, setRequestBody] = useState();
 
@@ -146,9 +150,18 @@ function EventByYear() {
         request_data: requestData,
         filter_type: eventByYearFilterType,
         request_body: JSON.stringify(requestBody),
-        customer_type: 'all',
+        customer_types: customerType.toString(),
+        booking_types: 'Walk-in',
         event_status: 'planned',
+        categories: '139',
+        locations: locationType.toString(),
+        fb_leads: '57',
+        sales_employee: '72',
     };
+    console.log('customer type', customerType);
+    console.log('location type', locationType);
+    console.log('fbLead type', fbLeadType);
+
     const { data, error, isLoading } = useEventByYearQuery(payload);
 
     const { pleaseWait } = eluxTranslation;

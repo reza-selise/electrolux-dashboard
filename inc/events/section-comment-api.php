@@ -20,6 +20,8 @@ add_action( 'rest_api_init', function () {
         'methods' => 'POST',
         'callback' => 'el_add_section_comments',
         'login_user_id' => get_current_user_id(),
+        'permission_callback' => '__return_true',
+
     ]);
 
 } );

@@ -16,7 +16,7 @@ function get_generic_filter_data(){
         "customer_types" => array(
             [
                 "value"=> "electrolux_internal",
-                "label" => "Electrolux Internal"
+                "label" => "Elux"
             ],
             [
                 "value"=> "b2b",
