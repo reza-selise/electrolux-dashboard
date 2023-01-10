@@ -10,20 +10,8 @@ import { setTypeOfData } from '../../Redux/Slice/GlobalFilter/typeOfDataSlice';
 import ModalButton from '../ModalButton/ModalButton';
 import './CustomDrawer.scss';
 
-const customerOptions = [
-    {
-        label: 'ELUX',
-        value: 'electrolux_internal',
-    },
-    {
-        label: 'B2B',
-        value: 'b2b',
-    },
-    {
-        label: 'B2C',
-        value: 'b2c',
-    },
-];
+const customerOptions = window.eluxDashboard.eventGenericFilterData.customer_types;
+
 const eventStatusOptions = [
     {
         label: 'Planned',
@@ -48,56 +36,6 @@ const dataTypeOptions = [
         value: 'participants',
     },
 ];
-// const locationOptions = [
-//     {
-//         label: 'All',
-//         value: 'all',
-//     },
-//     {
-//         label: 'Bern',
-//         value: 'bern',
-//     },
-//     {
-//         label: 'Zurich',
-//         value: 'zurich',
-//     },
-//     {
-//         label: 'St. Gallen',
-//         value: 'st_gallen',
-//     },
-//     {
-//         label: 'Chur',
-//         value: 'chur',
-//     },
-//     {
-//         label: 'Charrant',
-//         value: 'charrant',
-//     },
-//     {
-//         label: 'Preverenges',
-//         value: 'preverenges',
-//     },
-//     {
-//         label: 'Manno',
-//         value: 'manno',
-//     },
-//     {
-//         label: 'Kriens',
-//         value: 'kriens',
-//     },
-//     {
-//         label: 'Pratteln',
-//         value: 'pratteln',
-//     },
-//     {
-//         label: 'Magenwil',
-//         value: 'magenwil',
-//     },
-//     {
-//         label: 'Volketswil',
-//         value: 'volketswil',
-//     },
-// ];
 
 const locationOptions = window.eluxDashboard.eventGenericFilterData.locations.map(
     ({ id, name }) => ({ value: id, label: name })
@@ -157,11 +95,9 @@ const fbLeadOptions = [
 ];
 
 function CustomDrawer({ onClose, open }) {
-    const [customerOptionsType, setCustomerOptionsType] = useState([
-        'electrolux_internal',
-        'b2b',
-        'b2c',
-    ]);
+    const [customerOptionsType, setCustomerOptionsType] = useState(
+        customerOptions.map(({ value }) => value)
+    );
     const [locationOptionsType, setLocationOptionsType] = useState(
         locationOptions.map(({ value }) => value)
     );
