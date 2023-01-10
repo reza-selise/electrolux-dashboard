@@ -105,15 +105,23 @@ function el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_id
             $each_structure_data = [];
             $order = wc_get_order($order_id);
 
-            // location
-            
-            // $event_location_id =  $order->get_meta('event_location');
-
-            // $structure_data[$order_id]['location'] = $event_location_id;
 
             $event_location_id = get_post_meta( $order_id, 'event_location', true );
             if($event_location_id){
                 $each_structure_data['location'][$event_location_id] = get_the_title( $event_location_id ) ;
+            }
+
+            $event_time_string  = (string) get_post_meta( $order_id, 'event_start_time', true );
+
+            if( $event_time_string ){
+
+                $event_year     =   substr($event_time_string,0,4) ; 
+                $event_month    =   substr($event_time_string,5,2)  ;
+                $event_date     =   substr($event_time_string,8,2)  ;
+
+                $each_structure_data['day']      = $event_date;
+                $each_structure_data['month']    = $event_month;
+                $each_structure_data['year']     = $event_year;
             }
 
 
