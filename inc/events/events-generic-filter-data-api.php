@@ -166,8 +166,7 @@ function get_generic_filter_data(){
            $user_id = $user->data->ID;
            $user_email = $user->data->user_email;
            $user_role = $user->roles[0];
-            error_log(print_r($user_role,1));
-           
+                     
            $usr_data = array(
                 "value"=> $user_id,
                 "email"=>  $user_email,
