@@ -5,8 +5,9 @@
 {
     "event_status": "reserved,planned,took_place", // all
     "customer_type": "b2b,b2c", // all
-    "booking_type": "Manual Booking, Walk-in",
-    "sales_employee" : "1,2,3",
+    "booking_type": "Manual Booking, Walk-in", // not required
+    "salesperson" : "1,2,3", // user id
+    "consultant_lead": "10,11,2", // user id
     "categories": "93,30,18,21",
     "filter_type": "months",
     "request_data": "events", // participants

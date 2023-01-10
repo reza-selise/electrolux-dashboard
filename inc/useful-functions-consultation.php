@@ -14,8 +14,14 @@ function el_get_each_consultation_FILTER_KEY_VALUES_ARR($order_id){
     $order_service_type = get_post_meta( $order_id, 'order_service_type', true );
 
     $output['order_service_type'] = $order_service_type;
-    $location_arr = [];
 
+
+    $location_id        = (int) get_post_meta( $order_id, 'event_location', true );
+    if($location_id){
+        $output['location'] = $location_id;
+    }
+
+   
     foreach ( $order_items as $item_id => $item ) {
 
 
@@ -28,16 +34,8 @@ function el_get_each_consultation_FILTER_KEY_VALUES_ARR($order_id){
             $output['customer_type'] = $customer_type;
         }
 
-        $location       = (int) get_post_meta( $product_id, 'event_location', true );
-        if($location){
-            $location_arr[] = $location;
-        }
-
     }
 
-    if(count($location_arr) > 0){
-        $output['location'] = $location_arr;
-    }
 
     return $output;
 
