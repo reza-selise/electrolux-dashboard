@@ -58,11 +58,11 @@ if( ! function_exists( 'elux_get_consultation_per_taste_gallery_data' ) ){
         // // 4. ---------- Get Final output
         $graph_data         = el_get_consultation_per_taste_gallery_by_year_GRAPH_FINAL_DATA($structure_data, $received_data);
 
-        print_r($graph_data);
+        // print_r($graph_data);
 
-        // $table_data         =   el_get_home_consultations_by_month_TABLE_FINAL_DATA($structure_data, $received_data);
+        $table_data         =   el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structure_data, $received_data);
 
-        
+        // print_r($table_data);
 
 
         if($structure_data && $graph_data   ){
@@ -175,8 +175,7 @@ function el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_id
 function el_get_consultation_per_taste_gallery_by_year_GRAPH_FINAL_DATA($structure_data,$received_data ){
 
     /*
-    dataset[
-
+    dataset_by_location [
         location_slug => [
             2008 => 1,
             2009 => 5,
@@ -234,5 +233,109 @@ function el_get_consultation_per_taste_gallery_by_year_GRAPH_FINAL_DATA($structu
         'labels'    => $final_labels,
         'datasets'  => $final_dataset
     ];
+
+}
+
+function el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structure_data, $received_data){
+    
+    /*
+    dataset_by_location [
+        location_slug_2 => [
+            2008 => [
+                b2b => 5,
+                b2C => 9,
+            ],
+            2004 => [
+                b2b => 5,
+                b2C => 9,
+            ],
+        ]
+    ] 
+    */
+
+    $dataset_by_location = [];
+    $final_labels = [ ]; // List of years
+
+    $unique_customer_type   = [];
+    $unique_location_name   = [];
+    $unique_years           = [] ; 
+
+    foreach($structure_data as $order_id => $order_data ){
+
+        $location_slug = $order_data['location_slug'];
+        $location_name = $order_data['location_name'];
+
+
+        $year = $order_data['year'];
+        $customer_type = '';
+        if( isset($order_data['customer_type']) ){
+            $customer_type = trim( sanitize_key(  $order_data['customer_type'] ));
+        }
+
+        if( isset($dataset_by_location[$location_slug][$year][$customer_type]) ){
+            $previous_count = intval($dataset_by_location[$location_slug][$year][$customer_type]);
+            $dataset_by_location[$location_slug][$year][$customer_type] = $previous_count + 1;
+        }else{
+            $dataset_by_location[$location_slug][$year][$customer_type] = 1;
+        }
+
+        $dataset_by_location[$location_slug]['location_name'] = $location_name;
+
+        // push unique customer type
+        if( $customer_type && !in_array($customer_type, $unique_customer_type) ){
+            $unique_customer_type[] = $customer_type;
+        }
+
+        // push unique location name
+        if( !in_array($location_name, $unique_location_name) ){
+            $unique_location_name[] = $location_name;
+        }
+
+        // push unique year
+        if( !in_array($year, $unique_years) ){
+            $unique_years[] = $year;
+        }
+
+    }
+
+    $final_rows=[];;
+    // prepare each row
+    foreach($dataset_by_location as $location_slug => $dataset_item){
+        $each_row = [];
+
+        $row_total = 0;
+
+        $each_row[] = $dataset_item['location_name'];
+
+        // loop through all the unique years
+        foreach($unique_years as $year){
+            
+            // customer type
+            foreach( $unique_customer_type as $customer_type ){
+
+                if(isset($dataset_item[$year][$customer_type])){
+                    $each_row[] = $dataset_item[$year][$customer_type];
+                    $row_total = $row_total + intval($dataset_item[$year][$customer_type]);
+                }else{
+                    $each_row[] = "0";
+                }
+            }
+        }
+
+        $each_row[] = $row_total;
+        $final_rows[] = $each_row;
+        
+    }
+
+
+
+    return [
+
+        'unique_customer_type' => $unique_customer_type,
+        'years' => $unique_years,
+        "rows" => $final_rows
+    ];
+
+
 
 }
