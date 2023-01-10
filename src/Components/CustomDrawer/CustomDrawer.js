@@ -1,6 +1,6 @@
 import { Button, Drawer, Select } from 'antd';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { setCustomerType } from '../../Redux/Slice/GlobalFilter/customerTypeSlice';
 import { setEventStatusType } from '../../Redux/Slice/GlobalFilter/eventStatusTypeSlice';
 import { setFbLeadType } from '../../Redux/Slice/GlobalFilter/fbLeadTypeSlice';
@@ -10,24 +10,8 @@ import { setTypeOfData } from '../../Redux/Slice/GlobalFilter/typeOfDataSlice';
 import ModalButton from '../ModalButton/ModalButton';
 import './CustomDrawer.scss';
 
-const customerOptions = [
-    {
-        label: 'All',
-        value: 'all',
-    },
-    {
-        label: 'ELUX',
-        value: 'elux',
-    },
-    {
-        label: 'B2B',
-        value: 'b2b',
-    },
-    {
-        label: 'B2C',
-        value: 'b2c',
-    },
-];
+const customerOptions = window.eluxDashboard.eventGenericFilterData.customer_types;
+
 const eventStatusOptions = [
     {
         label: 'Planned',
@@ -52,124 +36,34 @@ const dataTypeOptions = [
         value: 'participants',
     },
 ];
-const locationOptions = [
-    {
-        label: 'All',
-        value: 'all',
-    },
-    {
-        label: 'Bern',
-        value: 'bern',
-    },
-    {
-        label: 'Zurich',
-        value: 'zurich',
-    },
-    {
-        label: 'St. Gallen',
-        value: 'st_gallen',
-    },
-    {
-        label: 'Chur',
-        value: 'chur',
-    },
-    {
-        label: 'Charrant',
-        value: 'charrant',
-    },
-    {
-        label: 'Preverenges',
-        value: 'preverenges',
-    },
-    {
-        label: 'Manno',
-        value: 'manno',
-    },
-    {
-        label: 'Kriens',
-        value: 'kriens',
-    },
-    {
-        label: 'Pratteln',
-        value: 'pratteln',
-    },
-    {
-        label: 'Magenwil',
-        value: 'magenwil',
-    },
-    {
-        label: 'Volketswil',
-        value: 'volketswil',
-    },
-];
 
-const mainCategoryOptions = [
-    {
-        label: 'Steamdemo ProfiLine',
-        value: 'steamdemoProfiline',
-    },
-    {
-        label: 'Steamdemo owners',
-        value: 'steamdemoOwners',
-    },
-    {
-        label: 'Steamdemo interested parties',
-        value: 'steamdemoInterestedParties',
-    },
-    {
-        label: 'Cooking Course',
-        value: 'cookingCourse',
-    },
-    {
-        label: 'Event Location',
-        value: 'eventLocation',
-    },
-    {
-        label: 'Diverses',
-        value: 'diverses',
-    },
-    {
-        label: 'Special Operations Inhouse',
-        value: 'specialOperationsInhouse',
-    },
-    {
-        label: 'Electrolux Employee Training',
-        value: 'electroluxEmployeeTraining',
-    },
-    {
-        label: 'AD Customer Event',
-        value: 'adCustomerEvent',
-    },
-];
-const fbLeadOptions = [
-    {
-        label: 'Culinary Ambassadors',
-        value: 'culinaryAmbassadors',
-    },
-    {
-        label: 'Consultants',
-        value: 'consultants',
-    },
-    {
-        label: 'Admins',
-        value: 'admins',
-    },
-];
+const locationOptions = window.eluxDashboard.eventGenericFilterData.locations.map(
+    ({ id, name }) => ({ value: id, label: name })
+);
+
+const mainCategoryOptions = window.eluxDashboard.eventGenericFilterData.categories.map(
+    ({ id, name }) => ({ value: id, label: name })
+);
+
+const fbLeadOptions = window.eluxDashboard.eventGenericFilterData.fb_leads.map(role => ({
+    label: role.role_name,
+    options: role.users,
+}));
 
 function CustomDrawer({ onClose, open }) {
-    const [customerOptionsType, setCustomerOptionsType] = useState('all');
-    const [locationOptionsType, setLocationOptionsType] = useState('all');
-    const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState('');
-    const [fbLeadOptionsType, setFbLeadOptionsType] = useState('');
+    const [customerOptionsType, setCustomerOptionsType] = useState(
+        customerOptions.map(({ value }) => value)
+    );
+    const [locationOptionsType, setLocationOptionsType] = useState(
+        locationOptions.map(({ value }) => value)
+    );
+    const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState();
+    const [subCategoryOptions, setSubCategoryOptions] = useState();
+    const [fbLeadOptionsType, setFbLeadOptionsType] = useState(
+        fbLeadOptions.map(role => role.options.map(options => options.value)).flat()
+    );
     const [typeOfOptionsData, setTypeOfOptionsData] = useState('events');
     const [eventStatusOptionsType, setEventStatusOptionsType] = useState('takenPlace');
-
-    const customerType = useSelector(state => state.customerType.value);
-    const locationType = useSelector(state => state.locationType.value);
-    const mainCategoryType = useSelector(state => state.mainCategoryType.value);
-    const fbLeadType = useSelector(state => state.fbLeadType.value);
-    const typeOfData = useSelector(state => state.typeOfData.value);
-    const eventStatusType = useSelector(state => state.eventStatusType.value);
 
     const dispatch = useDispatch();
     // filter
@@ -192,6 +86,10 @@ function CustomDrawer({ onClose, open }) {
         setEventStatusOptionsType(value);
     };
 
+    const handleSubCategory = value => {
+        console.log(value);
+    };
+
     // dispatch all filter for the global state here.
     const applyFilterBtn = () => {
         dispatch(setCustomerType(customerOptionsType));
@@ -200,14 +98,32 @@ function CustomDrawer({ onClose, open }) {
         dispatch(setFbLeadType(fbLeadOptionsType));
         dispatch(setTypeOfData(typeOfOptionsData));
         dispatch(setEventStatusType(eventStatusOptionsType));
-        console.log('button clicked');
     };
+
+    useEffect(() => {
+        const subCategory = window.eluxDashboard.eventGenericFilterData.categories.filter(
+            category => parseInt(category.id, 10) === parseInt(mainCategoryOptionsType, 10)
+        );
+        console.log('ddd', subCategory);
+        if (
+            subCategory.length > 0 &&
+            // eslint-disable-next-line no-prototype-builtins
+            subCategory[0].hasOwnProperty('sub_category') &&
+            subCategory[0].sub_category.length > 0
+        ) {
+            setSubCategoryOptions(
+                subCategory[0].sub_category.map(({ id, name }) => ({ value: id, label: name }))
+            );
+        } else {
+            setSubCategoryOptions();
+        }
+    }, [mainCategoryOptionsType]);
 
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
             <div className="filter-type-options">
                 <Select
-                    defaultValue="All"
+                    defaultValue={customerOptionsType}
                     mode="multiple"
                     placeholder="Customer Type"
                     onChange={handleCustomerTypeChange}
@@ -217,7 +133,7 @@ function CustomDrawer({ onClose, open }) {
                     options={customerOptions}
                 />
                 <Select
-                    defaultValue="All"
+                    defaultValue={locationOptions.map(({ value }) => value)}
                     mode="multiple"
                     placeholder="Location"
                     onChange={handleLocationTypeChange}
@@ -235,9 +151,21 @@ function CustomDrawer({ onClose, open }) {
                     }}
                     options={mainCategoryOptions}
                 />
+                {typeof subCategoryOptions !== 'undefined' && (
+                    <Select
+                        className="single-select-box"
+                        placeholder="Sub Category"
+                        onChange={handleSubCategory}
+                        style={{
+                            width: '100%',
+                        }}
+                        options={subCategoryOptions}
+                    />
+                )}
                 <Select
                     mode="multiple"
                     placeholder="FB Lead"
+                    defaultValue={fbLeadOptionsType}
                     onChange={handleFbLeadTypeChange}
                     style={{
                         width: '100%',
@@ -256,7 +184,6 @@ function CustomDrawer({ onClose, open }) {
                     options={dataTypeOptions}
                 />
                 <Select
-                    mode="multiple"
                     defaultValue="Taken Place"
                     placeholder="Event Status"
                     onChange={handleEventStatusTypeChange}

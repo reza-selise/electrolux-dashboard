@@ -110,7 +110,6 @@ function EventByCancellation() {
     // const [graphData, setGraphData] = useState();
 
     useEffect(() => {
-        console.log('eventByCancellationFilterType', eventByCancellationFilterType);
         switch (eventByCancellationFilterType) {
             case 'years':
                 setPayload({
@@ -200,7 +199,7 @@ function EventByCancellation() {
     //     filter_key_value: {},
     // };
     const { data, isLoading } = useEventByCancellationQuery(payload);
-    console.log(data, 'data of event cancel by shuvo');
+
     const colors = ['#937359', '#4A2017', '#A6B2A4', '#6B7A66', '#3B4536'];
 
     const graphData =

@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const customerOptions = window.eluxDashboard.eventGenericFilterData.customer_types;
+customerOptions.map(({ value }) => value);
 const initialState = {
-    value: 'all',
+    value: customerOptions.map(({ value }) => value),
 };
 
 export const customerTypeSlice = createSlice({
