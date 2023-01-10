@@ -87,7 +87,6 @@ function MyTable({ data }) {
 function EventByCancellation() {
     const [requestData, setRequestData] = useState('events');
     const [grapTableEventCancellation, setGrapTableEventCancellation] = useState('graph');
-    const [productStatus, setProductStatus] = useState('Took Place');
     const [payload, setPayload] = useState();
     const eventByCancellationFilterType = useSelector(
         state => state.eventByCancellationFilterType.value
@@ -100,6 +99,14 @@ function EventByCancellation() {
     const eventByCancellationCustomDate = useSelector(
         state => state.eventByCancellationCustomDate.value
     );
+
+    const customerType = useSelector(state => state.customerType.value);
+    // const locationType = useSelector(state => state.locationType.value);
+    const eventStatusType = useSelector(state => state.eventStatusType.value);
+    const typeOfData = useSelector(state => state.typeOfData.value);
+    const mainCategoryType = useSelector(state => state.mainCategoryType.value);
+    const fbLeadType = useSelector(state => state.fbLeadType.value);
+
     // const [graphData, setGraphData] = useState();
 
     useEffect(() => {
@@ -110,8 +117,12 @@ function EventByCancellation() {
                     type: requestData,
                     timeline_type: 'years',
                     timeline_filter: eventByCancellationYears,
-                    filter_key_value: {
-                        product_status: productStatus,
+                    filter_key_values: {
+                        event_status: eventStatusType,
+                        customer_types: customerType,
+                        data_types: typeOfData,
+                        categories: mainCategoryType,
+                        fb_leads: fbLeadType,
                     },
                     year_months: eventByCancellationYearMonths,
                 });
@@ -122,8 +133,12 @@ function EventByCancellation() {
                     type: requestData,
                     timeline_type: 'months',
                     timeline_filter: eventByCancellationMonths,
-                    filter_key_value: {
-                        product_status: productStatus,
+                    filter_key_values: {
+                        event_status: eventStatusType,
+                        customer_types: customerType,
+                        data_types: typeOfData,
+                        categories: mainCategoryType,
+                        fb_leads: fbLeadType,
                     },
                 });
                 break;
@@ -132,8 +147,12 @@ function EventByCancellation() {
                     type: requestData,
                     timeline_type: 'custom_date_range',
                     timeline_filter: eventByCancellationCustomDate,
-                    filter_key_value: {
-                        product_status: productStatus,
+                    filter_key_values: {
+                        event_status: eventStatusType,
+                        customer_types: customerType,
+                        data_types: typeOfData,
+                        categories: mainCategoryType,
+                        fb_leads: fbLeadType,
                     },
                 });
                 break;
@@ -142,8 +161,12 @@ function EventByCancellation() {
                     type: requestData,
                     timeline_type: 'custom_time_frame',
                     timeline_filter: eventByCancellationMonths,
-                    filter_key_value: {
-                        product_status: productStatus,
+                    filter_key_values: {
+                        event_status: eventStatusType,
+                        customer_types: customerType,
+                        data_types: typeOfData,
+                        categories: mainCategoryType,
+                        fb_leads: fbLeadType,
                     },
                 });
                 break;
@@ -153,7 +176,7 @@ function EventByCancellation() {
                     type: 'events',
                     timeline_type: 'years',
                     timeline_filter: ['2022', '2024', '2021', '2020'],
-                    filter_key_value: {},
+                    filter_key_values: {},
                 });
                 console.log('Event By Cancellation default payload');
         }
@@ -162,7 +185,11 @@ function EventByCancellation() {
         eventByCancellationFilterType,
         eventByCancellationYears,
         eventByCancellationMonths,
-        productStatus,
+        eventStatusType,
+        customerType,
+        typeOfData,
+        fbLeadType,
+        mainCategoryType,
         eventByCancellationYearMonths,
         eventByCancellationCustomDate,
     ]);
@@ -173,11 +200,7 @@ function EventByCancellation() {
     //     filter_key_value: {},
     // };
     const { data, isLoading } = useEventByCancellationQuery(payload);
-    console.log(data, 'data of event cancel');
-
-    const handleProductStatusChange = value => {
-        setProductStatus(value);
-    };
+    console.log(data, 'data of event cancel by shuvo');
     const colors = ['#937359', '#4A2017', '#A6B2A4', '#6B7A66', '#3B4536'];
 
     const graphData =
