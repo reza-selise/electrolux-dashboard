@@ -16,8 +16,14 @@ function get_event_by_locations($request){
    
     $customer_type          = $request->get_params()['customer_type']; // b2b | b2c | electrolux_internal | all etc. [customer_type on product meta]
     $customer_type       = explode( ',', $customer_type ); 
+   // Booked Manually | Walk-in | Customer Booking [consultation_booking_type on order meta]
+    if(isset($request->get_params()['booking_type'])){
+        $booking_type           = $request->get_params()['booking_type']; 
+    }
+    else{
+        $booking_type = 'all';
+    }
    
-    $booking_type           = $request->get_params()['booking_type']; // Booked Manually | Walk-in | Customer Booking [consultation_booking_type on order meta]
     $booking_type           = explode( ',', $booking_type ); 
     
     $sales_person_ids       = ! empty( $request->get_params()['salesperson'] ) ? $request->get_params()['salesperson'] : '';     // 7 | 8 | 9
@@ -25,7 +31,7 @@ function get_event_by_locations($request){
     
     $categories             = ! empty( $request->get_params()['categories'] ) ? $request->get_params()['categories'] : '';     // 15 | 47 | 104
     $categories             = explode( ',', $categories );  // category ids [product category on product]
-    $fb_leads               = $request->get_params()['fb_leads']; //product_event_consultant [on product meta]
+    $fb_leads               = $request->get_params()['consultant_lead']; //product_event_consultant [on product meta]
     $fb_leads             = explode( ',', $fb_leads );
     // FB lead = consultant lead on product edit page
 
