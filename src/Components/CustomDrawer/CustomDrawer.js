@@ -1,5 +1,5 @@
 import { Button, Drawer, Select } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCustomerType } from '../../Redux/Slice/GlobalFilter/customerTypeSlice';
 import { setEventStatusType } from '../../Redux/Slice/GlobalFilter/eventStatusTypeSlice';
@@ -41,44 +41,10 @@ const locationOptions = window.eluxDashboard.eventGenericFilterData.locations.ma
     ({ id, name }) => ({ value: id, label: name })
 );
 
-const mainCategoryOptions = [
-    {
-        label: 'Steamdemo ProfiLine',
-        value: 'steamdemoProfiline',
-    },
-    {
-        label: 'Steamdemo owners',
-        value: 'steamdemoOwners',
-    },
-    {
-        label: 'Steamdemo interested parties',
-        value: 'steamdemoInterestedParties',
-    },
-    {
-        label: 'Cooking Course',
-        value: 'cookingCourse',
-    },
-    {
-        label: 'Event Location',
-        value: 'eventLocation',
-    },
-    {
-        label: 'Diverses',
-        value: 'diverses',
-    },
-    {
-        label: 'Special Operations Inhouse',
-        value: 'specialOperationsInhouse',
-    },
-    {
-        label: 'Electrolux Employee Training',
-        value: 'electroluxEmployeeTraining',
-    },
-    {
-        label: 'AD Customer Event',
-        value: 'adCustomerEvent',
-    },
-];
+const mainCategoryOptions = window.eluxDashboard.eventGenericFilterData.categories.map(
+    ({ id, name }) => ({ value: id, label: name })
+);
+
 const fbLeadOptions = window.eluxDashboard.eventGenericFilterData.fb_leads.map(role => ({
     label: role.role_name,
     options: role.users,
@@ -91,7 +57,8 @@ function CustomDrawer({ onClose, open }) {
     const [locationOptionsType, setLocationOptionsType] = useState(
         locationOptions.map(({ value }) => value)
     );
-    const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState('');
+    const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState();
+    const [subCategoryOptions, setSubCategoryOptions] = useState();
     const [fbLeadOptionsType, setFbLeadOptionsType] = useState(
         fbLeadOptions.map(role => role.options.map(options => options.value)).flat()
     );
@@ -119,6 +86,10 @@ function CustomDrawer({ onClose, open }) {
         setEventStatusOptionsType(value);
     };
 
+    const handleSubCategory = value => {
+        console.log(value);
+    };
+
     // dispatch all filter for the global state here.
     const applyFilterBtn = () => {
         dispatch(setCustomerType(customerOptionsType));
@@ -127,8 +98,26 @@ function CustomDrawer({ onClose, open }) {
         dispatch(setFbLeadType(fbLeadOptionsType));
         dispatch(setTypeOfData(typeOfOptionsData));
         dispatch(setEventStatusType(eventStatusOptionsType));
-        console.log('button clicked');
     };
+
+    useEffect(() => {
+        const subCategory = window.eluxDashboard.eventGenericFilterData.categories.filter(
+            category => parseInt(category.id, 10) === parseInt(mainCategoryOptionsType, 10)
+        );
+        console.log('ddd', subCategory);
+        if (
+            subCategory.length > 0 &&
+            // eslint-disable-next-line no-prototype-builtins
+            subCategory[0].hasOwnProperty('sub_category') &&
+            subCategory[0].sub_category.length > 0
+        ) {
+            setSubCategoryOptions(
+                subCategory[0].sub_category.map(({ id, name }) => ({ value: id, label: name }))
+            );
+        } else {
+            setSubCategoryOptions();
+        }
+    }, [mainCategoryOptionsType]);
 
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
@@ -162,6 +151,17 @@ function CustomDrawer({ onClose, open }) {
                     }}
                     options={mainCategoryOptions}
                 />
+                {typeof subCategoryOptions !== 'undefined' && (
+                    <Select
+                        className="single-select-box"
+                        placeholder="Sub Category"
+                        onChange={handleSubCategory}
+                        style={{
+                            width: '100%',
+                        }}
+                        options={subCategoryOptions}
+                    />
+                )}
                 <Select
                     mode="multiple"
                     placeholder="FB Lead"
