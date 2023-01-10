@@ -52,7 +52,7 @@
 {
     "request_data": "events/participants",
     "event_status": "planned/cancelled/took_place",
-    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "customer_type": "b2b/b2c/electrolux_internal",
     "locations": "188,191,500",
     "categories": "15,47,104",
     "salesperson": "15,47,104",

@@ -149,12 +149,12 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
                             if( ! array_key_exists( $start_month, $monthly_order_ids ) ){
                                 $monthly_order_ids[$start_month] = [$order_id];
                             } else {
-                                $monthly_order_ids[$start_month] = array_merge( $monthly_order_ids[$start_month], $order_id );
+                                $monthly_order_ids[$start_month] = array_push( $monthly_order_ids[$start_month], $order_id );
                             }
                         }
 
                         foreach ( $monthly_order_ids as $month => $ids ) {
-                            $monthly_data       = elux_prepare_single_month_data( $month, $monthly_order_ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
+                            $monthly_data       = elux_prepare_single_month_data( $month, $ids, $data_type, $event_status, $customer_type, $locations, $categories, $sales_person_ids, $consultant_lead_ids );
                             $single_year_data["months"][] = $monthly_data;
                         }
                         array_push( $all_yearly_data, $single_year_data );
