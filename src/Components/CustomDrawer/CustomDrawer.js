@@ -184,6 +184,7 @@ function CustomDrawer({ onClose, open }) {
                     options={dataTypeOptions}
                 />
                 <Select
+                    className="single-select-box"
                     defaultValue="Taken Place"
                     placeholder="Event Status"
                     onChange={handleEventStatusTypeChange}
