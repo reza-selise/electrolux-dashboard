@@ -1,6 +1,6 @@
 import { Button, Drawer, Select } from 'antd';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setCustomerType } from '../../Redux/Slice/GlobalFilter/customerTypeSlice';
 import { setEventStatusType } from '../../Redux/Slice/GlobalFilter/eventStatusTypeSlice';
 import { setFbLeadType } from '../../Redux/Slice/GlobalFilter/fbLeadTypeSlice';
@@ -12,12 +12,8 @@ import './CustomDrawer.scss';
 
 const customerOptions = [
     {
-        label: 'All',
-        value: 'all',
-    },
-    {
         label: 'ELUX',
-        value: 'elux',
+        value: 'electrolux_internal',
     },
     {
         label: 'B2B',
@@ -52,56 +48,60 @@ const dataTypeOptions = [
         value: 'participants',
     },
 ];
-const locationOptions = [
-    {
-        label: 'All',
-        value: 'all',
-    },
-    {
-        label: 'Bern',
-        value: 'bern',
-    },
-    {
-        label: 'Zurich',
-        value: 'zurich',
-    },
-    {
-        label: 'St. Gallen',
-        value: 'st_gallen',
-    },
-    {
-        label: 'Chur',
-        value: 'chur',
-    },
-    {
-        label: 'Charrant',
-        value: 'charrant',
-    },
-    {
-        label: 'Preverenges',
-        value: 'preverenges',
-    },
-    {
-        label: 'Manno',
-        value: 'manno',
-    },
-    {
-        label: 'Kriens',
-        value: 'kriens',
-    },
-    {
-        label: 'Pratteln',
-        value: 'pratteln',
-    },
-    {
-        label: 'Magenwil',
-        value: 'magenwil',
-    },
-    {
-        label: 'Volketswil',
-        value: 'volketswil',
-    },
-];
+// const locationOptions = [
+//     {
+//         label: 'All',
+//         value: 'all',
+//     },
+//     {
+//         label: 'Bern',
+//         value: 'bern',
+//     },
+//     {
+//         label: 'Zurich',
+//         value: 'zurich',
+//     },
+//     {
+//         label: 'St. Gallen',
+//         value: 'st_gallen',
+//     },
+//     {
+//         label: 'Chur',
+//         value: 'chur',
+//     },
+//     {
+//         label: 'Charrant',
+//         value: 'charrant',
+//     },
+//     {
+//         label: 'Preverenges',
+//         value: 'preverenges',
+//     },
+//     {
+//         label: 'Manno',
+//         value: 'manno',
+//     },
+//     {
+//         label: 'Kriens',
+//         value: 'kriens',
+//     },
+//     {
+//         label: 'Pratteln',
+//         value: 'pratteln',
+//     },
+//     {
+//         label: 'Magenwil',
+//         value: 'magenwil',
+//     },
+//     {
+//         label: 'Volketswil',
+//         value: 'volketswil',
+//     },
+// ];
+
+const locationOptions = window.eluxDashboard.eventGenericFilterData.locations.map(
+    ({ id, name }) => ({ value: id, label: name })
+);
 
 const mainCategoryOptions = [
     {
@@ -157,19 +157,18 @@ const fbLeadOptions = [
 ];
 
 function CustomDrawer({ onClose, open }) {
-    const [customerOptionsType, setCustomerOptionsType] = useState('all');
-    const [locationOptionsType, setLocationOptionsType] = useState('all');
+    const [customerOptionsType, setCustomerOptionsType] = useState([
+        'electrolux_internal',
+        'b2b',
+        'b2c',
+    ]);
+    const [locationOptionsType, setLocationOptionsType] = useState(
+        locationOptions.map(({ value }) => value)
+    );
     const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState('');
     const [fbLeadOptionsType, setFbLeadOptionsType] = useState('');
     const [typeOfOptionsData, setTypeOfOptionsData] = useState('events');
     const [eventStatusOptionsType, setEventStatusOptionsType] = useState('takenPlace');
-
-    const customerType = useSelector(state => state.customerType.value);
-    const locationType = useSelector(state => state.locationType.value);
-    const mainCategoryType = useSelector(state => state.mainCategoryType.value);
-    const fbLeadType = useSelector(state => state.fbLeadType.value);
-    const typeOfData = useSelector(state => state.typeOfData.value);
-    const eventStatusType = useSelector(state => state.eventStatusType.value);
 
     const dispatch = useDispatch();
     // filter
@@ -207,7 +206,7 @@ function CustomDrawer({ onClose, open }) {
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
             <div className="filter-type-options">
                 <Select
-                    defaultValue="All"
+                    defaultValue={customerOptionsType}
                     mode="multiple"
                     placeholder="Customer Type"
                     onChange={handleCustomerTypeChange}
@@ -217,7 +216,7 @@ function CustomDrawer({ onClose, open }) {
                     options={customerOptions}
                 />
                 <Select
-                    defaultValue="All"
+                    defaultValue={locationOptions.map(({ value }) => value)}
                     mode="multiple"
                     placeholder="Location"
                     onChange={handleLocationTypeChange}
@@ -256,7 +255,6 @@ function CustomDrawer({ onClose, open }) {
                     options={dataTypeOptions}
                 />
                 <Select
-                    mode="multiple"
                     defaultValue="Taken Place"
                     placeholder="Event Status"
                     onChange={handleEventStatusTypeChange}

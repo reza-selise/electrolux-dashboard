@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: 'all',
+    value: ['electrolux_internal', 'b2b', 'b2c'],
 };
 
 export const customerTypeSlice = createSlice({
