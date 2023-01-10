@@ -15,60 +15,60 @@ function get_generic_filter_data(){
     $return_data = array(
         "customer_types" => array(
             [
-                "slug"=> "electrolux_internal",
-                "name" => "Electrolux Internal"
+                "value"=> "electrolux_internal",
+                "label" => "Electrolux Internal"
             ],
             [
-                "slug"=> "b2b",
-                "name" => "B2B"
+                "value"=> "b2b",
+                "label" => "B2B"
             ],
             [
-                "slug"=> "b2c",
-                "name" => "B2C"
+                "value"=> "b2c",
+                "label" => "B2C"
             ]
         ), 
         "booking_types"=> array(
             [
-                "slug"=> "Booked Manually",
-                "name" => "Booked Manually"
+                "value"=> "Booked Manually",
+                "label" => "Booked Manually"
             ],
             [
-                "slug"=> "Walk-in",
-                "name" => "Walk-in"
+                "value"=> "Walk-in",
+                "label" => "Walk-in"
             ]
         ),      
         "lead_types"=> array(
             [
-                "slug"=> "fb_leads",
-                "name" => "FB Leads"
+                "value"=> "fb_leads",
+                "label" => "FB Leads"
             ]
         ),
         "data_types" => [
             [
-                "slug"=> "events",
-                "name" => "Events"
+                "value"=> "events",
+                "label" => "Events"
             ],
             [
-                "slug"=> "participants",
-                "name" => "Participants"
+                "value"=> "participants",
+                "label" => "Participants"
             ]
         ],
         "event_status" => array(
             [
-                "slug"=>"reserved",
-                "name"=>"Reserved",
+                "value"=>"reserved",
+                "label"=>"Reserved",
             ],
             [
-                "slug"=>"planned",
-                "name"=>"Planned",
+                "value"=>"planned",
+                "label"=>"Planned",
             ],
             [
-                "slug"=>"took_place",
-                "name"=>"Took place",
+                "value"=>"took_place",
+                "label"=>"Took place",
             ],
             [
-                "slug"=>"canceled",
-                "name"=>"Canceled",
+                "value"=>"canceled",
+                "label"=>"Canceled",
             ]
         )
     );
@@ -166,12 +166,12 @@ function get_generic_filter_data(){
            $user_id = $user->data->ID;
            $user_email = $user->data->user_email;
            $user_role = $user->roles[0];
-          
+            error_log(print_r($user_role,1));
            
            $usr_data = array(
-                "id"=> $user_id,
+                "value"=> $user_id,
                 "email"=>  $user_email,
-                "name"=>  $user_name,
+                "label"=>  $user_name,
                 "role"=>   $user_role,
             );
             // sales
