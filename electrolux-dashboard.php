@@ -114,6 +114,9 @@ final class Electrolux_Dashboard {
         require_once ELUX_DB_PLUGIN_DIR . 'inc/api.php';
         require_once ELUX_DB_PLUGIN_DIR . 'inc/useful-functions.php';
         require_once ELUX_DB_PLUGIN_DIR . 'inc/useful-functions-consultation.php';
+        // event generic filter data 
+       
+        require_once ELUX_DB_PLUGIN_DIR . 'inc/events/events-generic-filter-data-api.php';
     }
 
     /**
@@ -159,6 +162,7 @@ final class Electrolux_Dashboard {
             'homeUrl'   => site_url(),
             'assetsUrl' => ELUX_DB_PLUGIN_URL . 'public',
             'currentUser' => get_current_user_id(),
+            'eventGenericFilterData' => get_generic_filter_data(),
         ];
         wp_localize_script( 'elux-db-react-script', 'eluxDashboard', $localize_array );
     }

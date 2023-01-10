@@ -1,15 +1,17 @@
 <?php
 
-add_action( 'rest_api_init', function () {
-    $namespace = 'elux-dashboard/v1';
-    register_rest_route($namespace, '/generic-filter-data', array(
-        'methods' => 'GET',
-        'callback' => 'get_generic_filter_data',
-        'permission_callback' => '__return_true',
-    ));
-});
+// add_action( 'rest_api_init', function () {
+//     $namespace = 'elux-dashboard/v1';
+//     register_rest_route($namespace, '/generic-filter-data', array(
+//         'methods' => 'GET',
+//         'callback' => 'get_generic_filter_data',
+//         'permission_callback' => '__return_true',
+//     ));
+// });
 
-function get_generic_filter_data($request){
+
+
+function get_generic_filter_data(){
     $return_data = array(
         "customer_types" => array(
             [
