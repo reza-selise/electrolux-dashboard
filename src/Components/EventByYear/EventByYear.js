@@ -103,6 +103,7 @@ function EventByYear() {
     );
     const customerType = useSelector(state => state.customerType.value);
     const locationType = useSelector(state => state.locationType.value);
+    const fbLeadType = useSelector(state => state.fbLeadType.value);
 
     const [requestData, setRequestData] = useState('events');
     const [requestBody, setRequestBody] = useState();
@@ -159,6 +160,7 @@ function EventByYear() {
     };
     console.log('customer type', customerType);
     console.log('location type', locationType);
+    console.log('fbLead type', fbLeadType);
 
     const { data, error, isLoading } = useEventByYearQuery(payload);
 

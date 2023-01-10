@@ -79,20 +79,10 @@ const mainCategoryOptions = [
         value: 'adCustomerEvent',
     },
 ];
-const fbLeadOptions = [
-    {
-        label: 'Culinary Ambassadors',
-        value: 'culinaryAmbassadors',
-    },
-    {
-        label: 'Consultants',
-        value: 'consultants',
-    },
-    {
-        label: 'Admins',
-        value: 'admins',
-    },
-];
+const fbLeadOptions = window.eluxDashboard.eventGenericFilterData.fb_leads.map(role => ({
+    label: role.role_name,
+    options: role.users,
+}));
 
 function CustomDrawer({ onClose, open }) {
     const [customerOptionsType, setCustomerOptionsType] = useState(
@@ -102,7 +92,9 @@ function CustomDrawer({ onClose, open }) {
         locationOptions.map(({ value }) => value)
     );
     const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState('');
-    const [fbLeadOptionsType, setFbLeadOptionsType] = useState('');
+    const [fbLeadOptionsType, setFbLeadOptionsType] = useState(
+        fbLeadOptions.map(role => role.options.map(options => options.value)).flat()
+    );
     const [typeOfOptionsData, setTypeOfOptionsData] = useState('events');
     const [eventStatusOptionsType, setEventStatusOptionsType] = useState('takenPlace');
 
@@ -173,6 +165,7 @@ function CustomDrawer({ onClose, open }) {
                 <Select
                     mode="multiple"
                     placeholder="FB Lead"
+                    defaultValue={fbLeadOptionsType}
                     onChange={handleFbLeadTypeChange}
                     style={{
                         width: '100%',

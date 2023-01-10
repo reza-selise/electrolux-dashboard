@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const fbLeadOptions = window.eluxDashboard.eventGenericFilterData.fb_leads.map(role => ({
+    label: role.role_name,
+    options: role.users,
+}));
 const initialState = {
-    value: [
-        'culinaryAmbassadors',
-        'consultants',
-        'admins',
-    ],
+    value: fbLeadOptions.map(role => role.options.map(options => options.value)).flat(),
 };
 
 export const fbLeadTypeSlice = createSlice({
