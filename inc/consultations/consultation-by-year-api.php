@@ -163,11 +163,17 @@ if( ! function_exists( 'elux_get_consultations_by_year' ) ){
 function elux_prepare_single_year_consultations( $year, $yearly_order_ids, $locations = array(), $categories = array(), $sales_person_ids = array(), $consultant_lead_ids = array() ){
     $response   = array(
         "year"      => $year,
-        "onsite"    => array(
-            "b2b"   => 0,
-            "b2c"   => 0,
+        "table"     => array(
+            "onsite"    => array(
+                "b2b"   => 0,
+                "b2c"   => 0,
+            ),
+            "live"    => array(
+                "b2b"   => 0,
+                "b2c"   => 0,
+            ),
         ),
-        "live"    => array(
+        "graph"     => array(
             "b2b"   => 0,
             "b2c"   => 0,
         ),
@@ -225,7 +231,8 @@ function elux_prepare_single_year_consultations( $year, $yearly_order_ids, $loca
 
                     
                     if ( 'b2b' === $type || 'b2c' === $type ){
-                        $response[$order_type][$type]++;
+                        $response["table"][$order_type][$type]++;
+                        $response["graph"][$type]++;
                         $response["total"]++;
                     } else {
                         continue;
