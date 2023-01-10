@@ -105,7 +105,18 @@ function el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_id
             $each_structure_data = [];
             $order = wc_get_order($order_id);
 
-            // 
+            // location
+            
+            // $event_location_id =  $order->get_meta('event_location');
+
+            // $structure_data[$order_id]['location'] = $event_location_id;
+
+            $event_location_id = get_post_meta( $order_id, 'event_location', true );
+            if($event_location_id){
+                $each_structure_data['location'][$event_location_id] = get_the_title( $event_location_id ) ;
+            }
+
+
 
             // loop through all the product in the order 
             $order_items =$order->get_items();
