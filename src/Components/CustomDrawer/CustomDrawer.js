@@ -46,7 +46,9 @@ function CustomDrawer({ onClose, open }) {
     const [locationOptionsType, setLocationOptionsType] = useState(
         locationOptions.map(({ value }) => value)
     );
-    const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState();
+    const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState(
+        mainCategoryOptions.map(({ value }) => value)
+    );
     const [subCategoryOptions, setSubCategoryOptions] = useState();
     const [subCategoryValue, setSubCategoryValue] = useState();
     const [fbLeadOptionsType, setFbLeadOptionsType] = useState(
@@ -92,24 +94,23 @@ function CustomDrawer({ onClose, open }) {
     };
 
     useEffect(() => {
-        const subCategory = window.eluxDashboard.eventGenericFilterData.categories.filter(
-            category => parseInt(category.id, 10) === parseInt(mainCategoryOptionsType, 10)
+        const matchCategory = window.eluxDashboard.eventGenericFilterData.categories.filter(
+            category => mainCategoryOptionsType.includes(category.id)
         );
+        const subCategory = matchCategory.reduce((subCat, category) => {
+            subCat.push(...category.sub_category);
+            return subCat;
+        }, []);
 
-        if (
-            subCategory.length > 0 &&
-            // eslint-disable-next-line no-prototype-builtins
-            subCategory[0].hasOwnProperty('sub_category') &&
-            subCategory[0].sub_category.length > 0
-        ) {
-            setSubCategoryOptions(
-                subCategory[0].sub_category.map(({ id, name }) => ({ value: id, label: name }))
-            );
-            setSubCategoryValue(subCategory[0].sub_category.map(({ id }) => id));
+        if (subCategory.length > 0) {
+            setSubCategoryOptions(subCategory.map(({ id, name }) => ({ value: id, label: name })));
+            setSubCategoryValue(subCategory.map(({ id }) => id));
         } else {
             setSubCategoryOptions();
         }
     }, [mainCategoryOptionsType]);
+
+    
 
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
@@ -135,6 +136,8 @@ function CustomDrawer({ onClose, open }) {
                     options={locationOptions}
                 />
                 <Select
+                    mode="multiple"
+                    defaultValue={mainCategoryOptionsType}
                     className="single-select-box"
                     placeholder="Main Category"
                     onChange={handleMainCategoryTypeChange}
