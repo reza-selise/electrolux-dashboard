@@ -254,6 +254,7 @@ function el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structu
     */
 
     $dataset_by_location = [];
+    $dataset_by_year = [];
     $final_labels = [ ]; // List of years
 
     $unique_customer_type   = [];
@@ -296,6 +297,16 @@ function el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structu
             $unique_years[] = $year;
         }
 
+
+        // dataset by year count
+        if( isset($dataset_by_year[$year]) ){
+            $previous_count = intval($dataset_by_year[$year]);
+            $dataset_by_year[$year] = $previous_count + 1;
+        }else{
+            $dataset_by_year[$year] = 1;
+        }
+        // dataset by year count end 
+
     }
 
     $final_rows=[];;
@@ -326,6 +337,41 @@ function el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structu
         $final_rows[] = $each_row;
         
     }
+
+    // LAST ROW
+    $last_row = ["Total"];
+    $last_total = 0;
+    foreach($unique_years as $year){
+
+        if(isset($dataset_by_year[$year])){
+            $last_row[] = intval( $dataset_by_year[$year]);
+            $last_total = $last_total + intval($dataset_by_year[$year]) ;
+
+        }else{
+            $last_row[] = '0';
+        }
+    }
+    $last_row[] = $last_total ;
+    $final_rows[] = $last_row;
+    // --- last row end
+
+    
+
+    foreach($unique_years as $year){
+            
+        // customer type
+        foreach( $unique_customer_type as $customer_type ){
+
+            if(isset($dataset_item[$year][$customer_type])){
+                $each_row[] = $dataset_item[$year][$customer_type];
+                $row_total = $row_total + intval($dataset_item[$year][$customer_type]);
+            }else{
+                $each_row[] = "0";
+            }
+        }
+    }
+
+
 
 
 
