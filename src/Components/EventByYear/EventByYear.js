@@ -101,6 +101,7 @@ function EventByYear() {
     const eventbyYearTimelineYearDateRange = useSelector(
         state => state.eventbyYearTimelineYearDateRange.value
     );
+    // Generic Filter
     const customerType = useSelector(state => state.customerType.value);
     const locationType = useSelector(state => state.locationType.value);
     const fbLeadType = useSelector(state => state.fbLeadType.value);
@@ -109,7 +110,7 @@ function EventByYear() {
     const typeOfData = useSelector(state => state.typeOfData.value);
     const eventStatusType = useSelector(state => state.eventStatusType.value);
 
-    const [requestData, setRequestData] = useState('events');
+    const [requestData, setRequestData] = useState();
     const [requestBody, setRequestBody] = useState();
 
     const [grapOrTableEvntYear, setGrapOrTableEvntYear] = useState('graph');
@@ -150,25 +151,47 @@ function EventByYear() {
         eventbyYearTimelineYearDateRange,
     ]);
 
+    // request_data": "events/participants",
+    // "event_status": "planned/cancelled/took_place",
+    // "customer_type": "b2b/b2c/electrolux_internal",
+    // "locations": "188,191,500",
+    // "categories": "15,47,104",
+    // "salesperson": "15,47,104",
+    // "consultant_lead": "15,47,104",
+    // "filter_type": "years/months/custom_date_range/custom_time_frame",
+    // "request_body": [
+    //     {
+    //         "year": "2022",
+    //         "months": "02,05,06"
+    //     },
+    //     {
+    //         "year": "2023",
+    //         "months": "02,11,06"
+    //     },
+    //     {
+    //         "year": "2021",
+    //         "months": "02,07,04"
+    //     }
+    // ]
+
     const payload = {
-        request_data: requestData,
+        request_data: requestData || typeOfData,
         filter_type: eventByYearFilterType,
         request_body: JSON.stringify(requestBody),
-        customer_types: customerType.toString(),
-        booking_types: 'Walk-in',
-        event_status: 'planned',
-        categories: '139',
+        customer_type: customerType.toString(),
+        event_status: eventStatusType,
+        categories: mainCategoryType.toString(),
         locations: locationType.toString(),
-        fb_leads: '57',
-        sales_employee: '72',
+        consultant_lead: fbLeadType.toString(),
+        salesperson: '72',
     };
-    console.log('customer type', customerType);
-    console.log('location type', locationType);
-    console.log('mainCategoryType type', mainCategoryType);
-    console.log('fbLead type', fbLeadType);
-    console.log('subCategoryType type', subCategoryType);
-    console.log('typeOfData type', typeOfData);
-    console.log('eventStatusType type', eventStatusType);
+    // console.log('customer type', customerType);
+    // console.log('location type', locationType);
+    // console.log('mainCategoryType type', mainCategoryType);
+    // console.log('fbLead type', fbLeadType);
+    // console.log('subCategoryType type', subCategoryType);
+    // console.log('typeOfData type', typeOfData);
+    // console.log('eventStatusType type', eventStatusType);
 
     const { data, error, isLoading } = useEventByYearQuery(payload);
 
@@ -196,7 +219,6 @@ function EventByYear() {
                 </h2>
                 <LocalFilter
                     showBoth="true"
-                    requestData={requestData}
                     setRequestData={setRequestData}
                     location="event-by-year-timeline"
                 />

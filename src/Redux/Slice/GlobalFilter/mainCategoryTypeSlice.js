@@ -1,7 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const defaultMainCategory = window.eluxDashboard.eventGenericFilterData.categories.map(
+    ({ id }) => id
+);
+
 const initialState = {
-    value: '',
+    value: defaultMainCategory,
 };
 
 export const mainCategoryTypeSlice = createSlice({

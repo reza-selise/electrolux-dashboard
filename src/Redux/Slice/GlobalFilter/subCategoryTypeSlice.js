@@ -1,7 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const subCategory = window.eluxDashboard.eventGenericFilterData.categories.reduce(
+    (subCat, category) => {
+        subCat.push(...category.sub_category);
+        return subCat;
+    },
+    []
+);
+
 const initialState = {
-    value: '',
+    value: subCategory.map(({ id }) => id),
 };
 
 export const subCategoryTypeSlice = createSlice({

@@ -3,7 +3,7 @@ import React from 'react';
 import ModalButton from '../ModalButton/ModalButton';
 import './LocalFilter.scss';
 
-function LocalFilter({ location, requestData, setRequestData, showBoth }) {
+function LocalFilter({ location, setRequestData, showBoth }) {
     const currentYear = new Date().getFullYear();
 
     const handleYearChange = value => {
@@ -20,10 +20,14 @@ function LocalFilter({ location, requestData, setRequestData, showBoth }) {
 
             {showBoth === 'true' ? (
                 <Select
-                    defaultValue={requestData}
+                    defaultValue="select_type"
                     style={{ width: 120 }}
                     onChange={handleYearChange}
                     options={[
+                        {
+                            value: 'select_type',
+                            label: 'Select Type',
+                        },
                         {
                             value: 'events',
                             label: 'Events',

@@ -110,8 +110,6 @@ function CustomDrawer({ onClose, open }) {
         }
     }, [mainCategoryOptionsType]);
 
-    
-
     return (
         <Drawer title="Filters" placement="right" onClose={onClose} open={open}>
             <div className="filter-type-options">
