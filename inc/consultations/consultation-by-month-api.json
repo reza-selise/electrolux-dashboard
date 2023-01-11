@@ -1,0 +1,201 @@
+{
+    "status": 200,
+    "message": "success",
+    "data": {
+        "type": "events",
+        "graph": [
+            {
+                "year": "2022",
+                "months": [
+                    {
+                        "month": "01",
+                        "total": "90"
+                    },
+                    {
+                        "month": "02",
+                        "total": "90"
+                    },
+                    {
+                        "month": "03",
+                        "total": "90"
+                    }
+                ]
+            },
+            {
+                "year": "2021",
+                "months": [
+                    {
+                        "month": "01",
+                        "total": "90"
+                    },
+                    {
+                        "month": "02",
+                        "total": "90"
+                    },
+                    {
+                        "month": "03",
+                        "total": "90"
+                    }
+                ]
+            },
+            {
+                "year": "2020",
+                "months": [
+                    {
+                        "month": "01",
+                        "total": "90"
+                    },
+                    {
+                        "month": "02",
+                        "total": "90"
+                    },
+                    {
+                        "month": "03",
+                        "total": "90"
+                    }
+                ]
+            }
+        ],
+        "table": {
+            "01": {
+                "onsite": {
+                    "b2b": 100,
+                    "b2c": 50
+                },
+                "live": {
+                    "b2b": 50,
+                    "b2c": 70
+                }
+            },
+            "02": {
+                "onsite": {
+                    "b2b": 100,
+                    "b2c": 50
+                },
+                "live": {
+                    "b2b": 50,
+                    "b2c": 70
+                }
+            },
+            "03": {
+                "onsite": {
+                    "b2b": 100,
+                    "b2c": 50
+                },
+                "live": {
+                    "b2b": 50,
+                    "b2c": 70
+                }
+            }
+        }
+    }
+}
+
+
+// for months
+{
+    "filter_type": "months",
+    "request_data": "events/participants",
+    "event_status": "planned/cancelled/took_place",
+    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "locations": "188,191,500",
+    "categories": "15,47,104",
+    "salesperson": "15,47,104",
+    "consultant_lead": "15,47,104",
+    "request_body": [
+        {
+            "year": "2022",
+            "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+        },
+        {
+            "year": "2021",
+            "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+        },
+        {
+            "year": "2020",
+            "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+        },
+        {
+            "year": "2019",
+            "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+        },
+        {
+            "year": "2018",
+            "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+        },
+    ]
+}
+
+// for years
+{
+    "request_data": "events/participants",
+    "event_status": "planned/cancelled/took_place",
+    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "locations": "188,191,500",
+    "categories": "15,47,104",
+    "salesperson": "15,47,104",
+    "consultant_lead": "15,47,104",
+    "filter_type": "years",
+    "request_body": [
+        {
+            "year": "2022",
+            "months": "02,05,06"
+        },
+        {
+            "year": "2023",
+            "months": "02,11,06"
+        },
+        {
+            "year": "2021",
+            "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+        }
+    ]
+}
+
+// for custom date range
+{
+    "request_data": "events/participants",
+    "event_status": "planned/cancelled/took_place",
+    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "locations": "188,191,500",
+    "categories": "15,47,104",
+    "salesperson": "15,47,104",
+    "consultant_lead": "15,47,104",
+    "filter_type": "custom_date_range",
+    "request_body": [
+        {
+            "start":  "2022-01-01",
+            "end":  "2022-01-31",
+        },
+        {
+            "start":  "2022-02-01",
+            "end":  "2022-03-15",
+        },
+        {
+            "start":  "2022-12-01",
+            "end":  "2024-31-01",
+        },
+    ]
+}
+
+// for custom time frame
+{
+    "filter_type": "custom_time_frame",
+    "request_data": "events/participants",
+    "event_status": "planned/cancelled/took_place",
+    "customer_type": "b2b/b2c/electrolux_internal/all",
+    "locations": "188,191,500",
+    "categories": "15,47,104",
+    "salesperson": "15,47,104",
+    "consultant_lead": "15,47,104",
+    "request_body": [
+        {
+            "year": "2021",
+            "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+        },
+        {
+            "year": "2022",
+            "months": "01,02,03,04,05,06,07,08,09,10,11,12"
+        }
+    ]
+}

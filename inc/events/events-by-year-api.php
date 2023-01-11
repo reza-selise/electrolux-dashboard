@@ -264,6 +264,8 @@ function elux_prepare_single_year_data( $year, $yearly_order_ids, $data_type, $e
         "b2c"   => $yearly_b2c,
     );
     $yearly_data['total']   = ( 'events' === $data_type ) ? count( $yearly_events ) : $yearly_event_participants;
-    
+    // echo $year . " " . json_encode($yearly_order_ids);
+    // echo $year . " " . json_encode($yearly_events);
+
     return $yearly_data;
 }
