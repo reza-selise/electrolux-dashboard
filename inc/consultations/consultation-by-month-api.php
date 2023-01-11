@@ -137,36 +137,36 @@ if( ! function_exists( 'elux_get_consultations_by_month' ) ){
                 $all_yearly_data    = array();
                 $yearly_order_ids   = array();
                 $all_months_table_data = array(
-                    "01"    => array(
-                        "onsite"    => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                        "live"      => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                    ),
-                    "02"    => array(
-                        "onsite"    => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                        "live"      => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                    ),
-                    "03"    => array(
-                        "onsite"    => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                        "live"      => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                    ),
+                    // "01"    => array(
+                    //     "onsite"    => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    //     "live"      => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    // ),
+                    // "02"    => array(
+                    //     "onsite"    => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    //     "live"      => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    // ),
+                    // "03"    => array(
+                    //     "onsite"    => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    //     "live"      => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    // ),
                 );
 
                 // prepare yearly order ids
