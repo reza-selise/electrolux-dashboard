@@ -160,7 +160,7 @@ if( ! function_exists( 'elux_get_events_by_status' ) ){
 function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $customer_type, $locations = array(), $categories = array(), $sales_person_ids = array(), $consultant_lead_ids = array() ){
     $planned        = 0;
     $cancelled      = 0;
-    $taken_place    = 0;
+    $took_place    = 0;
     $events  = [];
 
     // filter order id's by location.
@@ -183,7 +183,7 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
                     }
 
                     $type       = !empty( get_post_meta( $product_id, 'customer_type', true ) ) ? strtolower(get_post_meta( $product_id, 'customer_type', true )) : '';
-                    $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '-', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
+                    $status     = !empty( get_post_meta( $product_id, 'product_status', true ) ) ? str_replace(' ', '_', strtolower(get_post_meta( $product_id, 'product_status', true ))) : '';
                     $product_cat= get_the_terms( $product_id , 'product_cat' );
 
                     // filter event by category.
@@ -214,7 +214,7 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
                     } elseif ( 'planned' === $status ){
                         $planned++;
                     } elseif ('took-place' === $status ){
-                        $taken_place++;
+                        $took_place++;
                     }
                 }
             }
@@ -225,7 +225,7 @@ function elux_prepare_single_year_by_status_data(  $year, $yearly_order_ids, $cu
         "year"          => $year,
         "planned"       => $planned,
         "cancelled"     => $cancelled,
-        "taken_place"   => $taken_place,
+        "took_place"   => $took_place,
         "total"         => count( $events ),
     );
     

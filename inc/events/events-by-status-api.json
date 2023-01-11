@@ -8,21 +8,21 @@
                 "year": "2022",
                 "planned": "400000",
                 "cancelled": "450000",
-                "taken_place": "750000",
+                "took_place": "750000",
                 "total": "1600000"
             },
             {
                 "year": "2021",
                 "planned": "400000",
                 "cancelled": "450000",
-                "taken_place": "750000",
+                "took_place": "750000",
                 "total": "1800000"
             },
             {
                 "year": "2020",
                 "planned": "400000",
                 "cancelled": "450000",
-                "taken_place": "750000",
+                "took_place": "750000",
                 "total": "1600000"
             }
         ]

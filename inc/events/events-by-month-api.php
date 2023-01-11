@@ -23,7 +23,7 @@ if( ! function_exists( 'elux_get_events_by_month' ) ){
             );
         $allowed_data_type      = array( 'events', 'participants' );
         $allowed_timeline       = array( 'months', 'years', 'custom_date_range', 'custom_time_frame' );
-        $allowed_event_status   = array( 'planned', 'cancelled', 'taken_place' );
+        $allowed_event_status   = array( 'planned', 'cancelled', 'took_place' );
         $allowed_customer_type  = array( 'b2b', 'b2c', 'electrolux_internal', 'all' );
         
         // required params.
