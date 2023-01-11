@@ -3,14 +3,14 @@ add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
     register_rest_route( $namespace, '/consultations-per-taste-gallery-by-year', [
         'methods'             => 'POST',
-        'callback'            => 'elux_get_consultation_per_taste_gallery_data',
+        'callback'            => 'elux_get_consultation_per_taste_gallery_by_year',
         'permission_callback' => '__return_true',
     ] );
 } );
 
 
-if( ! function_exists( 'elux_get_consultation_per_taste_gallery_data' ) ){
-    function elux_get_consultation_per_taste_gallery_data( $ReqObj ){ 
+if( ! function_exists( 'elux_get_consultation_per_taste_gallery_by_year' ) ){
+    function elux_get_consultation_per_taste_gallery_by_year( $ReqObj ){ 
         
         // this will use to store all relevant information along with post id
         $structure_data = [];
@@ -125,7 +125,7 @@ function el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_id
                 $event_date     =   substr($event_time_string,8,2)  ;
 
                 $each_structure_data['day']      = $event_date;
-                $each_structure_data['month']    = $event_month;
+                $each_structure_data['month']    = (string) $event_month;
                 $each_structure_data['year']     = intval($event_year);
             }
 
@@ -254,6 +254,7 @@ function el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structu
     */
 
     $dataset_by_location = [];
+    $dataset_by_year = [];
     $final_labels = [ ]; // List of years
 
     $unique_customer_type   = [];
@@ -296,6 +297,16 @@ function el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structu
             $unique_years[] = $year;
         }
 
+
+        // dataset by year count
+        if( isset($dataset_by_year[$year]) ){
+            $previous_count = intval($dataset_by_year[$year]);
+            $dataset_by_year[$year] = $previous_count + 1;
+        }else{
+            $dataset_by_year[$year] = 1;
+        }
+        // dataset by year count end 
+
     }
 
     $final_rows=[];;
@@ -326,6 +337,41 @@ function el_get_consultation_per_taste_gallery_by_year_TABLE_FINAL_DATA($structu
         $final_rows[] = $each_row;
         
     }
+
+    // LAST ROW
+    $last_row = ["Total"];
+    $last_total = 0;
+    foreach($unique_years as $year){
+
+        if(isset($dataset_by_year[$year])){
+            $last_row[] = intval( $dataset_by_year[$year]);
+            $last_total = $last_total + intval($dataset_by_year[$year]) ;
+
+        }else{
+            $last_row[] = '0';
+        }
+    }
+    $last_row[] = $last_total ;
+    $final_rows[] = $last_row;
+    // --- last row end
+
+    
+
+    foreach($unique_years as $year){
+            
+        // customer type
+        foreach( $unique_customer_type as $customer_type ){
+
+            if(isset($dataset_item[$year][$customer_type])){
+                $each_row[] = $dataset_item[$year][$customer_type];
+                $row_total = $row_total + intval($dataset_item[$year][$customer_type]);
+            }else{
+                $each_row[] = "0";
+            }
+        }
+    }
+
+
 
 
 

@@ -62,36 +62,36 @@ if( ! function_exists( 'elux_get_consultations_by_month' ) ){
             case 'years':
                 $all_years_graph_data = array();
                 $all_months_table_data = array(
-                    "01"    => array(
-                        "onsite"    => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                        "live"      => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                    ),
-                    "02"    => array(
-                        "onsite"    => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                        "live"      => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                    ),
-                    "03"    => array(
-                        "onsite"    => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                        "live"      => array(
-                            "b2b"   => 10,
-                            "b2c"   => 20,
-                        ),
-                    ),
+                    // "01"    => array(
+                    //     "onsite"    => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    //     "live"      => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    // ),
+                    // "02"    => array(
+                    //     "onsite"    => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    //     "live"      => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    // ),
+                    // "03"    => array(
+                    //     "onsite"    => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    //     "live"      => array(
+                    //         "b2b"   => 10,
+                    //         "b2c"   => 20,
+                    //     ),
+                    // ),
                 );
                 
                 foreach( $request_body as $single_year ){
@@ -109,7 +109,7 @@ if( ! function_exists( 'elux_get_consultations_by_month' ) ){
                         
                         // prepare data for graph.
                         $single_year_data["months"][] = array(
-                                "month" => $monthly_data["month"],
+                                "month" => $month,
                                 "total" => $monthly_data["total"],
                         );
 

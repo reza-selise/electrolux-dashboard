@@ -22,6 +22,7 @@ class Elux_DB_API {
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/consultations/consultation-by-acquisition-type-api.php';
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/consultations/consultation-by-year-api.php';
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/consultations/consultations-per-taste-gallery-by-year-api.php';
+		require_once ELUX_DB_PLUGIN_DIR . 'inc/consultations/consultations-per-taste-gallery-by-month-api.php';
 		
 		// Home consultation start 
 		require_once ELUX_DB_PLUGIN_DIR . 'inc/home-consultation/overview-of-home-consultations-by-month-api.php';
