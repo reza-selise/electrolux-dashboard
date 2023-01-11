@@ -3,14 +3,14 @@ add_action( 'rest_api_init', function () {
     $namespace = 'elux-dashboard/v1';
     register_rest_route( $namespace, '/consultations-per-taste-gallery-by-year', [
         'methods'             => 'POST',
-        'callback'            => 'elux_get_consultation_per_taste_gallery_data',
+        'callback'            => 'elux_get_consultation_per_taste_gallery_by_year',
         'permission_callback' => '__return_true',
     ] );
 } );
 
 
-if( ! function_exists( 'elux_get_consultation_per_taste_gallery_data' ) ){
-    function elux_get_consultation_per_taste_gallery_data( $ReqObj ){ 
+if( ! function_exists( 'elux_get_consultation_per_taste_gallery_by_year' ) ){
+    function elux_get_consultation_per_taste_gallery_by_year( $ReqObj ){ 
         
         // this will use to store all relevant information along with post id
         $structure_data = [];
@@ -125,7 +125,7 @@ function el_get_consultations_per_taste_gallery_by_year_STRUCTURE_DATA($order_id
                 $event_date     =   substr($event_time_string,8,2)  ;
 
                 $each_structure_data['day']      = $event_date;
-                $each_structure_data['month']    = $event_month;
+                $each_structure_data['month']    = (string) $event_month;
                 $each_structure_data['year']     = intval($event_year);
             }
 
