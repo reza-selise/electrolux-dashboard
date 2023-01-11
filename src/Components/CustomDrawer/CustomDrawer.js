@@ -6,26 +6,15 @@ import { setEventStatusType } from '../../Redux/Slice/GlobalFilter/eventStatusTy
 import { setFbLeadType } from '../../Redux/Slice/GlobalFilter/fbLeadTypeSlice';
 import { setLocationType } from '../../Redux/Slice/GlobalFilter/locationTypeSlice';
 import { setMainCategorytype } from '../../Redux/Slice/GlobalFilter/mainCategoryTypeSlice';
+import { setSubCategoryType } from '../../Redux/Slice/GlobalFilter/subCategoryTypeSlice';
 import { setTypeOfData } from '../../Redux/Slice/GlobalFilter/typeOfDataSlice';
 import ModalButton from '../ModalButton/ModalButton';
 import './CustomDrawer.scss';
 
 const customerOptions = window.eluxDashboard.eventGenericFilterData.customer_types;
 
-const eventStatusOptions = [
-    {
-        label: 'Planned',
-        value: 'planned',
-    },
-    {
-        label: 'Canceled',
-        value: 'canceled',
-    },
-    {
-        label: 'Taken Place',
-        value: 'takenPlace',
-    },
-];
+const eventStatusOptions = window.eluxDashboard.eventGenericFilterData.event_status;
+
 const dataTypeOptions = [
     {
         label: 'Events',
@@ -59,6 +48,7 @@ function CustomDrawer({ onClose, open }) {
     );
     const [mainCategoryOptionsType, setMainCategoryOptionstype] = useState();
     const [subCategoryOptions, setSubCategoryOptions] = useState();
+    const [subCategoryValue, setSubCategoryValue] = useState();
     const [fbLeadOptionsType, setFbLeadOptionsType] = useState(
         fbLeadOptions.map(role => role.options.map(options => options.value)).flat()
     );
@@ -87,7 +77,7 @@ function CustomDrawer({ onClose, open }) {
     };
 
     const handleSubCategory = value => {
-        console.log(value);
+        setSubCategoryValue(value);
     };
 
     // dispatch all filter for the global state here.
@@ -98,13 +88,14 @@ function CustomDrawer({ onClose, open }) {
         dispatch(setFbLeadType(fbLeadOptionsType));
         dispatch(setTypeOfData(typeOfOptionsData));
         dispatch(setEventStatusType(eventStatusOptionsType));
+        dispatch(setSubCategoryType(subCategoryValue));
     };
 
     useEffect(() => {
         const subCategory = window.eluxDashboard.eventGenericFilterData.categories.filter(
             category => parseInt(category.id, 10) === parseInt(mainCategoryOptionsType, 10)
         );
-        console.log('ddd', subCategory);
+
         if (
             subCategory.length > 0 &&
             // eslint-disable-next-line no-prototype-builtins
@@ -114,6 +105,7 @@ function CustomDrawer({ onClose, open }) {
             setSubCategoryOptions(
                 subCategory[0].sub_category.map(({ id, name }) => ({ value: id, label: name }))
             );
+            setSubCategoryValue(subCategory[0].sub_category.map(({ id }) => id));
         } else {
             setSubCategoryOptions();
         }
@@ -153,6 +145,8 @@ function CustomDrawer({ onClose, open }) {
                 />
                 {typeof subCategoryOptions !== 'undefined' && (
                     <Select
+                        mode="multiple"
+                        defaultValue={subCategoryValue}
                         className="single-select-box"
                         placeholder="Sub Category"
                         onChange={handleSubCategory}
@@ -172,9 +166,18 @@ function CustomDrawer({ onClose, open }) {
                     }}
                     options={fbLeadOptions}
                 />
-
                 <Select
-                    defaultValue="Events"
+                    defaultValue="events"
+                    className="single-select-box"
+                    placeholder="Sales Employee(s)"
+                    onChange={handleTypeOfDataChange}
+                    style={{
+                        width: '100%',
+                    }}
+                    options={dataTypeOptions}
+                />
+                <Select
+                    defaultValue="events"
                     className="single-select-box"
                     placeholder="Type Of Data"
                     onChange={handleTypeOfDataChange}
@@ -184,7 +187,7 @@ function CustomDrawer({ onClose, open }) {
                     options={dataTypeOptions}
                 />
                 <Select
-                    defaultValue="Taken Place"
+                    defaultValue="took_place"
                     placeholder="Event Status"
                     onChange={handleEventStatusTypeChange}
                     style={{

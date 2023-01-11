@@ -1,17 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: [
-        'steamdemoProfiline',
-        'steamdemoOwners',
-        'steamdemoInterestedParties',
-        'cookingCourse',
-        'eventLocation',
-        'diverses',
-        'specialOperationsInhouse',
-        'electroluxEmployeeTraining',
-        'adCustomerEvent',
-    ],
+    value: '',
 };
 
 export const mainCategoryTypeSlice = createSlice({
