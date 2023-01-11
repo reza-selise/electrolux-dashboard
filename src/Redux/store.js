@@ -34,6 +34,7 @@ import eventStatusTypeReducer from './Slice/GlobalFilter/eventStatusTypeSlice';
 import fbLeadTypeReducer from './Slice/GlobalFilter/fbLeadTypeSlice';
 import locationTypeReducer from './Slice/GlobalFilter/locationTypeSlice';
 import mainCategoryTypeReducer from './Slice/GlobalFilter/mainCategoryTypeSlice';
+import subCategoryTypeReducer from './Slice/GlobalFilter/subCategoryTypeSlice';
 import typeOfDataReducer from './Slice/GlobalFilter/typeOfDataSlice';
 import globalFilterTimelineCustomDateReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineCustomDate';
 import globalFilterTimelineFilterTypeReducer from './Slice/GlobalFilterTimeline/GlobalFilterTimelineFilterType';
@@ -86,11 +87,12 @@ export const store = configureStore({
         globalFilterTimelineYearMonths: globalFilterTimelineYearMonthsReducer,
         globalFilterTimelineCustomDate: globalFilterTimelineCustomDateReducer,
         customerType: customerTypeReducer,
-        locationType:locationTypeReducer,
-        mainCategoryType:mainCategoryTypeReducer,
-        fbLeadType:fbLeadTypeReducer,
-        typeOfData:typeOfDataReducer,
-        eventStatusType:eventStatusTypeReducer,
+        locationType: locationTypeReducer,
+        mainCategoryType: mainCategoryTypeReducer,
+        subCategoryType: subCategoryTypeReducer,
+        fbLeadType: fbLeadTypeReducer,
+        typeOfData: typeOfDataReducer,
+        eventStatusType: eventStatusTypeReducer,
         tableURL: tableURLReducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(eluxAPI.middleware),

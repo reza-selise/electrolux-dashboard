@@ -4,17 +4,17 @@ const initialState = {
     value: '',
 };
 
-export const mainCategoryTypeSlice = createSlice({
-    name: 'mainCategoryType',
+export const subCategoryTypeSlice = createSlice({
+    name: 'subCategoryType',
     initialState,
     reducers: {
-        setMainCategorytype: (state, action) => {
+        setSubCategoryType: (state, action) => {
             state.value = action.payload;
         },
     },
 });
 
 // Action creators are generated for each case reducer function
-export const { setMainCategorytype } = mainCategoryTypeSlice.actions;
+export const { setSubCategoryType } = subCategoryTypeSlice.actions;
 
-export default mainCategoryTypeSlice.reducer;
+export default subCategoryTypeSlice.reducer;
