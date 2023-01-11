@@ -1,9 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: [
-        'takenPlace'
-    ],
+    value: 'took_place',
 };
 
 export const eventStatusTypeSlice = createSlice({
