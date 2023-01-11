@@ -129,7 +129,7 @@ function get_generic_filter_data(){
         foreach ($the_post_query as $post){
             $the_title = $post->post_title;
             $the_slug = $post->post_name;
-            $the_id = get_the_id();
+            $the_id =  $post->ID;
 
             $loc_data = array(
                 "id"=> $the_id,
