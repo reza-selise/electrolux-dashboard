@@ -12,6 +12,8 @@
 
 
 function get_generic_filter_data(){
+    global $wp_query;
+
     $return_data = array(
         "customer_types" => array(
             [
@@ -109,6 +111,7 @@ function get_generic_filter_data(){
         
     }
     $return_data['categories'] = $categories;
+   
     //----------------------------------- locations-----
     $args = array(
         'posts_per_page'   => -1,
@@ -118,13 +121,14 @@ function get_generic_filter_data(){
         'orderby'        => 'title',
         'order'          => 'ASC',
     );
-    $the_post_query = new WP_Query( $args );
+ 
+    // $the_post_query = new WP_Query( $args );
+    $the_post_query = get_posts($args);
     $locations = [];
-    if ( $the_post_query->have_posts() ) {
-        while ( $the_post_query->have_posts() ) {
-            $the_post_query->the_post();
-            $the_title = get_the_title();
-            $the_slug = get_post_field( 'post_name', get_post() );
+    if ( $the_post_query) {
+        foreach ($the_post_query as $post){
+            $the_title = $post->post_title;
+            $the_slug = $post->post_name;
             $the_id = get_the_id();
 
             $loc_data = array(
@@ -136,7 +140,9 @@ function get_generic_filter_data(){
         }
         wp_reset_postdata();
     }
+   
     $return_data['locations'] = $locations;
+   
     //------------------------------------- Users by role----------------------------------------------------------------
     $usr_args = array(
         'role__in' => array('administrator','elex_instructor','elex_consultant', 'sales'),
@@ -198,7 +204,5 @@ function get_generic_filter_data(){
     $return_data['fb_leads'] =  $fb_leads;
     $return_data['sales_employee'] = $sales_users;
 
-   
-    // return  $return_data;
-    return  $return_data;
+    return $return_data;
 }
